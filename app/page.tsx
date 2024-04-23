@@ -9,6 +9,7 @@ import {
   getProviders,
   LiteralUnion,
   signIn,
+  signOut,
   useSession,
 } from "next-auth/react";
 
@@ -127,6 +128,9 @@ const Home = () => {
     <>
       {session?.user && (
         <section className="flex flex-col gap-4 mx-auto pt-16 max-w-[500px]">
+          <p className="text-4xl font-thin">
+            Hello, <span className="font-bold">{session.user.name}</span>
+          </p>
           <form
             onSubmit={filterOrders}
             className="w-full flex items-center justify-center gap-2"
@@ -159,6 +163,15 @@ const Home = () => {
             onClick={() => router.push("/orders/new")}
           >
             New Order
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              signOut();
+            }}
+            className="border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
+          >
+            Sign Out
           </button>
         </section>
       )}
