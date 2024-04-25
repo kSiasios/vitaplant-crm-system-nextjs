@@ -12,6 +12,8 @@ import {
   signOut,
   useSession,
 } from "next-auth/react";
+import frontEndDev from "@/utils/environment";
+import OrderItem from "@/components/OrderItem";
 
 const Home = () => {
   // const isUserLoggedIn = false;
@@ -115,7 +117,9 @@ const Home = () => {
       console.log(response);
     };
 
-    setUpProviders();
+    if (!frontEndDev) {
+      setUpProviders();
+    }
 
     resetFilter();
   }, []);
@@ -126,56 +130,67 @@ const Home = () => {
 
   return (
     <>
-      {session?.user && (
-        <section className="flex flex-col gap-4 mx-auto pt-16 max-w-[500px]">
-          <p className="text-4xl font-thin">
-            Hello, <span className="font-bold">{session.user.name}</span>
-          </p>
-          <form
-            onSubmit={filterOrders}
-            className="w-full flex items-center justify-center gap-2"
-          >
-            <input
-              className="px-4 py-2 border border-gray-300 rounded-lg"
-              placeholder="Search Order..."
-              value={filter}
-              onChange={updateFilter}
-            ></input>
+      {session?.user ||
+        (frontEndDev && (
+          <section className="flex flex-col gap-4 mx-auto pt-16 max-w-[500px]">
+            <p className="text-4xl font-thin">
+              Hello, <span className="font-bold">{session?.user?.name}</span>
+            </p>
+            <form
+              onSubmit={filterOrders}
+              className="w-full flex items-center justify-center gap-2"
+            >
+              <input
+                className="px-4 py-2 border border-gray-300 rounded-lg"
+                placeholder="Search Order..."
+                value={filter}
+                onChange={updateFilter}
+              ></input>
+              <button
+                className="bg-gray-100 border border-blue-500 text-blue-500 font-bold hover:bg-blue-500 focus:bg-blue-500 hover:text-white focus:text-white px-4 py-2 rounded-lg"
+                type="submit"
+              >
+                Filter
+              </button>
+            </form>
+            <h3 className="font-bold text-2xl">Orders</h3>
+            <div className="bg-gray-200 px-4 py-4">
+              <section className="max-h-[100px] overflow-y-scroll flex flex-col gap-4">
+                {orders &&
+                  Object.values(orders).map((order: any, index) => (
+                    // <div key={index}>{order.name}</div>
+                    <OrderItem
+                      key={index}
+                      clientName={order.name}
+                      orderID={index.toString()}
+                      items={[]}
+                      status={order.status}
+                      paymentStatus={order.payment}
+                    />
+                  ))}
+              </section>
+            </div>
             <button
               className="bg-gray-100 border border-blue-500 text-blue-500 font-bold hover:bg-blue-500 focus:bg-blue-500 hover:text-white focus:text-white px-4 py-2 rounded-lg"
               type="submit"
+              onClick={() => router.push("/orders/new")}
             >
-              Filter
+              New Order
             </button>
-          </form>
-          <h3 className="font-bold text-2xl">Orders</h3>
-          <div className="bg-gray-200 px-4 py-4">
-            <section className="max-h-[100px] overflow-y-scroll">
-              {orders &&
-                Object.values(orders).map((order: any, index) => (
-                  <div key={index}>{order.name}</div>
-                ))}
-            </section>
-          </div>
-          <button
-            className="bg-gray-100 border border-blue-500 text-blue-500 font-bold hover:bg-blue-500 focus:bg-blue-500 hover:text-white focus:text-white px-4 py-2 rounded-lg"
-            type="submit"
-            onClick={() => router.push("/orders/new")}
-          >
-            New Order
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              signOut();
-            }}
-            className="border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
-          >
-            Sign Out
-          </button>
-        </section>
-      )}
-      {!session?.user && (
+            <button
+              type="button"
+              onClick={() => {
+                if (!frontEndDev) {
+                  signOut();
+                }
+              }}
+              className="border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
+            >
+              Sign Out
+            </button>
+          </section>
+        ))}
+      {!session?.user && !frontEndDev && (
         <section className="w-screen h-screen flex flex-col gap-8 items-center justify-center">
           <h1 className="font-bold text-3xl">You are not Authorized!</h1>
           {providers &&
