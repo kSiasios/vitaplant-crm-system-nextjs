@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import OrderItem from "@/components/OrderItem";
+import frontEndDev from "@/utils/environment";
 import { BuiltInProviderType } from "next-auth/providers/index";
 import {
   ClientSafeProvider,
@@ -12,8 +14,6 @@ import {
   signOut,
   useSession,
 } from "next-auth/react";
-import frontEndDev from "@/utils/environment";
-import OrderItem from "@/components/OrderItem";
 
 const Home = () => {
   // const isUserLoggedIn = false;
@@ -26,7 +26,7 @@ const Home = () => {
       product: "apple tree",
       quantity: "10",
       price: "2.5",
-      payment: "full",
+      payment: { status: "full", amount: "" },
       status: "completed",
     },
     1: {
@@ -34,7 +34,7 @@ const Home = () => {
       product: "jasmine",
       quantity: "5",
       price: "4",
-      payment: "due",
+      payment: { status: "due", amount: "" },
       status: "registered",
     },
     2: {
@@ -50,7 +50,7 @@ const Home = () => {
       product: "lemon tree",
       quantity: "3",
       price: "4",
-      payment: "due",
+      payment: { status: "due", amount: "" },
       status: "packed",
     },
     4: {
@@ -58,7 +58,7 @@ const Home = () => {
       product: "apple tree",
       quantity: "100",
       price: "5.6",
-      payment: "full",
+      payment: { status: "full", amount: "" },
       status: "packed",
     },
   };

@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 interface OrderProps {
   clientName: String;
   orderID: String;
   status: String;
-  paymentStatus: String | PaymentInterface;
+  paymentStatus: PaymentInterface;
   items: Item[];
 }
 interface PaymentInterface {
@@ -51,12 +51,7 @@ const OrderItem = ({
             Status: <span>{status}</span>
           </div>
           <div>
-            Payment:{" "}
-            <span>
-              {typeof paymentStatus === "string"
-                ? paymentStatus
-                : paymentStatus?.status}
-            </span>
+            Payment: <span>{paymentStatus.status}</span>
           </div>
           <div>
             Items: <span>{items.toString()}</span>
