@@ -14,6 +14,8 @@ import {
   signOut,
   useSession,
 } from "next-auth/react";
+import { CiLogout } from "react-icons/ci";
+import { IoAdd, IoLogOutOutline } from "react-icons/io5";
 
 const Home = () => {
   // const isUserLoggedIn = false;
@@ -153,9 +155,35 @@ const Home = () => {
                 Filter
               </button>
             </form>
-            <h3 className="font-bold text-2xl">Orders</h3>
-            <div className="bg-gray-200 px-4 py-4">
-              <section className="max-h-[100px] overflow-y-scroll flex flex-col gap-4">
+            <div className="flex justify-between items-center">
+              {/* Orders title bar */}
+              <h3 className="font-bold text-2xl">Orders</h3>
+              <div className="flex gap-1">
+                {/* Actions */}
+                <button
+                  className="bg-gray-100 border border-blue-500 text-blue-500 font-bold hover:bg-blue-500 focus:bg-blue-500 hover:text-white focus:text-white p-4 rounded-lg text-lg"
+                  type="submit"
+                  onClick={() => router.push("/orders/new")}
+                >
+                  {/* New Order */}
+                  <IoAdd />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!frontEndDev) {
+                      signOut();
+                    }
+                  }}
+                  className="border border-black rounded-lg p-4 hover:bg-black hover:text-white focus:bg-black focus:text-white text-lg"
+                >
+                  {/* Sign Out */}
+                  <IoLogOutOutline />
+                </button>
+              </div>
+            </div>
+            <div className="p-4">
+              <section className="overflow-y-scroll flex flex-col gap-4">
                 {orders &&
                   Object.values(orders).map((order: any, index) => (
                     // <div key={index}>{order.name}</div>
@@ -170,24 +198,6 @@ const Home = () => {
                   ))}
               </section>
             </div>
-            <button
-              className="bg-gray-100 border border-blue-500 text-blue-500 font-bold hover:bg-blue-500 focus:bg-blue-500 hover:text-white focus:text-white px-4 py-2 rounded-lg"
-              type="submit"
-              onClick={() => router.push("/orders/new")}
-            >
-              New Order
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (!frontEndDev) {
-                  signOut();
-                }
-              }}
-              className="border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
-            >
-              Sign Out
-            </button>
           </section>
         ))}
       {!session?.user && !frontEndDev && (

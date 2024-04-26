@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { CiClock1 } from "react-icons/ci";
+import { FaHourglassStart, FaRegHourglass } from "react-icons/fa";
+import { FaHourglassEnd, FaRegHourglassHalf } from "react-icons/fa6";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { IoCheckmark } from "react-icons/io5";
 
 interface OrderProps {
   clientName: String;
@@ -37,16 +41,29 @@ const OrderItem = ({
         onClick={() => {
           setIsExpanded(!isExpanded);
         }}
-        className="bg-purple-500 cursor-pointer flex justify-between items-center"
+        className="cursor-pointer flex justify-between items-center p-2 border-gray-400 border rounded-lg"
       >
         <div className="flex gap-2">
           <span>{clientName}</span>
           <span className="opacity-45">ID: {orderID}</span>
         </div>
-        {isExpanded ? <IoIosArrowUp /> : <IoIosArrowDown />}
+        <div className="flex gap-1">
+          <div className="">
+            {paymentStatus.status === "full" && (
+              <FaHourglassEnd className="text-green-700" />
+            )}
+            {paymentStatus.status === "in advance" && (
+              <FaRegHourglassHalf className="text-orange-400" />
+            )}
+            {paymentStatus.status === "due" && (
+              <FaHourglassStart className="text-red-500" />
+            )}
+          </div>
+          {isExpanded ? <IoIosArrowUp /> : <IoIosArrowDown />}
+        </div>
       </div>
       {isExpanded && (
-        <div>
+        <div className="border border-gray-400 border-t-0 p-2 rounded-lg">
           <div>
             Status: <span>{status}</span>
           </div>
