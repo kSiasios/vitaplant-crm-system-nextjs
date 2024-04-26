@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import OrderItemEntry from "./OrderItemEntry";
 
 interface OrderFormProps {
   handleSubmit: React.FormEventHandler<HTMLFormElement>;
@@ -65,7 +66,9 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
           />
         )}
       </div>
-      <></>
+      <div>
+        <OrderItemEntry handleChange={() => console.log("change")} />
+      </div>
       <button className="px-3 py-2 rounded-lg bg-white/40" type="submit">
         CLICK TO SUBMIT
       </button>
