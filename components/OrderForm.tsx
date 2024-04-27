@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import OrderItemEntry from "./OrderItemEntry";
 
 interface OrderFormProps {
@@ -34,11 +34,10 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
         onChange={(e) => {
           setOrderStatus(e.target.value);
         }}
+        // defaultValue="registered"
         // placeholder="Status"
       >
-        <option value="registered" selected>
-          Registered
-        </option>
+        <option value="registered">Registered</option>
         <option value="packed">Packed</option>
         <option value="complete">Complete</option>
       </select>
@@ -51,11 +50,10 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
           onChange={(e) => {
             setPaymentStatus(e.target.value);
           }}
+          // defaultValue="due"
           // placeholder="Status"
         >
-          <option value="due" selected>
-            Due
-          </option>
+          <option value="due">Due</option>
           <option value="in-advance">In Advance</option>
           <option value="complete">Complete</option>
         </select>

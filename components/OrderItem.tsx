@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CiClock1 } from "react-icons/ci";
-import { FaHourglassStart, FaRegHourglass } from "react-icons/fa";
+import { FaHourglassStart } from "react-icons/fa";
 import { FaHourglassEnd, FaRegHourglassHalf } from "react-icons/fa6";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { IoCheckmark } from "react-icons/io5";
 
 interface OrderProps {
   clientName: String;
