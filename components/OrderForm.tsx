@@ -43,6 +43,7 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
         <option value="complete">Complete</option>
       </select>
       <div className="flex gap-2">
+        {/* <label>Order Status</label> */}
         <select
           className="flex-1 px-3 py-2 rounded-lg border border-gray-400 bg-none"
           required={true}
