@@ -1,13 +1,24 @@
 "use client";
 import OrderForm from "@/components/OrderForm";
+import { useRouter } from "next/navigation";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 const NewOrder = () => {
   function handleNewOrder(e?: any) {
     e?.preventDefault();
     console.log("new order!");
   }
+
+  const router = useRouter();
+
   return (
-    <div>
+    <div className="pt-8">
+      <button
+        onClick={() => router.back()}
+        className="absolute aspect-square text-3xl border border-gray-400 p-4 rounded-full mx-4"
+      >
+        <IoIosArrowRoundBack />
+      </button>
       <OrderForm handleSubmit={handleNewOrder} type="edit" />
     </div>
   );

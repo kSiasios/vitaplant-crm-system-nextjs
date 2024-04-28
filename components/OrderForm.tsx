@@ -22,13 +22,8 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
       onSubmit={handleSubmit}
       className="flex flex-col max-w-[500px] mx-auto border border-gray-400 rounded-lg p-8 gap-4"
     >
-      <input
-        className="px-3 py-2 rounded-lg border border-gray-400"
-        required={true}
-        placeholder="Client"
-      />
+      <input required={true} placeholder="Client" />
       <select
-        className="px-3 py-2 rounded-lg border border-gray-400 bg-none"
         required={true}
         value={orderStatus}
         onChange={(e) => {
@@ -44,7 +39,7 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
       <div className="flex gap-2">
         {/* <label>Order Status</label> */}
         <select
-          className="flex-1 px-3 py-2 rounded-lg border border-gray-400 bg-none"
+          className="flex-1"
           required={true}
           value={paymentStatus}
           onChange={(e) => {
@@ -59,7 +54,7 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
         </select>
         {paymentStatus === "in-advance" && (
           <input
-            className="flex-1 px-3 py-2 rounded-lg border border-gray-400"
+            className="flex-1"
             value={paymentAmount}
             placeholder="Payment Amount"
           />
@@ -68,7 +63,7 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
       <div>
         <OrderItemEntry handleChange={() => console.log("change")} />
       </div>
-      <button className="px-3 py-2 rounded-lg bg-white/40" type="submit">
+      <button className="px-3 py-2 rounded-lg bg-gray-300" type="submit">
         CLICK TO SUBMIT
       </button>
     </form>

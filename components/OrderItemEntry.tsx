@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { IoTrashOutline } from "react-icons/io5";
 
 interface OrderItemEntryProps {
   handleChange: Function;
@@ -73,170 +74,220 @@ const OrderItemEntry = ({ handleChange }: OrderItemEntryProps) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       {sections.map((section, index) => {
         return (
-          <div key={index}>
-            <div>
-              <h3>Item</h3>
+          <div
+            key={index}
+            className="border border-gray-400 rounded-lg p-4 flex flex-col gap-4"
+          >
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold">Item</h3>
               {index > 0 && (
                 <button
-                  className="bg-red-700 text-white px-4 py-2 rounded-lg"
+                  className="border border-red-700 bg-red-100 text-red-700 hover:bg-red-700 focus:bg-red-700 hover:text-white focus:text-white p-4 rounded-lg"
                   onClick={() => removeSection(index)}
                 >
-                  Remove
+                  {/* Remove */}
+                  <IoTrashOutline />
                 </button>
               )}
             </div>
-            {/* Subject */}
-            <div>
-              <div className="flex gap-1">
-                <h4>Subject</h4>
-                <div>
-                  <label htmlFor={`subject_existing_${index}`}>Existing</label>
-                  <input
-                    type="radio"
-                    name={`subject_new_${index}`}
-                    checked={!checks[index].subjectNew}
+            <div className="flex flex-col gap-3">
+              {/* Subject */}
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-1 justify-between">
+                  <h4>Subject</h4>
+                  <div className="flex gap-1">
+                    <div>
+                      <label
+                        className="border border-gray-300 rounded-lg"
+                        htmlFor={`subject_existing_${index}`}
+                      >
+                        Existing
+                        <input
+                          type="radio"
+                          name={`subject_new_${index}`}
+                          checked={!checks[index].subjectNew}
+                          onChange={(e) =>
+                            handleCheckChange(
+                              index,
+                              "subjectNew",
+                              !e.target.checked
+                            )
+                          }
+                          id={`subject_existing_${index}`}
+                        />
+                      </label>
+                    </div>
+                    <div>
+                      <label
+                        className="border border-gray-400 rounded-lg"
+                        htmlFor={`subject_new_${index}`}
+                      >
+                        New
+                        <input
+                          type="radio"
+                          name={`subject_new_${index}`}
+                          checked={checks[index].subjectNew}
+                          onChange={(e) => {
+                            handleCheckChange(
+                              index,
+                              "subjectNew",
+                              e.target.checked
+                            );
+                          }}
+                          id={`subject_new_${index}`}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                {!checks[index].subjectNew && (
+                  <select
+                    value={section.subject}
                     onChange={(e) =>
-                      handleCheckChange(index, "subjectNew", !e.target.checked)
+                      handleInputChange(index, "subject", e.target.value)
                     }
-                    id={`subject_existing_${index}`}
-                  />
-                </div>
-                <div>
-                  <label htmlFor={`subject_new_${index}`}>New</label>
+                  >
+                    <option>One</option>
+                    <option>Two</option>
+                    <option>Three</option>
+                  </select>
+                )}
+                {checks[index].subjectNew && (
                   <input
-                    type="radio"
-                    name={`subject_new_${index}`}
-                    checked={checks[index].subjectNew}
-                    onChange={(e) => {
-                      handleCheckChange(index, "subjectNew", e.target.checked);
-                    }}
-                    id={`subject_new_${index}`}
+                    type="text"
+                    placeholder="Subject"
+                    value={section.subject}
+                    onChange={(e) =>
+                      handleInputChange(index, "subject", e.target.value)
+                    }
                   />
-                </div>
+                )}
               </div>
-              {!checks[index].subjectNew && (
-                <select
-                  value={section.subject}
-                  onChange={(e) =>
-                    handleInputChange(index, "subject", e.target.value)
-                  }
-                >
-                  <option>One</option>
-                  <option>Two</option>
-                  <option>Three</option>
-                </select>
-              )}
-              {checks[index].subjectNew && (
+              {/* Variety */}
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-1 justify-between">
+                  <h4>Variety</h4>
+                  <div className="flex gap-1">
+                    <div>
+                      <label htmlFor={`variety_existing_${index}`}>
+                        Existing
+                        <input
+                          type="radio"
+                          name={`variety_new_${index}`}
+                          checked={!checks[index].varietyNew}
+                          onChange={(e) => {
+                            handleCheckChange(
+                              index,
+                              "varietyNew",
+                              !e.target.checked
+                            );
+                          }}
+                          id={`variety_existing_${index}`}
+                        />
+                      </label>
+                    </div>
+                    <div>
+                      <label htmlFor={`variety_new_${index}`}>
+                        New
+                        <input
+                          type="radio"
+                          name={`variety_new_${index}`}
+                          checked={checks[index].varietyNew}
+                          onChange={(e) => {
+                            handleCheckChange(
+                              index,
+                              "varietyNew",
+                              e.target.checked
+                            );
+                          }}
+                          id={`variety_new_${index}`}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                {!checks[index].varietyNew && (
+                  <select
+                    value={section.variety}
+                    onChange={(e) =>
+                      handleInputChange(index, "variety", e.target.value)
+                    }
+                  >
+                    <option>One</option>
+                    <option>Two</option>
+                    <option>Three</option>
+                  </select>
+                )}
+                {checks[index].varietyNew && (
+                  <input
+                    type="text"
+                    placeholder="Variety"
+                    value={section.variety}
+                    onChange={(e) =>
+                      handleInputChange(index, "variety", e.target.value)
+                    }
+                  />
+                )}
+              </div>
+              {/* Price */}
+              <div className="flex justify-between items-center">
+                <label htmlFor={`price_${index}`}>Price</label>
                 <input
-                  type="text"
-                  placeholder="Subject"
-                  value={section.subject}
+                  type="number"
+                  name="price"
+                  id={`price_${index}`}
+                  value={section.price}
                   onChange={(e) =>
-                    handleInputChange(index, "subject", e.target.value)
+                    handleInputChange(
+                      index,
+                      "price",
+                      parseFloat(e.target.value)
+                    )
                   }
                 />
-              )}
-            </div>
-            {/* Variety */}
-            <div>
-              <div className="flex gap-1">
-                <h4>Variety</h4>
-                <div>
-                  <label htmlFor={`variety_existing_${index}`}>Existing</label>
-                  <input
-                    type="radio"
-                    name={`variety_new_${index}`}
-                    checked={!checks[index].varietyNew}
-                    onChange={(e) => {
-                      handleCheckChange(index, "varietyNew", !e.target.checked);
-                    }}
-                    id={`variety_existing_${index}`}
-                  />
-                </div>
-                <div>
-                  <label htmlFor={`variety_new_${index}`}>New</label>
-                  <input
-                    type="radio"
-                    name={`variety_new_${index}`}
-                    checked={checks[index].varietyNew}
-                    onChange={(e) => {
-                      handleCheckChange(index, "varietyNew", e.target.checked);
-                    }}
-                    id={`variety_new_${index}`}
-                  />
-                </div>
               </div>
-              {!checks[index].varietyNew && (
-                <select
-                  value={section.variety}
-                  onChange={(e) =>
-                    handleInputChange(index, "variety", e.target.value)
-                  }
-                >
-                  <option>One</option>
-                  <option>Two</option>
-                  <option>Three</option>
-                </select>
-              )}
-              {checks[index].varietyNew && (
+              {/* Amount */}
+              <div className="flex justify-between items-center">
+                <label htmlFor={`amount_${index}`}>Amount</label>
                 <input
-                  type="text"
-                  placeholder="Variety"
-                  value={section.variety}
+                  type="number"
+                  name="amount"
+                  id={`amount_${index}`}
+                  value={section.amount}
                   onChange={(e) =>
-                    handleInputChange(index, "variety", e.target.value)
+                    handleInputChange(index, "amount", parseInt(e.target.value))
                   }
                 />
-              )}
-            </div>
-            {/* Price */}
-            <div>
-              <label htmlFor={`price_${index}`}>Price</label>
-              <input
-                type="number"
-                name="price"
-                id={`price_${index}`}
-                value={section.price}
-                onChange={(e) =>
-                  handleInputChange(index, "price", parseFloat(e.target.value))
-                }
-              />
-            </div>
-            {/* Amount */}
-            <div>
-              <label htmlFor={`amount_${index}`}>Amount</label>
-              <input
-                type="number"
-                name="amount"
-                id={`amount_${index}`}
-                value={section.amount}
-                onChange={(e) =>
-                  handleInputChange(index, "amount", parseInt(e.target.value))
-                }
-              />
-            </div>
-            {/* Own Stock */}
-            <div>
-              <label htmlFor={`own_stock_${index}`}>Own Stock</label>
-              <input
-                type="checkbox"
-                name="own_stock"
-                id={`own_stock_${index}`}
-                checked={section.ownStock}
-                onChange={(e) => {
-                  handleInputChange(index, "ownStock", e.target.checked);
-                }}
-              />
+              </div>
+              {/* Own Stock */}
+              <div className="flex items-center gap-1">
+                <input
+                  type="checkbox"
+                  name="own_stock"
+                  id={`own_stock_${index}`}
+                  checked={section.ownStock}
+                  onChange={(e) => {
+                    handleInputChange(index, "ownStock", e.target.checked);
+                  }}
+                  className="cursor-pointer"
+                />
+                <label
+                  htmlFor={`own_stock_${index}`}
+                  className="cursor-pointer"
+                >
+                  Own Stock
+                </label>
+              </div>
             </div>
           </div>
         );
       })}
       <button
         onClick={addSection}
-        className="bg-green-300 text-black px-4 py-2 rounded-lg"
+        className="border border-green-700 bg-green-100 text-green-700 hover:bg-green-700 focus:bg-green-700 hover:text-white focus:text-white px-4 py-2 rounded-lg m-auto"
       >
         Add More..
       </button>
