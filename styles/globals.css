@@ -38,4 +38,20 @@ body {
     border: 1px solid rgb(156 163 175 / 1);
     background: none;
   }
+
+  input:required {
+    position: relative;
+  }
+
+  input:required::before {
+    background: coral;
+    content: "";
+    position: absolute;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid rgb(156 163 175 / 1);
+    right: 100%;
+    top: 0;
+    width: 100px;
+  }
 }

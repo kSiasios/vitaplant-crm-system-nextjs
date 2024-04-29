@@ -4,9 +4,10 @@ import { useRouter } from "next/navigation";
 import { IoIosArrowRoundBack } from "react-icons/io";
 
 const NewOrder = () => {
-  function handleNewOrder(e?: any) {
+  function handleNewOrder(data: Object, e?: any) {
     e?.preventDefault();
-    console.log("new order!");
+    // console.log("new order!");
+    console.log(data);
   }
 
   const router = useRouter();
