@@ -126,6 +126,8 @@ const Home = () => {
     resetFilter();
   }, []);
 
+  const newOrderNav = () => router.push("/orders/new");
+
   useEffect(() => {
     filterOrders();
   }, [filter]);
@@ -163,7 +165,7 @@ const Home = () => {
                 <button
                   className="bg-gray-100 border border-blue-500 text-blue-500 font-bold hover:bg-blue-500 focus:bg-blue-500 hover:text-white focus:text-white p-4 rounded-lg text-lg"
                   type="submit"
-                  onClick={() => router.push("/orders/new")}
+                  onClick={newOrderNav}
                 >
                   {/* New Order */}
                   <IoAdd />
