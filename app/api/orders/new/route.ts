@@ -7,6 +7,16 @@ export const POST = async (req: Request) => {
     let orderData = await req.json();
     console.log(orderData);
 
+    const orderObject = {
+        clientName: orderData.clientName,
+        clientName: orderData.clientName,
+        clientName: orderData.clientName,
+        clientName: orderData.clientName,
+        clientName: orderData.clientName,
+        paymentAmount: orderData.clientName,
+        items: [...orderData.items],
+    }
+
     try {
         await connectToDB();
         const order = await Order.create(orderData);
