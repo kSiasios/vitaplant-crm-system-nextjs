@@ -4,10 +4,24 @@ import { useRouter } from "next/navigation";
 import { IoIosArrowRoundBack } from "react-icons/io";
 
 const NewOrder = () => {
-  function handleNewOrder(data: Object, e?: any) {
+  async function handleNewOrder(data: Object, e?: any) {
     e?.preventDefault();
     // console.log("new order!");
     console.log(data);
+    const headers: Headers = new Headers();
+    headers.set("Content-Type", "application/json");
+    headers.set("Accept", "application/json");
+
+    try {
+      const response = await fetch(`/api/orders/new`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(data),
+      });
+      alert(JSON.stringify(response.json()));
+    } catch (error) {
+      alert(error);
+    }
   }
 
   const router = useRouter();
