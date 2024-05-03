@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 
 interface OrderItemEntryProps {
   handleChange: Function;
+  newItem?: boolean;
 }
 
 interface ItemFormData {
@@ -21,7 +22,7 @@ interface Checks {
   varietyNew: boolean;
 }
 
-const OrderItemEntry = ({ handleChange }: OrderItemEntryProps) => {
+const OrderItemEntry = ({ handleChange, newItem }: OrderItemEntryProps) => {
   const [sections, setSections] = useState<ItemFormData[]>([
     { subject: "", variety: "", price: 0, amount: 0, ownStock: true },
   ]);
@@ -92,6 +93,10 @@ const OrderItemEntry = ({ handleChange }: OrderItemEntryProps) => {
     newChecks[index][field] = value;
     setChecks(newChecks);
   };
+
+  useEffect(() => {
+    handleChange(sections);
+  }, []);
 
   return (
     <div className="flex flex-col gap-4">
@@ -322,12 +327,14 @@ const OrderItemEntry = ({ handleChange }: OrderItemEntryProps) => {
           </div>
         );
       })}
-      <button
-        onClick={addSection}
-        className="border border-green-700 bg-green-100 text-green-700 hover:bg-green-700 focus:bg-green-700 hover:text-white focus:text-white px-4 py-2 rounded-lg m-auto"
-      >
-        Add More..
-      </button>
+      {!newItem && (
+        <button
+          onClick={addSection}
+          className="border border-green-700 bg-green-100 text-green-700 hover:bg-green-700 focus:bg-green-700 hover:text-white focus:text-white px-4 py-2 rounded-lg m-auto"
+        >
+          Add More..
+        </button>
+      )}
     </div>
   );
 };

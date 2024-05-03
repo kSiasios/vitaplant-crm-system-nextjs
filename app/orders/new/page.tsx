@@ -18,7 +18,6 @@ const NewOrder = () => {
         headers,
         body: JSON.stringify(data),
       });
-      alert(JSON.stringify(response.json()));
     } catch (error) {
       alert(error);
     }

@@ -15,7 +15,7 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
   const [afm, setAFM] = useState("");
   const [orderStatus, setOrderStatus] = useState("registered");
   const [paymentStatus, setPaymentStatus] = useState("due");
-  const [paymentAmount, setPaymentAmount] = useState(undefined);
+  const [paymentAmount, setPaymentAmount] = useState<number>(0);
 
   const [orderItems, setOrderItems] = useState([{}]);
   // console.log(type);
@@ -38,6 +38,9 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
       clientName,
       address,
       afm,
+      orderStatus,
+      paymentStatus,
+      paymentAmount,
       items: orderItems,
     };
 
@@ -99,6 +102,7 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
           <input
             className="flex-1"
             value={paymentAmount}
+            onChange={(e) => setPaymentAmount(parseInt(e.target.value))}
             placeholder="Payment Amount"
           />
         )}
