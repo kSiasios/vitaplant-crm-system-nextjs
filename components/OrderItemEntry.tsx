@@ -303,6 +303,14 @@ const OrderItemEntry = ({ handleChange, newItem }: OrderItemEntryProps) => {
                     }
                   />
                 </div>
+                {section.amount * section.price > 0 && (
+                  <sup className="text-blue-400 ">
+                    Total Cost:{" "}
+                    {section.amount * section.price
+                      ? section.amount * section.price
+                      : 0}
+                  </sup>
+                )}
                 {/* Own Stock */}
                 <div className="flex items-center gap-1">
                   <input
