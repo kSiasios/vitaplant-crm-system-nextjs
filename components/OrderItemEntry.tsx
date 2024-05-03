@@ -275,6 +275,7 @@ const OrderItemEntry = ({ handleChange, newItem }: OrderItemEntryProps) => {
                   <input
                     type="number"
                     name="price"
+                    step={0.01}
                     id={`price_${index}`}
                     value={section.price}
                     onChange={(e) =>
@@ -306,7 +307,7 @@ const OrderItemEntry = ({ handleChange, newItem }: OrderItemEntryProps) => {
                 {section.amount * section.price > 0 && (
                   <sup className="text-blue-400 ">
                     Total Cost:{" "}
-                    {section.amount * section.price
+                    {section.amount * section.price > 0
                       ? section.amount * section.price
                       : 0}
                   </sup>
