@@ -16,10 +16,40 @@ export const POST = async (req: Request) => {
   };
 
   console.log(itemObject);
+  for (let index = 0; index < itemData.length; index++) {
+    const item = itemData[index];
+    if (
+      item.subject == "" ||
+      item.variety == "" ||
+      item.amount <= 0 ||
+      item.price <= 0 ||
+      item.ownStock == undefined
+    ) {
+      return new Response(
+        JSON.stringify({
+          message: "Some Data are not provided!",
+        }),
+        {
+          status: 500,
+        }
+      );
+    }
+
+    if (!item.ownStock) {
+      return new Response(
+        JSON.stringify({
+          message: "The Stock must be owned by the company!",
+        }),
+        {
+          status: 500,
+        }
+      );
+    }
+  }
 
   try {
     await connectToDB();
-    const item = await Item.create(itemObject);
+    const item = await Item.insertMany(itemObject);
     const res = new Response(
       JSON.stringify({ message: "Resource created successfully", item }),
       { status: 201 }

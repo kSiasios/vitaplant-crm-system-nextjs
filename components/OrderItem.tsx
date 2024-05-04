@@ -17,7 +17,7 @@ interface PaymentInterface {
   amount: number;
 }
 
-interface Item {
+export interface Item {
   subject: String;
   variety: String;
   price: number;

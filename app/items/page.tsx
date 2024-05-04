@@ -1,27 +1,29 @@
+import { Item } from "@/components/OrderItem";
+
 async function getData() {
   // const res = await fetch("https://.../posts");
   // const items = await res.json();
 
-  const items = [
-    {
-      "1": "One",
-    },
-    {
-      "2": "Two",
-    },
-  ];
-
-  return {
-    props: {
-      items,
-    },
-  };
+  const res = await fetch(`${process.env.URL}/api/items`, {
+    method: "GET",
+  });
+  const items = await res.json();
+  return items;
 }
 
 const Items = async () => {
-  const items = await getData();
-  console.log(items);
-  return <div>Items</div>;
+  const items: Array<Item> = await getData();
+  // console.log(items);
+  return (
+    <div>
+      Items
+      <div>
+        {items.map((item) => (
+          <>{item.subject}</>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Items;
