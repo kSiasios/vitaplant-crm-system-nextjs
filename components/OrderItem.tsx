@@ -69,7 +69,16 @@ const OrderItem = ({
             Payment: <span>{paymentStatus.status}</span>
           </div>
           <div>
-            Items: <span>{items.toString()}</span>
+            Items:
+            <div className="order-items-container">
+              {items.map((item) => (
+                <div>
+                  <div>Subject: {item.subject}</div>
+                  <div>Variety: {item.variety}</div>
+                </div>
+              ))}
+            </div>
+            {/* <span>{items.toString()}</span> */}
           </div>
         </div>
       )}

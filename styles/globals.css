@@ -2,17 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-}
+:root {}
 
-@media (prefers-color-scheme: dark) {
-}
+@media (prefers-color-scheme: dark) {}
 
-body {
-}
+body {}
 
-@layer utilities {
-}
+@layer utilities {}
 
 @layer components {
   label:has(input[type="radio"]) {
@@ -22,10 +18,12 @@ body {
     border-radius: 0.5rem;
     border: 1px solid rgb(156 163 175 / 1);
   }
+
   label:has(input[type="radio"]:checked) {
     /* background: rgb(156 163 175 / 1); */
     background: rgb(209 213 219 / 1);
   }
+
   input[type="radio"] {
     display: none;
   }
@@ -53,5 +51,9 @@ body {
     right: 100%;
     top: 0;
     width: 100px;
+  }
+
+  .order-items-container>*:nth-child(2n+1) {
+    background: rgb(0, 0, 0, .1)
   }
 }

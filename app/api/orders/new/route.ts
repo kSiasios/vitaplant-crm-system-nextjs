@@ -11,7 +11,7 @@ export const POST = async (req: Request) => {
     clientName: orderData.clientName,
     address: orderData.address,
     taxpayerNumber: orderData.afm,
-    status: orderData.orderStatus,
+    status: orderData.status,
     paymentStatus: orderData.paymentStatus,
     paymentAmount: orderData.paymentAmount,
     items: [...orderData.items],
@@ -30,6 +30,10 @@ export const POST = async (req: Request) => {
     return res;
   } catch (error) {
     console.log(error);
-    return false;
+    const res = new Response(
+      JSON.stringify({ error }),
+      { status: 500 }
+    );
+    return res;
   }
 };

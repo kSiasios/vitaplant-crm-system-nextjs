@@ -20,50 +20,51 @@ import { IoAdd, IoLogOutOutline } from "react-icons/io5";
 const Home = () => {
   // const isUserLoggedIn = false;
   const { data: session } = useSession();
+  const [ordersData, setOrdersData] = useState([]);
 
   const router = useRouter();
-  const ordersData = {
-    0: {
-      name: "Giorgos",
-      product: "apple tree",
-      quantity: "10",
-      price: "2.5",
-      payment: { status: "full", amount: "" },
-      status: "completed",
-    },
-    1: {
-      name: "Marios",
-      product: "jasmine",
-      quantity: "5",
-      price: "4",
-      payment: { status: "due", amount: "" },
-      status: "registered",
-    },
-    2: {
-      name: "Ioanna",
-      product: "orange tree",
-      quantity: "15",
-      price: "3.5",
-      payment: { status: "in advance", amount: "20" },
-      status: "completed",
-    },
-    3: {
-      name: "Giorgos",
-      product: "lemon tree",
-      quantity: "3",
-      price: "4",
-      payment: { status: "due", amount: "" },
-      status: "packed",
-    },
-    4: {
-      name: "Ioanna",
-      product: "apple tree",
-      quantity: "100",
-      price: "5.6",
-      payment: { status: "full", amount: "" },
-      status: "packed",
-    },
-  };
+  // const ordersData = {
+  //   0: {
+  //     name: "Giorgos",
+  //     product: "apple tree",
+  //     quantity: "10",
+  //     price: "2.5",
+  //     payment: { status: "full", amount: "" },
+  //     status: "completed",
+  //   },
+  //   1: {
+  //     name: "Marios",
+  //     product: "jasmine",
+  //     quantity: "5",
+  //     price: "4",
+  //     payment: { status: "due", amount: "" },
+  //     status: "registered",
+  //   },
+  //   2: {
+  //     name: "Ioanna",
+  //     product: "orange tree",
+  //     quantity: "15",
+  //     price: "3.5",
+  //     payment: { status: "in advance", amount: "20" },
+  //     status: "completed",
+  //   },
+  //   3: {
+  //     name: "Giorgos",
+  //     product: "lemon tree",
+  //     quantity: "3",
+  //     price: "4",
+  //     payment: { status: "due", amount: "" },
+  //     status: "packed",
+  //   },
+  //   4: {
+  //     name: "Ioanna",
+  //     product: "apple tree",
+  //     quantity: "100",
+  //     price: "5.6",
+  //     payment: { status: "full", amount: "" },
+  //     status: "packed",
+  //   },
+  // };
 
   const [providers, setProviders] = useState<Record<
     LiteralUnion<BuiltInProviderType, string>,
@@ -90,10 +91,9 @@ const Home = () => {
 
     setOrders(
       prev.filter((order: any) => {
-        return (
-          order.name.toLowerCase().includes(filter.toLowerCase()) ||
-          order.product.toLowerCase().includes(filter.toLowerCase())
-        );
+        return order.clientName.toLowerCase().includes(filter.toLowerCase());
+        // ||
+        // order.items.toLowerCase().includes(filter.toLowerCase())
       })
     );
   }
@@ -110,7 +110,13 @@ const Home = () => {
   useEffect(() => {
     // fetch orders data
     // set orders to the fetched data
-    // console.log("USE EFFECT");
+
+    const fetchOrders = async () => {
+      const res = await fetch("/api/orders");
+      const data = await res.json();
+      // console.log(data);
+      setOrdersData(data);
+    };
 
     const setUpProviders = async () => {
       const response = await getProviders();
@@ -122,9 +128,13 @@ const Home = () => {
     if (!frontEndDev) {
       setUpProviders();
     }
-
-    resetFilter();
+    fetchOrders();
+    // resetFilter();
   }, []);
+
+  useEffect(() => {
+    resetFilter();
+  }, [ordersData]);
 
   const newOrderNav = () => router.push("/orders/new");
 
@@ -187,15 +197,15 @@ const Home = () => {
             <div className="p-4">
               <section className="overflow-y-scroll flex flex-col gap-4">
                 {orders &&
-                  Object.values(orders).map((order: any, index) => (
+                  Object.values(orders).map((order: any) => (
                     // <div key={index}>{order.name}</div>
                     <OrderItem
-                      key={index}
-                      clientName={order.name}
-                      orderID={index.toString()}
-                      items={[]}
+                      key={order._id}
+                      clientName={order.clientName}
+                      orderID={order._id}
+                      items={order.items}
                       status={order.status}
-                      paymentStatus={order.payment}
+                      paymentStatus={order.paymentStatus}
                     />
                   ))}
               </section>
