@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import OrderItem from "@/components/OrderItem";
+import OrderItem, { Item } from "@/components/OrderItem";
 import frontEndDev from "@/utils/environment";
 import { BuiltInProviderType } from "next-auth/providers/index";
 import {
@@ -14,7 +14,6 @@ import {
   signOut,
   useSession,
 } from "next-auth/react";
-import { CiLogout } from "react-icons/ci";
 import { IoAdd, IoLogOutOutline } from "react-icons/io5";
 
 const Home = () => {
@@ -23,48 +22,6 @@ const Home = () => {
   const [ordersData, setOrdersData] = useState([]);
 
   const router = useRouter();
-  // const ordersData = {
-  //   0: {
-  //     name: "Giorgos",
-  //     product: "apple tree",
-  //     quantity: "10",
-  //     price: "2.5",
-  //     payment: { status: "full", amount: "" },
-  //     status: "completed",
-  //   },
-  //   1: {
-  //     name: "Marios",
-  //     product: "jasmine",
-  //     quantity: "5",
-  //     price: "4",
-  //     payment: { status: "due", amount: "" },
-  //     status: "registered",
-  //   },
-  //   2: {
-  //     name: "Ioanna",
-  //     product: "orange tree",
-  //     quantity: "15",
-  //     price: "3.5",
-  //     payment: { status: "in advance", amount: "20" },
-  //     status: "completed",
-  //   },
-  //   3: {
-  //     name: "Giorgos",
-  //     product: "lemon tree",
-  //     quantity: "3",
-  //     price: "4",
-  //     payment: { status: "due", amount: "" },
-  //     status: "packed",
-  //   },
-  //   4: {
-  //     name: "Ioanna",
-  //     product: "apple tree",
-  //     quantity: "100",
-  //     price: "5.6",
-  //     payment: { status: "full", amount: "" },
-  //     status: "packed",
-  //   },
-  // };
 
   const [providers, setProviders] = useState<Record<
     LiteralUnion<BuiltInProviderType, string>,
@@ -76,6 +33,20 @@ const Home = () => {
 
   function resetFilter() {
     setOrders(Object.values(ordersData));
+  }
+
+  function checkItemsFilter(items: Array<Item>, filter: string) {
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
+      if (
+        item.subject.toLowerCase().includes(filter.toLowerCase()) ||
+        item.variety.toLowerCase().includes(filter.toLowerCase())
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   function filterOrders(e?: any) {
@@ -91,9 +62,10 @@ const Home = () => {
 
     setOrders(
       prev.filter((order: any) => {
-        return order.clientName.toLowerCase().includes(filter.toLowerCase());
-        // ||
-        // order.items.toLowerCase().includes(filter.toLowerCase())
+        return (
+          order.clientName.toLowerCase().includes(filter.toLowerCase()) ||
+          checkItemsFilter(order.items, filter)
+        );
       })
     );
   }
@@ -195,7 +167,7 @@ const Home = () => {
               </div>
             </div>
             <div className="p-4">
-              <section className="overflow-y-scroll flex flex-col gap-4">
+              <section className="overflow-y-visible flex flex-col gap-4">
                 {orders &&
                   Object.values(orders).map((order: any) => (
                     // <div key={index}>{order.name}</div>
