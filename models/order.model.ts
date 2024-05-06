@@ -13,11 +13,11 @@ const OrderScema = new Schema({
     type: String,
   },
   status: {
-    type:String,
+    type: String,
     required: [true, "Order Status not defined!"],
   },
   paymentStatus: {
-    type:String,
+    type: String,
     required: [true, "Payment Status not defined!"],
   },
   paymentAmount: {
@@ -26,28 +26,28 @@ const OrderScema = new Schema({
   },
   items: [
     {
-        subject: {
-            type: String,
-            required: [true, "Subject not defined!"]
-        },
-        variety: {
-            type: String,
-            required: [true, "Variety not defined!"]
-        },
-        price: {
-            type: Number,
-            required: [true, "Price not defined!"]
-        },
-        amount: {
-            type: Number,
-            required: [true, "Amount not defined!"]
-        },
-        ownStock: {
-            type: Boolean,
-            required: [true, "OwnStock not defined!"]
-        }
-    }
-  ]
+      subject: {
+        type: String,
+        required: [true, "Subject not defined!"],
+      },
+      variety: {
+        type: String,
+        required: [true, "Variety not defined!"],
+      },
+      price: {
+        type: Number,
+        required: [true, "Price not defined!"],
+      },
+      amount: {
+        type: Number,
+        required: [true, "Amount not defined!"],
+      },
+      ownStock: {
+        type: Boolean,
+        required: [true, "OwnStock not defined!"],
+      },
+    },
+  ],
 });
 
 const Order = models.Order || model("Order", OrderScema);

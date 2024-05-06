@@ -7,15 +7,15 @@ export const POST = async (req: Request) => {
   let itemData = await req.json();
   console.log(itemData);
 
-  const itemObject = {
-    subject: itemData.subject,
-    variety: itemData.variety,
-    price: itemData.price,
-    amount: itemData.amount,
-    ownStock: itemData.ownStock,
-  };
+  // const itemObject = {
+  //   subject: itemData.subject,
+  //   variety: itemData.variety,
+  //   price: itemData.price,
+  //   amount: itemData.amount,
+  //   ownStock: itemData.ownStock,
+  // };
 
-  console.log(itemObject);
+  // console.log(itemObject);
   for (let index = 0; index < itemData.length; index++) {
     const item = itemData[index];
     if (
@@ -49,7 +49,7 @@ export const POST = async (req: Request) => {
 
   try {
     await connectToDB();
-    const item = await Item.insertMany(itemObject);
+    const item = await Item.insertMany(itemData);
     const res = new Response(
       JSON.stringify({ message: "Resource created successfully", item }),
       { status: 201 }
@@ -58,6 +58,6 @@ export const POST = async (req: Request) => {
     return res;
   } catch (error) {
     console.log(error);
-    return false;
+    return new Response(JSON.stringify({ error }), { status: 500 });
   }
 };

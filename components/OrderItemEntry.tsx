@@ -5,8 +5,11 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 
 interface OrderItemEntryProps {
-  handleChange: Function;
+  handleChange?: Function;
   newItem?: boolean;
+  item?: ItemFormData;
+  availableSubjects?: Array<string>;
+  availableVarieties?: Array<string>;
 }
 
 interface ItemFormData {
@@ -22,9 +25,21 @@ interface Checks {
   varietyNew: boolean;
 }
 
-const OrderItemEntry = ({ handleChange, newItem }: OrderItemEntryProps) => {
+const OrderItemEntry = ({
+  handleChange,
+  newItem,
+  item,
+  availableSubjects,
+  availableVarieties,
+}: OrderItemEntryProps) => {
   const [sections, setSections] = useState<ItemFormData[]>([
-    { subject: "", variety: "", price: 0, amount: 0, ownStock: true },
+    {
+      subject: item ? item.subject : "",
+      variety: item ? item.variety : "",
+      price: item ? item.price : 0,
+      amount: item ? item.amount : 0,
+      ownStock: item ? item.ownStock : true,
+    },
   ]);
 
   const [checks, setChecks] = useState<Checks[]>([
@@ -75,7 +90,9 @@ const OrderItemEntry = ({ handleChange, newItem }: OrderItemEntryProps) => {
 
     // const items: Array<Object> = [];
 
-    handleChange(sections);
+    if (handleChange) {
+      handleChange(sections);
+    }
   };
 
   const handleExpand = (index: number, value: boolean) => {
@@ -95,7 +112,9 @@ const OrderItemEntry = ({ handleChange, newItem }: OrderItemEntryProps) => {
   };
 
   useEffect(() => {
-    handleChange(sections);
+    if (handleChange) {
+      handleChange(sections);
+    }
   }, []);
 
   return (
@@ -187,9 +206,13 @@ const OrderItemEntry = ({ handleChange, newItem }: OrderItemEntryProps) => {
                         handleInputChange(index, "subject", e.target.value)
                       }
                     >
-                      <option>One</option>
+                      {availableSubjects &&
+                        availableSubjects.map((subject) => (
+                          <option value={subject}>{subject}</option>
+                        ))}
+                      {/* <option>One</option>
                       <option>Two</option>
-                      <option>Three</option>
+                      <option>Three</option> */}
                     </select>
                   )}
                   {checks[index].subjectNew && (
@@ -253,9 +276,10 @@ const OrderItemEntry = ({ handleChange, newItem }: OrderItemEntryProps) => {
                         handleInputChange(index, "variety", e.target.value)
                       }
                     >
-                      <option>One</option>
-                      <option>Two</option>
-                      <option>Three</option>
+                      {availableVarieties &&
+                        availableVarieties.map((variety) => (
+                          <option value={variety}>{variety}</option>
+                        ))}
                     </select>
                   )}
                   {checks[index].varietyNew && (

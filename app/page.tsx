@@ -180,6 +180,7 @@ const Home = () => {
                       paymentStatus={order.paymentStatus}
                     />
                   ))}
+                {orders.length === 0 && <div>LOADING</div>}
               </section>
             </div>
           </section>

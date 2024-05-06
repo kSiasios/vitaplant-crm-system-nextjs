@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { Item } from "./OrderItem";
 import OrderItemEntry from "./OrderItemEntry";
 
 interface OrderFormProps {
@@ -18,6 +19,17 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
   const [paymentAmount, setPaymentAmount] = useState<number>(0);
 
   const [orderItems, setOrderItems] = useState([{}]);
+
+  const fetchItems = async () => {
+    const res = await fetch(`/api/items`);
+    const items = await res.json();
+    setAvailableSubjects(items.map((item: Item) => item.subject));
+    setAvailableVarieties(items.map((item: Item) => item.variety));
+  };
+
+  const [availableSubjects, setAvailableSubjects] = useState([]);
+  const [availableVarieties, setAvailableVarieties] = useState([]);
+
   // console.log(type);
   // useEffect(() => {
   //   console.log(orderStatus);
@@ -46,6 +58,10 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
 
     handleSubmit(data, e);
   };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   return (
     <form
@@ -108,7 +124,11 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
         )}
       </div>
       <div>
-        <OrderItemEntry handleChange={getOrderItems} />
+        <OrderItemEntry
+          handleChange={getOrderItems}
+          availableSubjects={availableSubjects}
+          availableVarieties={availableVarieties}
+        />
       </div>
       <button className="px-3 py-2 rounded-lg bg-gray-300" type="submit">
         CLICK TO SUBMIT

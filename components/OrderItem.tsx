@@ -21,8 +21,8 @@ interface OrderProps {
 // }
 
 export interface Item {
-  subject: String;
-  variety: String;
+  subject: string;
+  variety: string;
   price: number;
   amount: number;
   ownStock: boolean;
