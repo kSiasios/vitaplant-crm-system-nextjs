@@ -20,7 +20,7 @@ const Items = async () => {
     <div>
       Items
       <div>
-        {items.map((item) => (
+        {items.map((item, index) => (
           <OrderItemEntry
             newItem={false}
             item={{
@@ -30,6 +30,8 @@ const Items = async () => {
               amount: item.amount,
               ownStock: item.ownStock,
             }}
+            key={index}
+            editable={false}
             availableSubjects={items.map((item) => item.subject)}
             availableVarieties={items.map((item) => item.variety)}
           />

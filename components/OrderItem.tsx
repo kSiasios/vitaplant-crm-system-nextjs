@@ -87,8 +87,11 @@ const OrderItem = ({
           <div>
             Items:
             <div className="order-items-container">
-              {items.map((item) => (
-                <div className="inline-flex gap-3 justify-center p-2 rounded-md">
+              {items.map((item, index) => (
+                <div
+                  className="inline-flex gap-3 justify-center p-2 rounded-md"
+                  key={index}
+                >
                   <div className="inline-flex items-center flex-row-reverse gap-1 flex-1 justify-start">
                     <GiTreeRoots className="text-orange-950" /> {item.subject}
                   </div>

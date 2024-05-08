@@ -10,6 +10,7 @@ interface OrderItemEntryProps {
   item?: ItemFormData;
   availableSubjects?: Array<string>;
   availableVarieties?: Array<string>;
+  editable?: boolean;
 }
 
 interface ItemFormData {
@@ -31,6 +32,7 @@ const OrderItemEntry = ({
   item,
   availableSubjects,
   availableVarieties,
+  editable = true,
 }: OrderItemEntryProps) => {
   const [sections, setSections] = useState<ItemFormData[]>([
     {
@@ -151,55 +153,59 @@ const OrderItemEntry = ({
             {itemSectionExpanded[index] && (
               <div className="flex flex-col gap-3">
                 {/* Subject */}
-                <div className="flex flex-col gap-2">
+                <div
+                  className={`flex gap-2 ${editable ? "flex-col" : "flex-row"}`}
+                >
                   <div className="flex gap-1 justify-between">
                     <h4>Subject</h4>
-                    <div className="flex gap-1">
-                      <div>
-                        <label
-                          className="border border-gray-300 rounded-lg"
-                          htmlFor={`subject_existing_${index}`}
-                        >
-                          Existing
-                          <input
-                            type="radio"
-                            name={`subject_new_${index}`}
-                            checked={!checks[index].subjectNew}
-                            onChange={(e) =>
-                              handleCheckChange(
-                                index,
-                                "subjectNew",
-                                !e.target.checked
-                              )
-                            }
-                            id={`subject_existing_${index}`}
-                          />
-                        </label>
+                    {editable && (
+                      <div className="flex gap-1">
+                        <div>
+                          <label
+                            className="border border-gray-300 rounded-lg"
+                            htmlFor={`subject_existing_${index}`}
+                          >
+                            Existing
+                            <input
+                              type="radio"
+                              name={`subject_new_${index}`}
+                              checked={!checks[index].subjectNew}
+                              onChange={(e) =>
+                                handleCheckChange(
+                                  index,
+                                  "subjectNew",
+                                  !e.target.checked
+                                )
+                              }
+                              id={`subject_existing_${index}`}
+                            />
+                          </label>
+                        </div>
+                        <div>
+                          <label
+                            className="border border-gray-400 rounded-lg"
+                            htmlFor={`subject_new_${index}`}
+                          >
+                            New
+                            <input
+                              type="radio"
+                              name={`subject_new_${index}`}
+                              checked={checks[index].subjectNew}
+                              onChange={(e) => {
+                                handleCheckChange(
+                                  index,
+                                  "subjectNew",
+                                  e.target.checked
+                                );
+                              }}
+                              id={`subject_new_${index}`}
+                            />
+                          </label>
+                        </div>
                       </div>
-                      <div>
-                        <label
-                          className="border border-gray-400 rounded-lg"
-                          htmlFor={`subject_new_${index}`}
-                        >
-                          New
-                          <input
-                            type="radio"
-                            name={`subject_new_${index}`}
-                            checked={checks[index].subjectNew}
-                            onChange={(e) => {
-                              handleCheckChange(
-                                index,
-                                "subjectNew",
-                                e.target.checked
-                              );
-                            }}
-                            id={`subject_new_${index}`}
-                          />
-                        </label>
-                      </div>
-                    </div>
+                    )}
                   </div>
-                  {!checks[index].subjectNew && (
+                  {!checks[index].subjectNew && editable && (
                     <select
                       value={section.subject}
                       onChange={(e) =>
@@ -215,7 +221,7 @@ const OrderItemEntry = ({
                       <option>Three</option> */}
                     </select>
                   )}
-                  {checks[index].subjectNew && (
+                  {checks[index].subjectNew && editable && (
                     <input
                       type="text"
                       placeholder="Subject"
@@ -225,51 +231,56 @@ const OrderItemEntry = ({
                       }
                     />
                   )}
+                  {!editable && <p>{section.subject}</p>}
                 </div>
                 {/* Variety */}
-                <div className="flex flex-col gap-2">
+                <div
+                  className={`flex gap-2 ${editable ? "flex-col" : "flex-row"}`}
+                >
                   <div className="flex gap-1 justify-between">
                     <h4>Variety</h4>
-                    <div className="flex gap-1">
-                      <div>
-                        <label htmlFor={`variety_existing_${index}`}>
-                          Existing
-                          <input
-                            type="radio"
-                            name={`variety_new_${index}`}
-                            checked={!checks[index].varietyNew}
-                            onChange={(e) => {
-                              handleCheckChange(
-                                index,
-                                "varietyNew",
-                                !e.target.checked
-                              );
-                            }}
-                            id={`variety_existing_${index}`}
-                          />
-                        </label>
+                    {editable && (
+                      <div className="flex gap-1">
+                        <div>
+                          <label htmlFor={`variety_existing_${index}`}>
+                            Existing
+                            <input
+                              type="radio"
+                              name={`variety_new_${index}`}
+                              checked={!checks[index].varietyNew}
+                              onChange={(e) => {
+                                handleCheckChange(
+                                  index,
+                                  "varietyNew",
+                                  !e.target.checked
+                                );
+                              }}
+                              id={`variety_existing_${index}`}
+                            />
+                          </label>
+                        </div>
+                        <div>
+                          <label htmlFor={`variety_new_${index}`}>
+                            New
+                            <input
+                              type="radio"
+                              name={`variety_new_${index}`}
+                              checked={checks[index].varietyNew}
+                              onChange={(e) => {
+                                handleCheckChange(
+                                  index,
+                                  "varietyNew",
+                                  e.target.checked
+                                );
+                              }}
+                              id={`variety_new_${index}`}
+                            />
+                          </label>
+                        </div>
                       </div>
-                      <div>
-                        <label htmlFor={`variety_new_${index}`}>
-                          New
-                          <input
-                            type="radio"
-                            name={`variety_new_${index}`}
-                            checked={checks[index].varietyNew}
-                            onChange={(e) => {
-                              handleCheckChange(
-                                index,
-                                "varietyNew",
-                                e.target.checked
-                              );
-                            }}
-                            id={`variety_new_${index}`}
-                          />
-                        </label>
-                      </div>
-                    </div>
+                    )}
                   </div>
-                  {!checks[index].varietyNew && (
+                  {!checks[index].varietyNew && editable && (
                     <select
                       value={section.variety}
                       onChange={(e) =>
@@ -282,7 +293,7 @@ const OrderItemEntry = ({
                         ))}
                     </select>
                   )}
-                  {checks[index].varietyNew && (
+                  {checks[index].varietyNew && editable && (
                     <input
                       type="text"
                       placeholder="Variety"
@@ -292,41 +303,48 @@ const OrderItemEntry = ({
                       }
                     />
                   )}
+                  {!editable && <p>{section.variety}</p>}
                 </div>
                 {/* Price */}
                 <div className="flex justify-between items-center">
                   <label htmlFor={`price_${index}`}>Price</label>
-                  <input
-                    type="number"
-                    name="price"
-                    step={0.01}
-                    id={`price_${index}`}
-                    value={section.price}
-                    onChange={(e) =>
-                      handleInputChange(
-                        index,
-                        "price",
-                        parseFloat(e.target.value)
-                      )
-                    }
-                  />
+                  {editable && (
+                    <input
+                      type="number"
+                      name="price"
+                      step={0.01}
+                      id={`price_${index}`}
+                      value={section.price}
+                      onChange={(e) =>
+                        handleInputChange(
+                          index,
+                          "price",
+                          parseFloat(e.target.value)
+                        )
+                      }
+                    />
+                  )}
+                  {!editable && <p id={`price_${index}`}>{section.price}</p>}
                 </div>
                 {/* Amount */}
                 <div className="flex justify-between items-center">
                   <label htmlFor={`amount_${index}`}>Amount</label>
-                  <input
-                    type="number"
-                    name="amount"
-                    id={`amount_${index}`}
-                    value={section.amount}
-                    onChange={(e) =>
-                      handleInputChange(
-                        index,
-                        "amount",
-                        parseInt(e.target.value)
-                      )
-                    }
-                  />
+                  {editable && (
+                    <input
+                      type="number"
+                      name="amount"
+                      id={`amount_${index}`}
+                      value={section.amount}
+                      onChange={(e) =>
+                        handleInputChange(
+                          index,
+                          "amount",
+                          parseInt(e.target.value)
+                        )
+                      }
+                    />
+                  )}
+                  {!editable && <p id={`amount_${index}`}>{section.amount}</p>}
                 </div>
                 {section.amount * section.price > 0 && (
                   <sup className="text-blue-400 ">
@@ -338,16 +356,22 @@ const OrderItemEntry = ({
                 )}
                 {/* Own Stock */}
                 <div className="flex items-center gap-1">
-                  <input
-                    type="checkbox"
-                    name="own_stock"
-                    id={`own_stock_${index}`}
-                    checked={section.ownStock}
-                    onChange={(e) => {
-                      handleInputChange(index, "ownStock", e.target.checked);
-                    }}
-                    className="cursor-pointer"
-                  />
+                  {editable && (
+                    <input
+                      type="checkbox"
+                      name="own_stock"
+                      id={`own_stock_${index}`}
+                      checked={section.ownStock}
+                      onChange={(e) => {
+                        handleInputChange(index, "ownStock", e.target.checked);
+                      }}
+                      className="cursor-pointer"
+                    />
+                  )}
+                  {/* {!editable && !section.ownStock && <p>NOT</p>} */}
+                  {!editable && !section.ownStock && (
+                    <p className="underline text-red-700">NOT</p>
+                  )}
                   <label
                     htmlFor={`own_stock_${index}`}
                     className="cursor-pointer"
@@ -360,7 +384,7 @@ const OrderItemEntry = ({
           </div>
         );
       })}
-      {!newItem && (
+      {!newItem && editable && (
         <button
           onClick={addSection}
           className="border border-green-700 bg-green-100 text-green-700 hover:bg-green-700 focus:bg-green-700 hover:text-white focus:text-white px-4 py-2 rounded-lg m-auto"
