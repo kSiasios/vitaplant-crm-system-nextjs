@@ -1,14 +1,24 @@
 "use client";
 
+import { Item } from "@/components/OrderItem";
 import OrderItemEntry from "@/components/OrderItemEntry";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 const NewItem = () => {
   const [orderItems, setOrderItems] = useState<Object>([]);
   const [loading, setLoading] = useState(false);
+  const [availableSubjects, setAvailableSubjects] = useState([]);
+  const [availableVarieties, setAvailableVarieties] = useState([]);
 
   const getOrderItems = (data: Array<Object>) => {
     setOrderItems(data);
+  };
+
+  const fetchItems = async () => {
+    const res = await fetch(`/api/items`);
+    const items = await res.json();
+    setAvailableSubjects(items.map((item: Item) => item.subject));
+    setAvailableVarieties(items.map((item: Item) => item.variety));
   };
 
   const formSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -29,6 +39,10 @@ const NewItem = () => {
     }
   };
 
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
   return (
     <div>
       <h1 className="font-bold text-4xl w-full text-center my-4">New Item</h1>
@@ -36,7 +50,12 @@ const NewItem = () => {
         className="max-w-[500px] mx-auto flex flex-col gap-4"
         onSubmit={formSubmit}
       >
-        <OrderItemEntry handleChange={getOrderItems} newItem={true} />
+        <OrderItemEntry
+          availableSubjects={availableSubjects}
+          availableVarieties={availableVarieties}
+          handleChange={getOrderItems}
+          newItem={true}
+        />
         <button
           type="submit"
           disabled={loading}

@@ -14,14 +14,6 @@ interface OrderItemEntryProps {
   editable?: boolean;
 }
 
-// interface ItemFormData {
-//   subject: string;
-//   variety: string;
-//   price: number;
-//   amount: number;
-//   stock: Stock;
-// }
-
 interface Checks {
   subjectNew: boolean;
   varietyNew: boolean;
@@ -109,9 +101,13 @@ const OrderItemEntry = ({
     field: keyof Stock,
     value: string | number | boolean
   ) => {
+    // console.log("Cjheck");
     const newSections = [...sections];
-    if (field in newSections[index]) {
+    console.log(newSections);
+    if (field in newSections[index]["stock"]) {
       (newSections[index]["stock"][field] as string | number | boolean) = value;
+      console.log(newSections);
+
       setSections(newSections);
     }
 
@@ -238,12 +234,11 @@ const OrderItemEntry = ({
                       }
                     >
                       {availableSubjects &&
-                        availableSubjects.map((subject) => (
-                          <option value={subject}>{subject}</option>
+                        availableSubjects.map((subject, index) => (
+                          <option key={index} value={subject}>
+                            {subject}
+                          </option>
                         ))}
-                      {/* <option>One</option>
-                      <option>Two</option>
-                      <option>Three</option> */}
                     </select>
                   )}
                   {checks[index].subjectNew && editable && (
@@ -313,8 +308,10 @@ const OrderItemEntry = ({
                       }
                     >
                       {availableVarieties &&
-                        availableVarieties.map((variety) => (
-                          <option value={variety}>{variety}</option>
+                        availableVarieties.map((variety, index) => (
+                          <option key={index} value={variety}>
+                            {variety}
+                          </option>
                         ))}
                     </select>
                   )}
@@ -398,17 +395,19 @@ const OrderItemEntry = ({
                         }}
                         className="cursor-pointer"
                       />
-                      <input
-                        type="text"
-                        placeholder="Distributor"
-                        onChange={(e) => {
-                          handleStockInputChange(
-                            index,
-                            "distributor",
-                            e.target.value
-                          );
-                        }}
-                      />
+                      {!section.stock.own && (
+                        <input
+                          type="text"
+                          placeholder="Distributor"
+                          onChange={(e) => {
+                            handleStockInputChange(
+                              index,
+                              "distributor",
+                              e.target.value
+                            );
+                          }}
+                        />
+                      )}
                     </>
                   )}
                   {/* {!editable && !section.ownStock && <p>NOT</p>} */}
@@ -419,7 +418,8 @@ const OrderItemEntry = ({
                     htmlFor={`own_stock_${index}`}
                     className="cursor-pointer"
                   >
-                    Own Stock
+                    {section.stock.own && "Own "}
+                    Stock
                   </label>
                 </div>
               </div>
