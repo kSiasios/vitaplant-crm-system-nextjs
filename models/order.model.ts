@@ -24,6 +24,10 @@ const OrderScema = new Schema({
     type: Number,
     required: [true, "Payment Amount not defined!"],
   },
+  created: {
+    by: { type: String, required: [true, "Creator not defined!"] },
+    at: { type: String, required: [true, "Date of creation not defined!"] }
+  },
   items: [
     {
       subject: {

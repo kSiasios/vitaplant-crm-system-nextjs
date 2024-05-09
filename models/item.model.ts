@@ -17,9 +17,15 @@ const ItemScema = new Schema({
     type: Number,
     required: [true, "Amount not defined!"],
   },
-  ownStock: {
-    type: Boolean,
-    required: [true, "OwnStock not defined!"],
+  stock: {
+    own: {
+      type: Boolean,
+      required: [true, "Own Stock not defined!"],
+    },
+    distributor: {
+      type: String,
+      // required: [true, "Distributor not defined!"],
+    }
   },
 });
 
