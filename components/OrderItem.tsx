@@ -25,7 +25,12 @@ export interface Item {
   variety: string;
   price: number;
   amount: number;
-  ownStock: boolean;
+  stock: Stock;
+}
+
+export interface Stock {
+  own: boolean;
+  distributor: string;
 }
 
 const OrderItem = ({

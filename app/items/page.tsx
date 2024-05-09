@@ -28,7 +28,7 @@ const Items = async () => {
               variety: item.variety,
               price: item.price,
               amount: item.amount,
-              ownStock: item.ownStock,
+              stock: item.stock,
             }}
             key={index}
             editable={false}

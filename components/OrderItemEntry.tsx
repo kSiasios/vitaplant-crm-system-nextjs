@@ -3,23 +3,24 @@
 import { useEffect, useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
+import { Item, Stock } from "./OrderItem";
 
 interface OrderItemEntryProps {
   handleChange?: Function;
   newItem?: boolean;
-  item?: ItemFormData;
+  item?: Item;
   availableSubjects?: Array<string>;
   availableVarieties?: Array<string>;
   editable?: boolean;
 }
 
-interface ItemFormData {
-  subject: string;
-  variety: string;
-  price: number;
-  amount: number;
-  ownStock: boolean;
-}
+// interface ItemFormData {
+//   subject: string;
+//   variety: string;
+//   price: number;
+//   amount: number;
+//   stock: Stock;
+// }
 
 interface Checks {
   subjectNew: boolean;
@@ -34,13 +35,13 @@ const OrderItemEntry = ({
   availableVarieties,
   editable = true,
 }: OrderItemEntryProps) => {
-  const [sections, setSections] = useState<ItemFormData[]>([
+  const [sections, setSections] = useState<Item[]>([
     {
       subject: item ? item.subject : "",
       variety: item ? item.variety : "",
       price: item ? item.price : 0,
       amount: item ? item.amount : 0,
-      ownStock: item ? item.ownStock : true,
+      stock: item ? item.stock : { own: true, distributor: "" },
     },
   ]);
 
@@ -58,7 +59,13 @@ const OrderItemEntry = ({
   const addSection = () => {
     setSections([
       ...sections,
-      { subject: "", variety: "", price: 0, amount: 0, ownStock: false },
+      {
+        subject: "",
+        variety: "",
+        price: 0,
+        amount: 0,
+        stock: { own: true, distributor: "" },
+      },
     ]);
 
     setChecks([...checks, { subjectNew: false, varietyNew: false }]);
@@ -81,12 +88,30 @@ const OrderItemEntry = ({
 
   const handleInputChange = (
     index: number,
-    field: keyof ItemFormData,
+    field: keyof Item,
     value: string | number | boolean
   ) => {
     const newSections = [...sections];
     if (field in newSections[index]) {
       (newSections[index][field] as string | number | boolean) = value;
+      setSections(newSections);
+    }
+
+    // const items: Array<Object> = [];
+
+    if (handleChange) {
+      handleChange(sections);
+    }
+  };
+
+  const handleStockInputChange = (
+    index: number,
+    field: keyof Stock,
+    value: string | number | boolean
+  ) => {
+    const newSections = [...sections];
+    if (field in newSections[index]) {
+      (newSections[index]["stock"][field] as string | number | boolean) = value;
       setSections(newSections);
     }
 
@@ -357,19 +382,37 @@ const OrderItemEntry = ({
                 {/* Own Stock */}
                 <div className="flex items-center gap-1">
                   {editable && (
-                    <input
-                      type="checkbox"
-                      name="own_stock"
-                      id={`own_stock_${index}`}
-                      checked={section.ownStock}
-                      onChange={(e) => {
-                        handleInputChange(index, "ownStock", e.target.checked);
-                      }}
-                      className="cursor-pointer"
-                    />
+                    <>
+                      <input
+                        type="checkbox"
+                        name="own_stock"
+                        id={`own_stock_${index}`}
+                        checked={section.stock.own}
+                        onChange={(e) => {
+                          handleStockInputChange(
+                            index,
+                            "own",
+                            e.target.checked
+                          );
+                          // handleInputChange(index, "stock.own", e.target.checked);
+                        }}
+                        className="cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Distributor"
+                        onChange={(e) => {
+                          handleStockInputChange(
+                            index,
+                            "distributor",
+                            e.target.value
+                          );
+                        }}
+                      />
+                    </>
                   )}
                   {/* {!editable && !section.ownStock && <p>NOT</p>} */}
-                  {!editable && !section.ownStock && (
+                  {!editable && !section.stock.own && (
                     <p className="underline text-red-700">NOT</p>
                   )}
                   <label
