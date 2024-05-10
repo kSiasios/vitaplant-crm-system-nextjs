@@ -23,7 +23,7 @@ export const POST = async (req: Request) => {
       item.variety == "" ||
       item.amount <= 0 ||
       item.price <= 0 ||
-      item.ownStock == undefined
+      item.stock == undefined
     ) {
       return new Response(
         JSON.stringify({
@@ -35,7 +35,7 @@ export const POST = async (req: Request) => {
       );
     }
 
-    if (!item.ownStock) {
+    if (!item.stock.own) {
       return new Response(
         JSON.stringify({
           message: "The Stock must be owned by the company!",

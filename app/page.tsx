@@ -85,6 +85,9 @@ const Home = () => {
 
     const fetchOrders = async () => {
       const res = await fetch("/api/orders");
+
+      // console.log(res);
+
       const data = await res.json();
       // console.log(data);
       setOrdersData(data);
@@ -94,7 +97,7 @@ const Home = () => {
       const response = await getProviders();
       setProviders(response);
 
-      console.log(response);
+      // console.log(response);
     };
 
     if (!frontEndDev) {

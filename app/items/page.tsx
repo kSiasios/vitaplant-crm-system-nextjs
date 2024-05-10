@@ -15,7 +15,7 @@ async function getData() {
 const Items = async () => {
   const items: Array<Item> = await getData();
   // console.log(items);
-  console.log(items.map((item) => item.subject));
+  // console.log(items.map((item) => item.subject));
   return (
     <div>
       Items

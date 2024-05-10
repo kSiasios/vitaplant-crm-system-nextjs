@@ -52,8 +52,8 @@ const OrderItemEntry = ({
     setSections([
       ...sections,
       {
-        subject: "",
-        variety: "",
+        subject: availableSubjects ? availableSubjects[0] : "",
+        variety: availableVarieties ? availableVarieties[0] : "",
         price: 0,
         amount: 0,
         stock: { own: true, distributor: "" },
@@ -91,9 +91,9 @@ const OrderItemEntry = ({
 
     // const items: Array<Object> = [];
 
-    if (handleChange) {
-      handleChange(sections);
-    }
+    // if (handleChange) {
+    //   handleChange(sections);
+    // }
   };
 
   const handleStockInputChange = (
@@ -103,19 +103,15 @@ const OrderItemEntry = ({
   ) => {
     // console.log("Cjheck");
     const newSections = [...sections];
-    console.log(newSections);
+    // console.log(newSections);
     if (field in newSections[index]["stock"]) {
       (newSections[index]["stock"][field] as string | number | boolean) = value;
-      console.log(newSections);
+      // console.log(newSections);
 
       setSections(newSections);
     }
 
     // const items: Array<Object> = [];
-
-    if (handleChange) {
-      handleChange(sections);
-    }
   };
 
   const handleExpand = (index: number, value: boolean) => {
@@ -134,11 +130,23 @@ const OrderItemEntry = ({
     setChecks(newChecks);
   };
 
+  // useEffect(() => {
+  //   if (handleChange) {
+  //     handleChange(sections);
+  //   }
+  // }, []);
   useEffect(() => {
     if (handleChange) {
       handleChange(sections);
     }
-  }, []);
+  }, [sections]);
+
+  useEffect(() => {
+    sections.forEach((section) => {
+      section.subject = availableSubjects ? availableSubjects[0] : "";
+      section.variety = availableVarieties ? availableVarieties[0] : "";
+    });
+  }, [availableSubjects, availableVarieties]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -396,17 +404,20 @@ const OrderItemEntry = ({
                         className="cursor-pointer"
                       />
                       {!section.stock.own && (
-                        <input
-                          type="text"
-                          placeholder="Distributor"
-                          onChange={(e) => {
-                            handleStockInputChange(
-                              index,
-                              "distributor",
-                              e.target.value
-                            );
-                          }}
-                        />
+                        <>
+                          <input
+                            type="text"
+                            placeholder="Distributor"
+                            onChange={(e) => {
+                              handleStockInputChange(
+                                index,
+                                "distributor",
+                                e.target.value
+                              );
+                            }}
+                          />
+                          's
+                        </>
                       )}
                     </>
                   )}
@@ -416,7 +427,7 @@ const OrderItemEntry = ({
                   )}
                   <label
                     htmlFor={`own_stock_${index}`}
-                    className="cursor-pointer"
+                    className={`${editable ? "cursor-pointer" : ""}`}
                   >
                     {section.stock.own && "Own "}
                     Stock

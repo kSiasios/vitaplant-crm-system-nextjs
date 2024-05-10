@@ -26,7 +26,7 @@ const OrderScema = new Schema({
   },
   created: {
     by: { type: String, required: [true, "Creator not defined!"] },
-    at: { type: String, required: [true, "Date of creation not defined!"] }
+    at: { type: String, required: [true, "Date of creation not defined!"] },
   },
   items: [
     {
@@ -46,9 +46,14 @@ const OrderScema = new Schema({
         type: Number,
         required: [true, "Amount not defined!"],
       },
-      ownStock: {
-        type: Boolean,
-        required: [true, "OwnStock not defined!"],
+      stock: {
+        own: {
+          type: Boolean,
+          required: [true, "OwnStock not defined!"],
+        },
+        distributor: {
+          type: String,
+        },
       },
     },
   ],

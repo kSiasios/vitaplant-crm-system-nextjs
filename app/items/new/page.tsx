@@ -23,7 +23,7 @@ const NewItem = () => {
 
   const formSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(orderItems);
+    // console.log(orderItems);
     setLoading(true);
     try {
       const res = await fetch("/api/items/new", {
