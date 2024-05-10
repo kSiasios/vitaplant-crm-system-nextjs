@@ -130,11 +130,6 @@ const OrderItemEntry = ({
     setChecks(newChecks);
   };
 
-  // useEffect(() => {
-  //   if (handleChange) {
-  //     handleChange(sections);
-  //   }
-  // }, []);
   useEffect(() => {
     if (handleChange) {
       handleChange(sections);

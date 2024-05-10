@@ -17,8 +17,8 @@ const Items = async () => {
   // console.log(items);
   // console.log(items.map((item) => item.subject));
   return (
-    <div>
-      Items
+    <div className="flex flex-col max-w-[500px] mx-auto">
+      <h1 className="font-bold text-4xl w-full text-center my-4">Items</h1>
       <div>
         {items.map((item, index) => (
           <OrderItemEntry
