@@ -14,6 +14,8 @@ import {
   signOut,
   useSession,
 } from "next-auth/react";
+import Link from "next/link";
+import { FaGear } from "react-icons/fa6";
 import { IoAdd, IoLogOutOutline } from "react-icons/io5";
 
 const Home = () => {
@@ -119,32 +121,39 @@ const Home = () => {
 
   return (
     <>
+      <Link
+        href="/settings"
+        className="absolute right-0 m-4 p-2 rounded-full hover:animate-spin focus:animate-spin"
+      >
+        <FaGear />
+      </Link>
       {session?.user ||
         (frontEndDev && (
-          <section className="flex flex-col gap-4 mx-auto pt-16 max-w-[500px]">
+          <section className="flex flex-col gap-4 mx-auto pt-16 max-w-[556px] bg-white rounded-2xl p-14 shadow-lg">
             <p className="text-4xl font-thin">
               Hello, <span className="font-bold">{session?.user?.name}</span>
             </p>
-            <form
-              onSubmit={filterOrders}
-              className="w-full flex items-center justify-center gap-2"
-            >
-              <input
-                className="px-4 py-2 border border-gray-300 rounded-lg"
-                placeholder="Search Order..."
-                value={filter}
-                onChange={updateFilter}
-              ></input>
-              <button
-                className="bg-gray-100 border border-blue-500 text-blue-500 font-bold hover:bg-blue-500 focus:bg-blue-500 hover:text-white focus:text-white px-4 py-2 rounded-lg"
-                type="submit"
-              >
-                Filter
-              </button>
-            </form>
+
+            <h3 className="font-bold text-2xl">Orders</h3>
             <div className="flex justify-between items-center">
               {/* Orders title bar */}
-              <h3 className="font-bold text-2xl">Orders</h3>
+              <form
+                onSubmit={filterOrders}
+                className="w-full flex items-center justify-start gap-2"
+              >
+                <input
+                  className="px-4 py-2 border border-gray-300 rounded-lg"
+                  placeholder="Search Order..."
+                  value={filter}
+                  onChange={updateFilter}
+                ></input>
+                {/* <button
+                  className="bg-gray-100 border border-blue-500 text-blue-500 font-bold hover:bg-blue-500 focus:bg-blue-500 hover:text-white focus:text-white px-4 py-2 rounded-lg"
+                  type="submit"
+                >
+                  Filter
+                </button> */}
+              </form>
               <div className="flex gap-1">
                 {/* Actions */}
                 <button
@@ -169,7 +178,9 @@ const Home = () => {
                 </button>
               </div>
             </div>
-            <div className="p-4">
+            <div
+            // className="p-4"
+            >
               <section className="overflow-y-visible flex flex-col gap-4">
                 {orders &&
                   Object.values(orders).map((order: any) => (
@@ -183,7 +194,8 @@ const Home = () => {
                       paymentStatus={order.paymentStatus}
                     />
                   ))}
-                {orders.length === 0 && <div>LOADING</div>}
+                {orders.length === 0 && !filter && <div>LOADING</div>}
+                {orders.length === 0 && filter && <div>No Results</div>}
               </section>
             </div>
           </section>

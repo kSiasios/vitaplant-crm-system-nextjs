@@ -83,6 +83,9 @@ const OrderItemEntry = ({
     field: keyof Item,
     value: string | number | boolean
   ) => {
+    if (!editable) {
+      return;
+    }
     const newSections = [...sections];
     if (field in newSections[index]) {
       (newSections[index][field] as string | number | boolean) = value;
@@ -101,6 +104,9 @@ const OrderItemEntry = ({
     field: keyof Stock,
     value: string | number | boolean
   ) => {
+    if (!editable) {
+      return;
+    }
     // console.log("Cjheck");
     const newSections = [...sections];
     // console.log(newSections);
@@ -117,6 +123,7 @@ const OrderItemEntry = ({
   const handleExpand = (index: number, value: boolean) => {
     const newExpanded = [...itemSectionExpanded];
     newExpanded[index] = value;
+    // console.log(index);
     setItemSectionExpanded(newExpanded);
   };
 
@@ -125,13 +132,16 @@ const OrderItemEntry = ({
     field: keyof Checks,
     value: boolean
   ) => {
+    if (!editable) {
+      return;
+    }
     const newChecks = [...checks];
     newChecks[index][field] = value;
     setChecks(newChecks);
   };
 
   useEffect(() => {
-    if (handleChange) {
+    if (handleChange && editable) {
       handleChange(sections);
     }
   }, [sections]);
@@ -149,17 +159,17 @@ const OrderItemEntry = ({
         return (
           <div
             key={index}
-            className="border border-gray-400 rounded-lg p-4 flex flex-col gap-4"
+            className="border border-gray-400 rounded-lg p-4 flex flex-col gap-4 bg-white"
           >
             <div
-              className="flex justify-between items-center"
+              className="flex justify-between items-center cursor-pointer"
               onClick={() => {
                 handleExpand(index, !itemSectionExpanded[index]);
               }}
             >
               <h3 className="font-bold">Item</h3>
               <div className="flex gap-4">
-                {index > 0 && (
+                {index > 0 && editable && (
                   <button
                     className="border border-red-700 bg-red-100 text-red-700 hover:bg-red-700 focus:bg-red-700 hover:text-white focus:text-white p-4 rounded-lg"
                     onClick={() => removeSection(index)}
@@ -168,7 +178,13 @@ const OrderItemEntry = ({
                     <IoTrashOutline />
                   </button>
                 )}
-                <button className="border border-gray-400 p-4 rounded-lg">
+                <button
+                  className="border border-gray-400 p-4 rounded-lg"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    // handleExpand(index, !itemSectionExpanded[index]);
+                  }}
+                >
                   {!itemSectionExpanded[index] && <IoIosArrowDown />}
                   {itemSectionExpanded[index] && <IoIosArrowUp />}
                 </button>
@@ -237,8 +253,9 @@ const OrderItemEntry = ({
                       }
                     >
                       {availableSubjects &&
-                        availableSubjects.map((subject, index) => (
-                          <option key={index} value={subject}>
+                        editable &&
+                        availableSubjects.map((subject, idx) => (
+                          <option key={idx} value={subject}>
                             {subject}
                           </option>
                         ))}
@@ -254,7 +271,11 @@ const OrderItemEntry = ({
                       }
                     />
                   )}
-                  {!editable && <p>{section.subject}</p>}
+                  {!editable && (
+                    <p>
+                      {section.subject}_{index}
+                    </p>
+                  )}
                 </div>
                 {/* Variety */}
                 <div
@@ -311,8 +332,9 @@ const OrderItemEntry = ({
                       }
                     >
                       {availableVarieties &&
-                        availableVarieties.map((variety, index) => (
-                          <option key={index} value={variety}>
+                        editable &&
+                        availableVarieties.map((variety, idx) => (
+                          <option key={idx} value={variety}>
                             {variety}
                           </option>
                         ))}
@@ -418,7 +440,7 @@ const OrderItemEntry = ({
                   )}
                   {/* {!editable && !section.ownStock && <p>NOT</p>} */}
                   {!editable && !section.stock.own && (
-                    <p className="underline text-red-700">NOT</p>
+                    <p>{section.stock.distributor}'s</p>
                   )}
                   <label
                     htmlFor={`own_stock_${index}`}

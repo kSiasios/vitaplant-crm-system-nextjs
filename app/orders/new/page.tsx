@@ -18,6 +18,9 @@ const NewOrder = () => {
         headers,
         body: JSON.stringify(data),
       });
+      if (response.ok) {
+        console.log("Created ");
+      }
     } catch (error) {
       alert(error);
     }

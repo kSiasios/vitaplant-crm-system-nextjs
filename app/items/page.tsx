@@ -20,7 +20,7 @@ const Items = async () => {
     <div className="flex flex-col max-w-[500px] mx-auto">
       <h1 className="font-bold text-4xl w-full text-center my-4">Items</h1>
       <div>
-        {items.map((item, index) => (
+        {items.map((item, idx) => (
           <OrderItemEntry
             newItem={false}
             item={{
@@ -30,10 +30,10 @@ const Items = async () => {
               amount: item.amount,
               stock: item.stock,
             }}
-            key={index}
+            key={idx}
             editable={false}
-            availableSubjects={items.map((item) => item.subject)}
-            availableVarieties={items.map((item) => item.variety)}
+            availableSubjects={[item.subject]}
+            availableVarieties={[item.variety]}
           />
         ))}
       </div>

@@ -9,6 +9,7 @@
 }
 
 body {
+  background-color: #2b8c2a;
 }
 
 @layer utilities {
@@ -55,6 +56,10 @@ body {
     right: 100%;
     top: 0;
     width: 100px;
+  }
+
+  button {
+    background-color: white;
   }
 
   .order-items-container {

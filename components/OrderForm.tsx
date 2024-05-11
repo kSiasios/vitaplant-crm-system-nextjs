@@ -66,7 +66,7 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
   return (
     <form
       onSubmit={submitForm}
-      className="flex flex-col max-w-[500px] mx-auto border border-gray-400 rounded-lg p-8 gap-4"
+      className="flex flex-col max-w-[500px] mx-auto border border-gray-400 rounded-lg p-8 gap-4 bg-white"
     >
       <input
         required={true}

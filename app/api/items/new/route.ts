@@ -35,16 +35,16 @@ export const POST = async (req: Request) => {
       );
     }
 
-    if (!item.stock.own) {
-      return new Response(
-        JSON.stringify({
-          message: "The Stock must be owned by the company!",
-        }),
-        {
-          status: 500,
-        }
-      );
-    }
+    // if (!item.stock.own) {
+    //   return new Response(
+    //     JSON.stringify({
+    //       message: "The Stock must be owned by the company!",
+    //     }),
+    //     {
+    //       status: 500,
+    //     }
+    //   );
+    // }
   }
 
   try {
