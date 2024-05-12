@@ -12,3 +12,23 @@ export const GET = async () => {
     return false;
   }
 };
+
+export const DELETE = async (req: Request) => {
+  try {
+    let data = await req.json();
+    console.log(data);
+    if (!data.id) {
+      return new Response(JSON.stringify({ error: "No id provided" }), {
+        status: 500,
+      });
+    }
+    await connectToDB();
+    const items = await Item.deleteOne({ _id: data.id });
+
+    return new Response(JSON.stringify(items));
+    // return new Response(JSON.stringify({ message: "Got it!" }));
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};

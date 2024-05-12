@@ -69,4 +69,15 @@ body {
   .order-items-container > *:nth-child(2n + 1) {
     background: rgb(0, 0, 0, 0.1);
   }
+
+  tr:nth-child(even) {
+    background-color: #96969631;
+  }
+  td,
+  th {
+    /* background-color: #d6eeee; */
+    /* background-color: #f5f5f5; */
+    border: 1px solid;
+    padding: 1rem;
+  }
 }
