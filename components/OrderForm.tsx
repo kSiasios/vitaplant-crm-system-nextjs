@@ -23,12 +23,16 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
   const fetchItems = async () => {
     const res = await fetch(`/api/items`);
     const items = await res.json();
-    setAvailableSubjects(items.map((item: Item) => item.subject));
-    setAvailableVarieties(items.map((item: Item) => item.variety));
+
+    const subs: Set<Object> = new Set(items.map((item: Item) => item.subject));
+    const vars: Set<Object> = new Set(items.map((item: Item) => item.variety));
+
+    setAvailableSubjects(Array.from(subs.values()));
+    setAvailableVarieties(Array.from(vars.values()));
   };
 
-  const [availableSubjects, setAvailableSubjects] = useState([]);
-  const [availableVarieties, setAvailableVarieties] = useState([]);
+  const [availableSubjects, setAvailableSubjects] = useState<any>([]);
+  const [availableVarieties, setAvailableVarieties] = useState<any>([]);
 
   // console.log(type);
   // useEffect(() => {

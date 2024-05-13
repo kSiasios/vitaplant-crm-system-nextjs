@@ -2,7 +2,9 @@
 
 import { Item } from "@/components/OrderItem";
 import OrderItemEntry from "@/components/OrderItemEntry";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 const NewItem = () => {
   const [orderItems, setOrderItems] = useState<Object>([]);
@@ -43,9 +45,19 @@ const NewItem = () => {
     fetchItems();
   }, []);
 
+  const router = useRouter();
+
   return (
     <div>
-      <h1 className="font-bold text-4xl w-full text-center my-4">New Item</h1>
+      <button
+        onClick={() => router.back()}
+        className="absolute aspect-square text-3xl border border-gray-400 p-4 rounded-full mx-4"
+      >
+        <IoIosArrowRoundBack />
+      </button>
+      <h1 className="font-bold text-4xl w-full text-center my-4 text-white">
+        New Item
+      </h1>
       <form
         className="max-w-[500px] mx-auto flex flex-col gap-4"
         onSubmit={formSubmit}

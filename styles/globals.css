@@ -80,4 +80,13 @@ body {
     border: 1px solid;
     padding: 1rem;
   }
+
+  .background-image-container {
+    background-image: url("../public/assets/vitaplant_logo.png");
+    background-size: 40%;
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+    z-index: 0;
+    opacity: 10%;
+  }
 }

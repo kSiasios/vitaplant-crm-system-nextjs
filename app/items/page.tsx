@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
+import { IoIosArrowRoundBack } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 
 const Items = () => {
@@ -52,9 +55,20 @@ const Items = () => {
       }
     }
   }
+
+  const router = useRouter();
+
   return (
     <div className="flex flex-col w-fit mx-auto">
-      <h1 className="font-bold text-4xl w-full text-center my-4">Items</h1>
+      <button
+        onClick={() => router.back()}
+        className="absolute aspect-square text-3xl border border-gray-400 p-4 rounded-full mx-4"
+      >
+        <IoIosArrowRoundBack />
+      </button>
+      <h1 className="font-bold text-4xl w-full text-center my-4 text-white">
+        Items
+      </h1>
       <div className="bg-white p-4 rounded-xl ">
         <table>
           <thead>
@@ -87,7 +101,7 @@ const Items = () => {
               <tr key={idx} className="group relative">
                 <th
                   scope="row"
-                  className="text-ellipsis max-w-20 overflow-hidden"
+                  className="text-ellipsis max-w-32 overflow-hidden"
                 >
                   {item._id}
                 </th>
@@ -102,7 +116,9 @@ const Items = () => {
                     <FaXmark className="mx-auto" />
                   )}
                 </td>
-                <td className="text-center">{item.stock.distributor}</td>
+                <td className="text-center">
+                  {item.stock.distributor ? item.stock.distributor : "-"}
+                </td>
                 <td className="absolute p-0 border-none h-full hidden group-hover:block">
                   <button
                     className="p-4 rounded-e bg-red-500 text-white h-full"
@@ -118,6 +134,12 @@ const Items = () => {
           </tbody>
         </table>
       </div>
+      <Link
+        href="/items/new"
+        className="bg-white w-fit mx-auto my-3 px-4 py-2 rounded-lg"
+      >
+        New
+      </Link>
     </div>
   );
 };

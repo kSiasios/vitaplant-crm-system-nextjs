@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import Provider from "@/components/Provider";
 import "@/styles/globals.css";
+import Link from "next/link";
 
 export const metadata = {
   title: "Vitaplant - CRM System",
@@ -16,7 +17,11 @@ export default function RootLayout({
     <html lang="en">
       <body className="relative">
         <Provider>
-          <main className="min-h-screen pb-24">{children}</main>
+          <Link href="/" className="absolute">
+            <img src="/assets/vitaplant_logo.png"></img>
+          </Link>
+          <main className="min-h-screen p-8 pb-24">{children}</main>
+          <div className="absolute w-full h-full top-0 left-0 background-image-container pointer-events-none"></div>
           <Footer />
         </Provider>
       </body>

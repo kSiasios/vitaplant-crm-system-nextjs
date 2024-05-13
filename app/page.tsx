@@ -15,7 +15,7 @@ import {
   useSession,
 } from "next-auth/react";
 import Link from "next/link";
-import { FaGear } from "react-icons/fa6";
+import { GrStorage } from "react-icons/gr";
 import { IoAdd, IoLogOutOutline } from "react-icons/io5";
 
 const Home = () => {
@@ -121,20 +121,28 @@ const Home = () => {
 
   return (
     <>
-      <Link
+      {/* <Link
         href="/settings"
         className="absolute right-0 m-4 p-2 rounded-full hover:animate-spin focus:animate-spin"
       >
         <FaGear />
-      </Link>
-      {session?.user ||
-        (frontEndDev && (
+      </Link> */}
+      {frontEndDev ||
+        (session?.user && (
           <section className="flex flex-col gap-4 mx-auto pt-16 max-w-[556px] bg-white rounded-2xl p-14 shadow-lg">
             <p className="text-4xl font-thin">
               Hello, <span className="font-bold">{session?.user?.name}</span>
             </p>
 
-            <h3 className="font-bold text-2xl">Orders</h3>
+            <div className="inline-flex justify-between items-center">
+              <h3 className="font-bold text-2xl">Orders</h3>
+              <Link
+                href="/items"
+                className="inline-flex items-center gap-1 underline"
+              >
+                Storage <GrStorage />
+              </Link>
+            </div>
             <div className="flex justify-between items-center">
               {/* Orders title bar */}
               <form
@@ -201,8 +209,10 @@ const Home = () => {
           </section>
         ))}
       {!session?.user && !frontEndDev && (
-        <section className="w-screen h-screen flex flex-col gap-8 items-center justify-center">
-          <h1 className="font-bold text-3xl">You are not Authorized!</h1>
+        <section className="w-screen h-screen max-w-[500px] mx-auto flex flex-col gap-8 items-center justify-center">
+          <h1 className="font-bold text-3xl text-white">
+            You are not Authorized!
+          </h1>
           {providers &&
             Object.values(providers).map((provider) => (
               <button
