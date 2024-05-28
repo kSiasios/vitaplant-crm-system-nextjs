@@ -43,13 +43,13 @@ const OrderItem = ({
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <div>
-      <div
-        onClick={() => {
-          setIsExpanded(!isExpanded);
-        }}
-        className="cursor-pointer border-gray-400 border rounded-lg"
-      >
-        <div className="flex justify-between items-center p-2 w-full">
+      <div className="border-gray-400 border rounded-lg">
+        <div
+          className="cursor-pointer flex justify-between items-center p-2 w-full"
+          onClick={() => {
+            setIsExpanded(!isExpanded);
+          }}
+        >
           <div className="flex gap-2">
             <span>{clientName}</span>
             <span className="opacity-45">ID: {orderID}</span>
@@ -71,7 +71,7 @@ const OrderItem = ({
         </div>
         <div>
           {isExpanded && (
-            <div className="p-2 ">
+            <div className="p-2 flex flex-col">
               <div className="inline-flex gap-3">
                 <div className="inline-flex items-center gap-1">
                   Status:{" "}
@@ -90,6 +90,35 @@ const OrderItem = ({
                 <div>
                   Payment <span className="capitalize">{paymentStatus}</span>
                 </div>
+              </div>
+              <div className="inline-flex gap-2">
+                <label htmlFor={`status_${orderID}_1`}>
+                  Active{" "}
+                  <input
+                    type="radio"
+                    id={`status_${orderID}_1`}
+                    name={`status_${orderID}`}
+                    value="active"
+                  />
+                </label>
+                <label htmlFor={`status_${orderID}_2`}>
+                  Inactive
+                  <input
+                    type="radio"
+                    id={`status_${orderID}_2`}
+                    name={`status_${orderID}`}
+                    value="inactive"
+                  />
+                </label>
+                <label htmlFor={`status_${orderID}_3`}>
+                  Pending
+                  <input
+                    type="radio"
+                    id={`status_${orderID}_3`}
+                    name={`status_${orderID}`}
+                    value="pending"
+                  />
+                </label>
               </div>
               <div>
                 Items:

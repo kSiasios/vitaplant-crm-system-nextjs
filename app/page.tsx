@@ -10,7 +10,6 @@ import {
   ClientSafeProvider,
   getProviders,
   LiteralUnion,
-  signIn,
   signOut,
   useSession,
 } from "next-auth/react";
@@ -213,17 +212,45 @@ const Home = () => {
           <h1 className="font-bold text-3xl text-white">
             You are not Authorized!
           </h1>
-          {providers &&
-            Object.values(providers).map((provider) => (
-              <button
-                type="button"
-                key={provider.name}
-                onClick={() => signIn(provider.id)}
-                className="border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
-              >
-                Login with {provider.name}
-              </button>
-            ))}
+
+          <Link
+            href="/users/login"
+            className="bg-white border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
+          >
+            Log In
+          </Link>
+
+          {/* {providers &&
+            Object.values(providers).map((provider) => {
+              // if (provider.name === "Credentials") {
+              //   return (
+              //     <form key={provider.name} className="flex flex-col gap-4">
+              //       <label className="flex flex-col">
+              //         Username
+              //         <input type="text"></input>
+              //       </label>
+              //       <label className="flex flex-col">
+              //         Password
+              //         <input type="password"></input>
+              //       </label>
+              //       <button className="border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white">
+              //         Login
+              //       </button>
+              //     </form>
+              //   );
+              // }
+
+              return (
+                <button
+                  type="button"
+                  key={provider.name}
+                  onClick={() => signIn(provider.id)}
+                  className="border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
+                >
+                  Login with {provider.name}
+                </button>
+              );
+            })} */}
         </section>
       )}
     </>

@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="relative">
         <Provider>
-          <Link href="/" className="absolute">
+          <Link href="/" className="absolute -z-10">
             <img src="/assets/vitaplant_logo.png"></img>
           </Link>
           <main className="min-h-screen p-8 pb-24">{children}</main>

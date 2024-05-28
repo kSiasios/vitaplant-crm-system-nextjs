@@ -1,3 +1,3 @@
-const frontEndDev = true;
+const frontEndDev = false;
 
 export default frontEndDev;

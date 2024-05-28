@@ -14,8 +14,13 @@ const UserScema = new Schema({
       "Username invalid, it should contain 8-20 alphanumeric letters and be unique!",
     ],
   },
-  image: {
+  password: {
     type: String,
+    required: [true, "Password is required!"],
+  },
+  isAdmin: {
+    type: Boolean,
+    required: [true, "IsAdmin is required!"],
   },
 });
 
