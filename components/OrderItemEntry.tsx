@@ -433,7 +433,7 @@ const OrderItemEntry = ({
                               );
                             }}
                           />
-                          's
+                          &apos;s
                         </>
                       )}
                     </>
