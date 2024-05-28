@@ -3,8 +3,6 @@ import Order from "@/models/order.model";
 import { connectToDB } from "@/utils/database";
 
 export const POST = async (req: Request) => {
-  // console.log(req.json())
-
   let orderData = await req.json();
   console.log(orderData);
 
@@ -27,10 +25,6 @@ export const POST = async (req: Request) => {
   try {
     await connectToDB();
 
-    // orderObject.items.forEach(item => {
-
-    // });
-
     for (let index = 0; index < orderObject.items.length; index++) {
       const item = orderObject.items[index];
       const inStorage = await Item.findOne({
@@ -41,7 +35,6 @@ export const POST = async (req: Request) => {
       if (!inStorage && item.stock.own) {
         return new Response(
           JSON.stringify({ error: "Item not found in storage!", item }),
-          // JSON.stringify({ message: "Resource created successfully", order }),
           { status: 500 }
         );
       }
@@ -49,7 +42,6 @@ export const POST = async (req: Request) => {
       if (item.stock.own && inStorage.amount < item.amount) {
         return new Response(
           JSON.stringify({ error: "Item amount is too much!", item }),
-          // JSON.stringify({ message: "Resource created successfully", order }),
           { status: 500 }
         );
       }

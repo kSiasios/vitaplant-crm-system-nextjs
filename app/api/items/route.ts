@@ -9,7 +9,13 @@ export const GET = async () => {
     return new Response(JSON.stringify(items));
   } catch (error) {
     console.log(error);
-    return false;
+    // return false;
+    return new Response(
+      JSON.stringify({
+        message: "An error occured!",
+        error,
+      })
+    );
   }
 };
 
@@ -29,6 +35,11 @@ export const DELETE = async (req: Request) => {
     // return new Response(JSON.stringify({ message: "Got it!" }));
   } catch (error) {
     console.log(error);
-    return false;
+    return new Response(
+      JSON.stringify({
+        message: "An error occured upon deletion!",
+        error,
+      })
+    );
   }
 };
