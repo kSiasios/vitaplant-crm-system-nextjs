@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import Provider from "@/components/Provider";
 import "@/styles/globals.css";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {
@@ -18,7 +19,7 @@ export default function RootLayout({
       <body className="relative">
         <Provider>
           <Link href="/" className="absolute -z-10">
-            <img src="/assets/vitaplant_logo.png"></img>
+            <Image alt="Vitaplant Logo" src="/assets/vitaplant_logo.png" />
           </Link>
           <main className="min-h-screen p-8 pb-24">{children}</main>
           <div className="absolute w-full h-full top-0 left-0 background-image-container pointer-events-none"></div>
