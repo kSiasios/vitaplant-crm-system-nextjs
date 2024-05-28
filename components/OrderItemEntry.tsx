@@ -440,7 +440,7 @@ const OrderItemEntry = ({
                   )}
                   {/* {!editable && !section.ownStock && <p>NOT</p>} */}
                   {!editable && !section.stock.own && (
-                    <p>{section.stock.distributor}'s</p>
+                    <p>{section.stock.distributor}&apos;s</p>
                   )}
                   <label
                     htmlFor={`own_stock_${index}`}
