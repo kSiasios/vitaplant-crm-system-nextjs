@@ -43,8 +43,8 @@ const SignIn = () => {
         setPending(false);
         return;
       }
-      // router.replace("/");
-      router.replace(`${process.env.URL ? process.env.URL : "/"}`);
+      router.replace("/");
+      // router.replace(`${process.env.URL ? process.env.URL : "/"}`);
     } catch (error) {
       console.error(error);
     }
