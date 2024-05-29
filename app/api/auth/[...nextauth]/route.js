@@ -81,6 +81,10 @@ const handler = NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
+  session: {
+    // Set to jwt in order to CredentialsProvider works properly
+    strategy: "jwt",
+  },
 });
 
 export { handler as GET, handler as POST };
