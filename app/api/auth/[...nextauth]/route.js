@@ -46,6 +46,7 @@ const handler = NextAuth({
         // console.log("Authorize called with:", credentials);
         try {
           const user = await logIn(credentials);
+          console.log(user);
           return user;
         } catch (error) {
           console.error(error);
