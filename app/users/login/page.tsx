@@ -23,8 +23,8 @@ const SignIn = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("Submit!");
-    console.log(creds);
+    // console.log("Submit!");
+    // console.log(creds);
 
     setPending(true);
 
@@ -43,7 +43,8 @@ const SignIn = () => {
         setPending(false);
         return;
       }
-      router.replace("/");
+      // router.replace("/");
+      router.replace(`${process.env.URL ? process.env.URL : "/"}`);
     } catch (error) {
       console.error(error);
     }
@@ -53,7 +54,7 @@ const SignIn = () => {
     const getData = async () => {
       const res = await getCsrfToken();
       // return res;
-      console.log(res);
+      // console.log(res);
       setCSRF(res);
     };
     // setCSRF(await getCsrfToken())

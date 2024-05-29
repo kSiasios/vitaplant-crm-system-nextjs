@@ -19,7 +19,12 @@ export default function RootLayout({
       <body className="relative">
         <Provider>
           <Link href="/" className="absolute -z-10">
-            <Image alt="Vitaplant Logo" src="/assets/vitaplant_logo.png" />
+            <Image
+              alt="Vitaplant Logo"
+              src="/assets/vitaplant_logo.png"
+              width={200}
+              height={200}
+            />
           </Link>
           <main className="min-h-screen p-8 pb-24">{children}</main>
           <div className="absolute w-full h-full top-0 left-0 background-image-container pointer-events-none"></div>
