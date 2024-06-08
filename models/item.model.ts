@@ -1,6 +1,10 @@
 import { model, models, Schema } from "mongoose";
 
 const ItemScema = new Schema({
+  plant: {
+    type: String,
+    required: [true, "Plant not defined!"],
+  },
   subject: {
     type: String,
     required: [true, "Subject not defined!"],
@@ -11,7 +15,6 @@ const ItemScema = new Schema({
   },
   price: {
     type: Number,
-    required: [true, "Price not defined!"],
   },
   amount: {
     type: Number,
@@ -25,7 +28,7 @@ const ItemScema = new Schema({
     distributor: {
       type: String,
       // required: [true, "Distributor not defined!"],
-    }
+    },
   },
 });
 

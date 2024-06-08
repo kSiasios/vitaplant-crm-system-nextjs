@@ -3,18 +3,18 @@
 import { useEffect, useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
+import ItemInput from "./ItemInput";
 import { Item, Stock } from "./OrderItem";
 
 interface OrderItemEntryProps {
   handleChange?: Function;
   newItem?: boolean;
   item?: Item;
-  availableSubjects?: Array<string>;
-  availableVarieties?: Array<string>;
   editable?: boolean;
 }
 
 interface Checks {
+  plantNew: boolean;
   subjectNew: boolean;
   varietyNew: boolean;
 }
@@ -23,12 +23,17 @@ const OrderItemEntry = ({
   handleChange,
   newItem,
   item,
-  availableSubjects,
-  availableVarieties,
   editable = true,
 }: OrderItemEntryProps) => {
+  const [items, setItems] = useState({});
+
+  const [availablePlants, setAvailablePlants] = useState([]);
+  const [availableSubjects, setAvailableSubjects] = useState([]);
+  const [availableVarieties, setAvailableVarieties] = useState([]);
+
   const [sections, setSections] = useState<Item[]>([
     {
+      plant: item ? item.plant : "",
       subject: item ? item.subject : "",
       variety: item ? item.variety : "",
       price: item ? item.price : 0,
@@ -39,6 +44,7 @@ const OrderItemEntry = ({
 
   const [checks, setChecks] = useState<Checks[]>([
     {
+      plantNew: false,
       subjectNew: false,
       varietyNew: false,
     },
@@ -48,10 +54,60 @@ const OrderItemEntry = ({
     true,
   ]);
 
+  useEffect(() => {
+    const fetchItems = async () => {
+      const res = await fetch(`/api/items`);
+
+      if (!res.ok) {
+        const resText = await res.text();
+        console.error(resText);
+        alert(`Error while fetching items ${resText}`);
+        return;
+      }
+
+      const items = await res.json();
+
+      const plants: Set<Object> = new Set(
+        items.map((item: Item) => item.plant)
+      );
+      const subjects: Set<Object> = new Set(
+        items.map((item: Item) => item.subject)
+      );
+      const varieties: Set<Object> = new Set(
+        items.map((item: Item) => item.variety)
+      );
+
+      setAvailablePlants(Array.from(plants.values()));
+      setAvailableSubjects(Array.from(subjects.values()));
+      setAvailableVarieties(Array.from(varieties.values()));
+
+      setItems(items);
+    };
+
+    fetchItems();
+  }, []);
+
+  useEffect(() => {}, [items]);
+
+  useEffect(() => {
+    if (handleChange && editable) {
+      handleChange(sections);
+    }
+  }, [sections]);
+
+  // useEffect(() => {
+  //   sections.forEach((section) => {
+  //     section.plant = availablePlants ? availablePlants[0] : "";
+  //     section.subject = availableSubjects ? availableSubjects[0] : "";
+  //     section.variety = availableVarieties ? availableVarieties[0] : "";
+  //   });
+  // }, [availablePlants, availableSubjects, availableVarieties]);
+
   const addSection = () => {
     setSections([
       ...sections,
       {
+        plant: availablePlants ? availablePlants[0] : "",
         subject: availableSubjects ? availableSubjects[0] : "",
         variety: availableVarieties ? availableVarieties[0] : "",
         price: 0,
@@ -60,7 +116,10 @@ const OrderItemEntry = ({
       },
     ]);
 
-    setChecks([...checks, { subjectNew: false, varietyNew: false }]);
+    setChecks([
+      ...checks,
+      { plantNew: false, subjectNew: false, varietyNew: false },
+    ]);
     setItemSectionExpanded([...itemSectionExpanded, true]);
   };
 
@@ -86,9 +145,35 @@ const OrderItemEntry = ({
     if (!editable) {
       return;
     }
+
+    let newValue = value;
+
     const newSections = [...sections];
+
+    if (field === "amount") {
+      // console.log(`amount: ${newValue}`);
+      // parse int
+      newValue = parseInt(value, 10);
+
+      // if (!newValue) {
+      //   newValue = 0;
+      //   // console.log(`amount: ${newValue}, ${typeof newValue}`);
+      // }
+
+      // console.log(`amount: ${newValue}, ${typeof newValue}`);
+    }
+
+    if (field === "price") {
+      // parse float
+      newValue = parseFloat(value);
+
+      // if (!newValue) {
+      //   newValue = 0.0;
+      // }
+    }
+
     if (field in newSections[index]) {
-      (newSections[index][field] as string | number | boolean) = value;
+      (newSections[index][field] as string | number | boolean) = newValue;
       setSections(newSections);
     }
 
@@ -140,19 +225,6 @@ const OrderItemEntry = ({
     setChecks(newChecks);
   };
 
-  useEffect(() => {
-    if (handleChange && editable) {
-      handleChange(sections);
-    }
-  }, [sections]);
-
-  useEffect(() => {
-    sections.forEach((section) => {
-      section.subject = availableSubjects ? availableSubjects[0] : "";
-      section.variety = availableVarieties ? availableVarieties[0] : "";
-    });
-  }, [availableSubjects, availableVarieties]);
-
   return (
     <div className="flex flex-col gap-4">
       {sections.map((section, index) => {
@@ -192,166 +264,39 @@ const OrderItemEntry = ({
             </div>
             {itemSectionExpanded[index] && (
               <div className="flex flex-col gap-3">
-                {/* Subject */}
-                <div
-                  className={`flex gap-2 ${editable ? "flex-col" : "flex-row"}`}
-                >
-                  <div className="flex gap-1 justify-between">
-                    <h4>Subject</h4>
-                    {editable && (
-                      <div className="flex gap-1">
-                        <div>
-                          <label
-                            className="border border-gray-300 rounded-lg"
-                            htmlFor={`subject_existing_${index}`}
-                          >
-                            Existing
-                            <input
-                              type="radio"
-                              name={`subject_new_${index}`}
-                              checked={!checks[index].subjectNew}
-                              onChange={(e) =>
-                                handleCheckChange(
-                                  index,
-                                  "subjectNew",
-                                  !e.target.checked
-                                )
-                              }
-                              id={`subject_existing_${index}`}
-                            />
-                          </label>
-                        </div>
-                        <div>
-                          <label
-                            className="border border-gray-400 rounded-lg"
-                            htmlFor={`subject_new_${index}`}
-                          >
-                            New
-                            <input
-                              type="radio"
-                              name={`subject_new_${index}`}
-                              checked={checks[index].subjectNew}
-                              onChange={(e) => {
-                                handleCheckChange(
-                                  index,
-                                  "subjectNew",
-                                  e.target.checked
-                                );
-                              }}
-                              id={`subject_new_${index}`}
-                            />
-                          </label>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  {!checks[index].subjectNew && editable && (
-                    <select
-                      value={section.subject}
-                      onChange={(e) =>
-                        handleInputChange(index, "subject", e.target.value)
-                      }
-                    >
-                      {availableSubjects &&
-                        editable &&
-                        availableSubjects.map((subject, idx) => (
-                          <option key={idx} value={subject}>
-                            {subject}
-                          </option>
-                        ))}
-                    </select>
-                  )}
-                  {checks[index].subjectNew && editable && (
-                    <input
-                      type="text"
-                      placeholder="Subject"
-                      value={section.subject}
-                      onChange={(e) =>
-                        handleInputChange(index, "subject", e.target.value)
-                      }
-                    />
-                  )}
-                  {!editable && (
-                    <p>
-                      {section.subject}_{index}
-                    </p>
-                  )}
-                </div>
-                {/* Variety */}
-                <div
-                  className={`flex gap-2 ${editable ? "flex-col" : "flex-row"}`}
-                >
-                  <div className="flex gap-1 justify-between">
-                    <h4>Variety</h4>
-                    {editable && (
-                      <div className="flex gap-1">
-                        <div>
-                          <label htmlFor={`variety_existing_${index}`}>
-                            Existing
-                            <input
-                              type="radio"
-                              name={`variety_new_${index}`}
-                              checked={!checks[index].varietyNew}
-                              onChange={(e) => {
-                                handleCheckChange(
-                                  index,
-                                  "varietyNew",
-                                  !e.target.checked
-                                );
-                              }}
-                              id={`variety_existing_${index}`}
-                            />
-                          </label>
-                        </div>
-                        <div>
-                          <label htmlFor={`variety_new_${index}`}>
-                            New
-                            <input
-                              type="radio"
-                              name={`variety_new_${index}`}
-                              checked={checks[index].varietyNew}
-                              onChange={(e) => {
-                                handleCheckChange(
-                                  index,
-                                  "varietyNew",
-                                  e.target.checked
-                                );
-                              }}
-                              id={`variety_new_${index}`}
-                            />
-                          </label>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  {!checks[index].varietyNew && editable && (
-                    <select
-                      value={section.variety}
-                      onChange={(e) =>
-                        handleInputChange(index, "variety", e.target.value)
-                      }
-                    >
-                      {availableVarieties &&
-                        editable &&
-                        availableVarieties.map((variety, idx) => (
-                          <option key={idx} value={variety}>
-                            {variety}
-                          </option>
-                        ))}
-                    </select>
-                  )}
-                  {checks[index].varietyNew && editable && (
-                    <input
-                      type="text"
-                      placeholder="Variety"
-                      value={section.variety}
-                      onChange={(e) =>
-                        handleInputChange(index, "variety", e.target.value)
-                      }
-                    />
-                  )}
-                  {!editable && <p>{section.variety}</p>}
-                </div>
+                <ItemInput
+                  editable={editable}
+                  title="Plant"
+                  property="plant"
+                  isNew={checks[index].plantNew}
+                  value={section.plant}
+                  index={index}
+                  handleCheckChange={handleCheckChange}
+                  handleInputChange={handleInputChange}
+                  options={availablePlants}
+                />
+                <ItemInput
+                  editable={editable}
+                  title="Subject"
+                  property="subject"
+                  isNew={checks[index].subjectNew}
+                  value={section.subject}
+                  index={index}
+                  handleCheckChange={handleCheckChange}
+                  handleInputChange={handleInputChange}
+                  options={availableSubjects}
+                />
+                <ItemInput
+                  editable={editable}
+                  title="Variety"
+                  property="variety"
+                  isNew={checks[index].varietyNew}
+                  value={section.variety}
+                  index={index}
+                  handleCheckChange={handleCheckChange}
+                  handleInputChange={handleInputChange}
+                  options={availableVarieties}
+                />
                 {/* Price */}
                 <div className="flex justify-between items-center">
                   <label htmlFor={`price_${index}`}>Price</label>
@@ -363,12 +308,18 @@ const OrderItemEntry = ({
                       id={`price_${index}`}
                       value={section.price}
                       onChange={(e) =>
-                        handleInputChange(
-                          index,
-                          "price",
-                          parseFloat(e.target.value)
-                        )
+                        handleInputChange(index, "price", e.target.value)
                       }
+                      onFocus={(e) => {
+                        if (parseFloat(e.target.value) === 0) {
+                          e.target.value = "";
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (!e.target.value) {
+                          e.target.value = 0;
+                        }
+                      }}
                     />
                   )}
                   {!editable && <p id={`price_${index}`}>{section.price}</p>}
@@ -383,12 +334,18 @@ const OrderItemEntry = ({
                       id={`amount_${index}`}
                       value={section.amount}
                       onChange={(e) =>
-                        handleInputChange(
-                          index,
-                          "amount",
-                          parseInt(e.target.value)
-                        )
+                        handleInputChange(index, "amount", e.target.value)
                       }
+                      onFocus={(e) => {
+                        if (parseInt(e.target.value, 10) == 0) {
+                          e.target.value = "";
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (!e.target.value) {
+                          e.target.value = 0;
+                        }
+                      }}
                     />
                   )}
                   {!editable && <p id={`amount_${index}`}>{section.amount}</p>}

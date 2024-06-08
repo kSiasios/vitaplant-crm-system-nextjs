@@ -89,6 +89,13 @@ const Home = () => {
 
       // console.log(res);
 
+      if (!res.ok) {
+        const resText = await res.text();
+        console.error(resText);
+        alert(`Error while fetching orders ${resText}`);
+        return;
+      }
+
       const data = await res.json();
       // console.log(data);
       setOrdersData(data);
@@ -190,7 +197,11 @@ const Home = () => {
             >
               <section className="overflow-y-visible flex flex-col gap-4">
                 {orders &&
-                  Object.values(orders).map((order: any) => (
+                  Object.values(
+                    orders.sort((a: any, b: any) => {
+                      return a.paymentStatus - b.paymentStatus;
+                    })
+                  ).map((order: any) => (
                     // <div key={index}>{order.name}</div>
                     <OrderItem
                       key={order._id}

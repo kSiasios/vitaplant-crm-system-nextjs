@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { FaHourglassStart } from "react-icons/fa";
-import { FaHourglassEnd, FaRegHourglassHalf } from "react-icons/fa6";
+import { FaPen } from "react-icons/fa";
 import { GiTreeRoots } from "react-icons/gi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { LuPackage, LuPackageCheck, LuPackageOpen } from "react-icons/lu";
 import { PiPlant } from "react-icons/pi";
+import { TbCurrencyEuro, TbCurrencyEuroOff } from "react-icons/tb";
 
 interface OrderProps {
   clientName: String;
@@ -23,8 +23,8 @@ interface OrderProps {
 export interface Item {
   subject: string;
   variety: string;
-  price: number;
-  amount: number;
+  price: string;
+  amount: string;
   stock: Stock;
 }
 
@@ -41,9 +41,11 @@ const OrderItem = ({
   items,
 }: OrderProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  console.log(paymentStatus);
+
   return (
     <div>
-      <div className="border-gray-400 border rounded-lg">
+      <div className="border-gray-400 border rounded-lg text-nowrap">
         <div
           className="cursor-pointer flex justify-between items-center p-2 w-full"
           onClick={() => {
@@ -52,18 +54,30 @@ const OrderItem = ({
         >
           <div className="flex gap-2">
             <span>{clientName}</span>
-            <span className="opacity-45">ID: {orderID}</span>
+            {/* <span className="opacity-45 text-ellipsis">ID: {orderID}</span> */}
           </div>
           <div className="flex gap-1">
-            <div className="">
-              {paymentStatus === "full" && (
-                <FaHourglassEnd className="text-green-700" />
+            <div>
+              {status === "registered" && (
+                <LuPackageOpen className="text-red-500" />
               )}
-              {paymentStatus === "in advance" && (
-                <FaRegHourglassHalf className="text-orange-400" />
+              {status === "packed" && <LuPackage className="text-orange-400" />}
+              {status === "complete" && (
+                <LuPackageCheck className="text-green-700" />
+              )}
+            </div>
+            <div>
+              {paymentStatus === "complete" && (
+                // <FaHourglassEnd className="text-green-700" />
+                <TbCurrencyEuro className="text-green-700" />
+              )}
+              {paymentStatus === "in-advance" && (
+                // <FaRegHourglassHalf className="text-orange-400" />
+                <TbCurrencyEuro className="text-orange-400" />
               )}
               {paymentStatus === "due" && (
-                <FaHourglassStart className="text-red-500" />
+                // <FaHourglassStart className="text-red-500" />
+                <TbCurrencyEuroOff className="text-red-500" />
               )}
             </div>
             {isExpanded ? <IoIosArrowUp /> : <IoIosArrowDown />}
@@ -72,7 +86,7 @@ const OrderItem = ({
         <div>
           {isExpanded && (
             <div className="p-2 flex flex-col">
-              <div className="inline-flex gap-3">
+              <div className="inline-flex gap-3 justify-between items-center">
                 <div className="inline-flex items-center gap-1">
                   Status:{" "}
                   <span>
@@ -90,6 +104,13 @@ const OrderItem = ({
                 <div>
                   Payment <span className="capitalize">{paymentStatus}</span>
                 </div>
+                <button
+                  type="button"
+                  className="border border-black rounded-lg p-4 hover:bg-black hover:text-white focus:bg-black focus:text-white text-lg"
+                >
+                  {/* Sign Out */}
+                  <FaPen />
+                </button>
               </div>
               <div className="inline-flex gap-2">
                 <label htmlFor={`status_${orderID}_1`}>

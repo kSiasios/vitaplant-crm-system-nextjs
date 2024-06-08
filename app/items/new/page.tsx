@@ -9,6 +9,7 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 const NewItem = () => {
   const [orderItems, setOrderItems] = useState<Object>([]);
   const [loading, setLoading] = useState(false);
+  const [availablePlants, setAvailablePlants] = useState([]);
   const [availableSubjects, setAvailableSubjects] = useState([]);
   const [availableVarieties, setAvailableVarieties] = useState([]);
 
@@ -19,21 +20,38 @@ const NewItem = () => {
   const fetchItems = async () => {
     const res = await fetch(`/api/items`);
     const items = await res.json();
+
+    if (!res.ok) {
+      const resText = await res.text();
+      console.error(resText);
+      alert(`Error while fetching items ${resText}`);
+      return;
+    }
+
+    setAvailablePlants(items.map((item: Item) => item.plant));
     setAvailableSubjects(items.map((item: Item) => item.subject));
     setAvailableVarieties(items.map((item: Item) => item.variety));
   };
 
   const formSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log(orderItems);
+    console.log(orderItems);
     setLoading(true);
     try {
       const res = await fetch("/api/items/new", {
         method: "POST",
         body: JSON.stringify(orderItems),
       });
-      const resText = await res.json();
-      console.log(resText);
+
+      if (!res.ok) {
+        const resText = await res.text();
+        console.error(resText);
+        alert(`Error while fetching items ${resText}`);
+        return;
+      }
+
+      const resJson = await res.json();
+      console.log(resJson);
     } catch (error) {
       console.error();
     } finally {
@@ -63,6 +81,7 @@ const NewItem = () => {
         onSubmit={formSubmit}
       >
         <OrderItemEntry
+          availablePlants={availablePlants}
           availableSubjects={availableSubjects}
           availableVarieties={availableVarieties}
           handleChange={getOrderItems}

@@ -13,7 +13,19 @@ const Items = () => {
 
   const getData = async () => {
     const res = await fetch(`/api/items`);
+
+    if (!res.ok) {
+      const resText = await res.text();
+      console.error(resText);
+      alert(`Error while fetching items: ${resText}`);
+      return;
+    }
+
     const items = await res.json();
+
+    // const filteredItems = items.map((item: any) => item.stock.own);
+
+    // setItems(filteredItems);
     setItems(items);
     // console.log(items);
     return items;
@@ -52,6 +64,7 @@ const Items = () => {
       } else {
         console.error("There was an error upon deletion.");
         console.error(text);
+        alert(text);
       }
     }
   }
@@ -73,7 +86,7 @@ const Items = () => {
         <table>
           <thead>
             <tr>
-              <th scope="col">ID</th>
+              {/* <th scope="col">ID</th> */}
               <th scope="col">Subject</th>
               <th scope="col">Variety</th>
               <th scope="col">Price</th>
@@ -99,12 +112,12 @@ const Items = () => {
               //   availableVarieties={[item.variety]}
               // />
               <tr key={idx} className="group relative">
-                <th
+                {/* <th
                   scope="row"
                   className="text-ellipsis max-w-32 overflow-hidden"
                 >
                   {item._id}
-                </th>
+                </th> */}
                 <td className="text-center">{item.subject}</td>
                 <td className="text-center">{item.variety}</td>
                 <td className="text-center">{item.price}</td>

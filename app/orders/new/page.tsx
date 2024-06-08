@@ -8,7 +8,7 @@ const NewOrder = () => {
   async function handleNewOrder(data: Object, e?: any) {
     e?.preventDefault();
     // console.log("new order!");
-    console.log(data);
+    // console.log(data);
     const headers: Headers = new Headers();
     headers.set("Content-Type", "application/json");
     headers.set("Accept", "application/json");
@@ -21,6 +21,11 @@ const NewOrder = () => {
       });
       if (response.ok) {
         console.log("Created ");
+      }
+
+      if (!response.ok) {
+        let jsonRes = await response.json();
+        alert(jsonRes.error);
       }
     } catch (error) {
       alert(error);

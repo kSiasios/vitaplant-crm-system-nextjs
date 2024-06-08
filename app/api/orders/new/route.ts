@@ -18,9 +18,10 @@ export const POST = async (req: Request) => {
       at: `${new Date()}`,
     },
     items: [...orderData.items],
+    comments: orderData.comments,
   };
 
-  console.log(orderObject);
+  // console.log(orderObject);
 
   try {
     await connectToDB();

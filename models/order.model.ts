@@ -7,7 +7,6 @@ const OrderScema = new Schema({
   },
   address: {
     type: String,
-    required: [true, "Delivery address is required!"],
   },
   taxpayerNumber: {
     type: String,
@@ -40,11 +39,9 @@ const OrderScema = new Schema({
       },
       price: {
         type: Number,
-        required: [true, "Price not defined!"],
       },
       amount: {
         type: Number,
-        required: [true, "Amount not defined!"],
       },
       stock: {
         own: {
@@ -57,6 +54,9 @@ const OrderScema = new Schema({
       },
     },
   ],
+  comments: {
+    type: String,
+  },
 });
 
 const Order = models.Order || model("Order", OrderScema);
