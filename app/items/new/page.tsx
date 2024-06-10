@@ -46,7 +46,7 @@ const NewItem = () => {
       if (!res.ok) {
         const resText = await res.text();
         console.error(resText);
-        alert(`Error while fetching items ${resText}`);
+        alert(`Error while creating item ${resText}`);
         return;
       }
 
@@ -80,13 +80,7 @@ const NewItem = () => {
         className="max-w-[500px] mx-auto flex flex-col gap-4"
         onSubmit={formSubmit}
       >
-        <OrderItemEntry
-          availablePlants={availablePlants}
-          availableSubjects={availableSubjects}
-          availableVarieties={availableVarieties}
-          handleChange={getOrderItems}
-          newItem={true}
-        />
+        <OrderItemEntry handleChange={getOrderItems} newItem={true} />
         <button
           type="submit"
           disabled={loading}

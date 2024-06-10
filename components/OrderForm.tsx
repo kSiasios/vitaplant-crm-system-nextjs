@@ -1,79 +1,79 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { Item } from "./OrderItem";
 import OrderItemEntry from "./OrderItemEntry";
 
 interface OrderFormProps {
   handleSubmit: any;
   type: String;
+  orderData?: any;
 }
 
-const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
-  const [clientName, setClientName] = useState("");
-  const [address, setAddress] = useState("");
-  const [afm, setAFM] = useState("");
-  const [orderStatus, setOrderStatus] = useState("registered");
-  const [paymentStatus, setPaymentStatus] = useState("due");
-  const [paymentAmount, setPaymentAmount] = useState<number>(0);
-  const [comments, setComments] = useState<string>("");
+const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
+  const [formData, setFormData] = useState({
+    clientName: "",
+    address: "",
+    taxpayerNumber: "",
+    status: "",
+    paymentAmount: "",
+    paymentStatus: "",
+    comments: "",
+    items: [{}],
+  });
 
-  const [orderItems, setOrderItems] = useState([{}]);
+  const [newFormData, setNewFormData] = useState({
+    clientName: "",
+    address: "",
+    taxpayerNumber: "",
+    status: "",
+    paymentAmount: "",
+    paymentStatus: "",
+    comments: "",
+    items: [{}],
+  });
 
-  // const fetchItems = async () => {
-  //   const res = await fetch(`/api/items`);
+  const handleChange = (
+    field: string,
+    value: object | string | number | boolean
+  ) => {
+    // console.log(value);
 
-  //   if (!res.ok) {
-  //     const resText = await res.text();
-  //     console.error(resText);
-  //     alert(`Error while fetching items ${resText}`);
-  //     return;
-  //   }
-
-  //   const items = await res.json();
-
-  //   const subs: Set<Object> = new Set(items.map((item: Item) => item.subject));
-  //   const vars: Set<Object> = new Set(items.map((item: Item) => item.variety));
-
-  //   setAvailableSubjects(Array.from(subs.values()));
-  //   setAvailableVarieties(Array.from(vars.values()));
-  // };
-
-  // const [availableSubjects, setAvailableSubjects] = useState<any>([]);
-  // const [availableVarieties, setAvailableVarieties] = useState<any>([]);
-
-  // console.log(type);
-  // useEffect(() => {
-  //   console.log(orderStatus);
-  // }, [orderStatus]);
-
-  const getOrderItems = (data: Array<Object>) => {
-    setOrderItems(data);
+    // setFormData({
+    //   ...formData,
+    //   [field]: value,
+    // });
+    setNewFormData({
+      ...newFormData,
+      [field]: value,
+    });
   };
 
-  // useEffect(() => {
-  //   console.log(orderItems);
-  // }, [orderItems]);
+  useEffect(() => {
+    // console.log(orderData);
+
+    if (orderData) {
+      setFormData(orderData);
+    }
+  }, [orderData]);
+
+  useEffect(() => {
+    // console.log(orderData);
+
+    // if (orderData) {
+    setNewFormData(formData);
+    // }
+  }, [formData]);
+
+  const getOrderItems = (data: Array<Object>) => {
+    handleChange("items", data);
+  };
 
   const submitForm = (e: FormEvent) => {
     e.preventDefault();
 
-    const data = {
-      clientName,
-      address,
-      afm,
-      orderStatus,
-      paymentStatus,
-      paymentAmount,
-      items: orderItems,
-      comments,
-    };
-
-    handleSubmit(data, e);
+    handleSubmit(newFormData, e);
   };
-
-  useEffect(() => {
-    // fetchItems();
-  }, []);
 
   return (
     <form
@@ -83,28 +83,30 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
       <input
         required={true}
         placeholder="Client"
-        value={clientName}
-        onChange={(e) => setClientName(e.target.value)}
+        name="clientName"
+        value={newFormData.clientName}
+        onChange={(e) => handleChange("clientName", e.target.value)}
       />
       <input
         required={true}
         placeholder="Address"
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
+        name="address"
+        value={newFormData.address}
+        onChange={(e) => handleChange("address", e.target.value)}
       />
       <input
         placeholder="AFM"
-        value={afm}
-        onChange={(e) => setAFM(e.target.value)}
+        name="taxpayerNumber"
+        value={newFormData.taxpayerNumber}
+        onChange={(e) => handleChange("taxpayerNumber", e.target.value)}
       />
       <select
         required={true}
-        value={orderStatus}
+        value={newFormData.status}
+        name="status"
         onChange={(e) => {
-          setOrderStatus(e.target.value);
+          handleChange("status", e.target.value);
         }}
-        // defaultValue="registered"
-        // placeholder="Status"
       >
         <option value="registered">Registered</option>
         <option value="packed">Packed</option>
@@ -115,23 +117,24 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
         <select
           className="flex-1"
           required={true}
-          value={paymentStatus}
+          value={newFormData.paymentStatus}
+          name="paymentStatus"
           onChange={(e) => {
-            setPaymentStatus(e.target.value);
+            handleChange("paymentStatus", e.target.value);
           }}
-          // defaultValue="due"
-          // placeholder="Status"
         >
           <option value="due">Due</option>
           <option value="in-advance">In Advance</option>
           <option value="complete">Complete</option>
         </select>
-        {paymentStatus === "in-advance" && (
+        {newFormData.paymentStatus === "in-advance" && (
           <input
             className="flex-1"
-            value={paymentAmount}
+            value={newFormData.paymentAmount}
+            name="paymentAmount"
             onChange={(e) =>
-              setPaymentAmount(
+              handleChange(
+                "paymentAmount",
                 parseInt(e.target.value) ? parseInt(e.target.value) : 0
               )
             }
@@ -139,24 +142,26 @@ const OrderForm = ({ handleSubmit, type }: OrderFormProps) => {
           />
         )}
       </div>
-      <div>
-        <OrderItemEntry
-          handleChange={getOrderItems}
-          // availableSubjects={availableSubjects}
-          // availableVarieties={availableVarieties}
-        />
-      </div>
       <div className="flex flex-col gap-2">
         <label htmlFor="comments">Σχόλια</label>
         <textarea
           name="comments"
           id="comments"
-          value={comments}
-          onChange={(e) => setComments(e.target.value)}
+          value={newFormData.comments}
+          onChange={(e) => handleChange("comments", e.target.value)}
           placeholder="Σχόλια..."
         ></textarea>
       </div>
-      <button className="px-3 py-2 rounded-lg bg-gray-300" type="submit">
+      <div>
+        <OrderItemEntry
+          handleChange={getOrderItems}
+          providedSections={formData.items as Item[]}
+        />
+      </div>
+      <button
+        className="bg-white border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
+        type="submit"
+      >
         CLICK TO SUBMIT
       </button>
     </form>

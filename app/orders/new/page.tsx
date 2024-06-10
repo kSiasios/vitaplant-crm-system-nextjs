@@ -14,7 +14,7 @@ const NewOrder = () => {
     headers.set("Accept", "application/json");
 
     try {
-      const response = await fetch(`/api/orders/new`, {
+      const response = await fetch(`/api/orders`, {
         method: "POST",
         headers,
         body: JSON.stringify(data),
@@ -68,7 +68,7 @@ const NewOrder = () => {
       >
         <IoIosArrowRoundBack />
       </button>
-      <OrderForm handleSubmit={handleNewOrder} type="edit" />
+      <OrderForm handleSubmit={handleNewOrder} type="new" />
     </div>
   );
 };

@@ -1,5 +1,3 @@
-import { ChangeEventHandler } from "react";
-
 interface ItemInputProps {
   editable: boolean;
   title: string;
@@ -7,8 +5,8 @@ interface ItemInputProps {
   isNew: boolean;
   value: string;
   index: number;
-  handleCheckChange: ChangeEventHandler;
-  handleInputChange: ChangeEventHandler;
+  handleCheckChange: any;
+  handleInputChange: any;
   options: string[];
 }
 
@@ -39,6 +37,7 @@ const ItemInput = ({
                   type="radio"
                   name={`${property}_new_${index}`}
                   checked={!isNew}
+                  value={`${!isNew}`}
                   onChange={(e) =>
                     handleCheckChange(
                       index,

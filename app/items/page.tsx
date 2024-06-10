@@ -1,5 +1,6 @@
 "use client";
 
+import { normalizeGreekString } from "@/utils/helper";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,6 +11,16 @@ import { IoTrashOutline } from "react-icons/io5";
 
 const Items = () => {
   const [items, setItems] = useState<Array<any>>([]);
+  const [displayItems, setDisplayItems] = useState<Array<any>>([]);
+  const [filter, setFilter] = useState({
+    plant: "",
+    subject: "",
+    variety: "",
+    price: 0.0,
+    amount: 0,
+    ownStock: false,
+    distributor: "",
+  });
 
   const getData = async () => {
     const res = await fetch(`/api/items`);
@@ -23,11 +34,8 @@ const Items = () => {
 
     const items = await res.json();
 
-    // const filteredItems = items.map((item: any) => item.stock.own);
-
-    // setItems(filteredItems);
     setItems(items);
-    // console.log(items);
+    setDisplayItems(items);
     return items;
   };
 
@@ -35,14 +43,12 @@ const Items = () => {
     getData();
   }, []);
 
-  // const items: Array<any> = await getData();
-  // console.log(items);
-  // console.log(items.map((item) => item.subject));
+  useEffect(() => {
+    filterEntries();
+  }, [filter]);
+
   async function handleDelete(id: string) {
-    // const reply = confirm("Are you sure you want to delete this item?");
-    // console.log(reply);
     if (confirm("Are you sure you want to delete this item?")) {
-      // console.log(`Deleted Item ${id}`);
       const data = {
         id,
       };
@@ -69,6 +75,74 @@ const Items = () => {
     }
   }
 
+  const filterEntries = () => {
+    setDisplayItems(items);
+    // console.log("Filter");
+    // console.log(filter);
+
+    if (
+      filter.amount == 0 &&
+      filter.distributor == "" &&
+      !filter.ownStock &&
+      filter.plant == "" &&
+      filter.price == 0 &&
+      filter.subject == "" &&
+      filter.variety == ""
+    ) {
+      // console.log("No filter");
+
+      return;
+    }
+
+    let prev = items;
+
+    // console.log(prev);
+
+    if (filter.plant != "") {
+      prev = prev.filter((entry) =>
+        normalizeGreekString(entry.plant).includes(
+          normalizeGreekString(filter.plant)
+        )
+      );
+    }
+    if (filter.subject != "") {
+      prev = prev.filter((entry) =>
+        normalizeGreekString(entry.subject).includes(
+          normalizeGreekString(filter.subject)
+        )
+      );
+    }
+    if (filter.variety != "") {
+      prev = prev.filter((entry) =>
+        normalizeGreekString(entry.variety).includes(
+          normalizeGreekString(filter.variety)
+        )
+      );
+    }
+    if (filter.price) {
+      prev = prev.filter((entry) => entry.price >= filter.price);
+    }
+    if (filter.amount) {
+      prev = prev.filter((entry) => entry.amount >= filter.amount);
+    }
+
+    if (filter.ownStock) {
+      prev = prev.filter((entry) => entry.stock.own === filter.ownStock);
+    }
+
+    if (filter.distributor != "") {
+      prev = prev.filter((entry) =>
+        normalizeGreekString(entry.stock.distributor).includes(
+          normalizeGreekString(filter.distributor)
+        )
+      );
+    }
+
+    // console.log(prev);
+
+    setDisplayItems(prev);
+  };
+
   const router = useRouter();
 
   return (
@@ -87,16 +161,98 @@ const Items = () => {
           <thead>
             <tr>
               {/* <th scope="col">ID</th> */}
-              <th scope="col">Subject</th>
-              <th scope="col">Variety</th>
-              <th scope="col">Price</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Own Stock</th>
-              <th scope="col">Distributor</th>
+              <th scope="col"></th>
+              <th scope="col">Φυτό</th>
+              <th scope="col">Υποκείμενο</th>
+              <th scope="col">Ποικιλία</th>
+              <th scope="col">Τιμή</th>
+              <th scope="col">Ποσότητα</th>
+              <th scope="col">Ίδιο Απόθεμα</th>
+              <th scope="col">Προμηθευτής</th>
             </tr>
           </thead>
           <tbody>
-            {items.map((item, idx) => (
+            <tr className="relative">
+              <td className="text-center">Φίλτρα</td>
+              <td className="text-center">
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={filter.plant}
+                  onChange={(e) => {
+                    setFilter({ ...filter, plant: e.target.value });
+                  }}
+                />
+              </td>
+              <td className="text-center">
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={filter.subject}
+                  onChange={(e) => {
+                    setFilter({ ...filter, subject: e.target.value });
+                  }}
+                />
+              </td>
+              <td className="text-center">
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={filter.variety}
+                  onChange={(e) => {
+                    setFilter({ ...filter, variety: e.target.value });
+                  }}
+                />
+              </td>
+              <td className="text-center">
+                {/* <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={filter.price}
+                  onChange={(e) => {
+                    setFilter({ ...filter, price: e.target.value });
+                  }}
+                /> */}
+              </td>
+              <td className="text-center">
+                {/* <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={filter.amount}
+                  onChange={(e) => {
+                    setFilter({ ...filter, amount: e.target.value });
+                  }}
+                /> */}
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  name=""
+                  id=""
+                  value={`${filter.ownStock}`}
+                  onChange={(e) => {
+                    setFilter({ ...filter, ownStock: e.target.checked });
+                  }}
+                />
+              </td>
+              <td className="text-center">
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={filter.distributor}
+                  onChange={(e) => {
+                    setFilter({ ...filter, distributor: e.target.value });
+                  }}
+                />
+              </td>
+            </tr>
+            {displayItems.map((item, idx) => (
               // <OrderItemEntry
               //   newItem={false}
               //   item={{
@@ -118,6 +274,8 @@ const Items = () => {
                 >
                   {item._id}
                 </th> */}
+                <td className="text-center"></td>
+                <td className="text-center">{item.plant}</td>
                 <td className="text-center">{item.subject}</td>
                 <td className="text-center">{item.variety}</td>
                 <td className="text-center">{item.price}</td>

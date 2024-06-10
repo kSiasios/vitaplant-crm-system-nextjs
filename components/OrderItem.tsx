@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { GiTreeRoots } from "react-icons/gi";
@@ -21,6 +22,7 @@ interface OrderProps {
 // }
 
 export interface Item {
+  plant: string;
   subject: string;
   variety: string;
   price: string;
@@ -29,7 +31,7 @@ export interface Item {
 }
 
 export interface Stock {
-  own: boolean;
+  own: string;
   distributor: string;
 }
 
@@ -41,7 +43,7 @@ const OrderItem = ({
   items,
 }: OrderProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  console.log(paymentStatus);
+  // console.log(paymentStatus);
 
   return (
     <div>
@@ -87,32 +89,49 @@ const OrderItem = ({
           {isExpanded && (
             <div className="p-2 flex flex-col">
               <div className="inline-flex gap-3 justify-between items-center">
-                <div className="inline-flex items-center gap-1">
-                  Status:{" "}
-                  <span>
-                    {status === "registered" && (
-                      <LuPackageOpen className="text-red-500" />
-                    )}
-                    {status === "packed" && (
-                      <LuPackage className="text-orange-400" />
-                    )}
-                    {status === "complete" && (
-                      <LuPackageCheck className="text-green-700" />
-                    )}
-                  </span>
+                <div className="flex flex-col">
+                  <div className="inline-flex items-center gap-1">
+                    Κατάσταση Παραγγελίας:{" "}
+                    <span>
+                      {status === "registered" && (
+                        <LuPackageOpen className="text-red-500" />
+                      )}
+                      {status === "packed" && (
+                        <LuPackage className="text-orange-400" />
+                      )}
+                      {status === "complete" && (
+                        <LuPackageCheck className="text-green-700" />
+                      )}
+                    </span>
+                  </div>
+                  <div className="inline-flex items-center gap-1">
+                    Κατάσταση Πληρωμής{" "}
+                    <span>
+                      {paymentStatus === "complete" && (
+                        // <FaHourglassEnd className="text-green-700" />
+                        <TbCurrencyEuro className="text-green-700" />
+                      )}
+                      {paymentStatus === "in-advance" && (
+                        // <FaRegHourglassHalf className="text-orange-400" />
+                        <TbCurrencyEuro className="text-orange-400" />
+                      )}
+                      {paymentStatus === "due" && (
+                        // <FaHourglassStart className="text-red-500" />
+                        <TbCurrencyEuroOff className="text-red-500" />
+                      )}
+                    </span>
+                    {/* <span className="capitalize">{paymentStatus}</span> */}
+                  </div>
                 </div>
-                <div>
-                  Payment <span className="capitalize">{paymentStatus}</span>
-                </div>
-                <button
-                  type="button"
-                  className="border border-black rounded-lg p-4 hover:bg-black hover:text-white focus:bg-black focus:text-white text-lg"
+                <Link
+                  className="flex gap-2 justify-center items-center border border-black rounded-lg p-4 hover:bg-black hover:text-white focus:bg-black focus:text-white text-lg"
+                  href={`/orders/edit/${orderID}`}
                 >
-                  {/* Sign Out */}
+                  Επεξεργασία
                   <FaPen />
-                </button>
+                </Link>
               </div>
-              <div className="inline-flex gap-2">
+              {/* <div className="inline-flex gap-2">
                 <label htmlFor={`status_${orderID}_1`}>
                   Active{" "}
                   <input
@@ -140,9 +159,9 @@ const OrderItem = ({
                     value="pending"
                   />
                 </label>
-              </div>
+              </div> */}
               <div>
-                Items:
+                Αντικείμενα:
                 <div className="order-items-container">
                   {items.map((item, index) => (
                     <div

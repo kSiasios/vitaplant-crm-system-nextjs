@@ -15,7 +15,37 @@ import {
 } from "next-auth/react";
 import Link from "next/link";
 import { GrStorage } from "react-icons/gr";
-import { IoAdd, IoLogOutOutline } from "react-icons/io5";
+import { IoAdd, IoFilter, IoLogOutOutline } from "react-icons/io5";
+
+interface statusDictionary {
+  [index: string]: string;
+}
+
+export const statusMap: statusDictionary = {
+  registered: "Καταχωρημένη",
+  complete: "Ολοκληρωμένη",
+  packed: "Πακεταρισμένη",
+};
+
+export const paymentStatusMap: statusDictionary = {
+  due: "Χρωστούμενη",
+  complete: "Ολοκληρωμένη",
+  "in-advance": "Προκαταβολή",
+};
+
+export interface OrderData {
+  name: string;
+  address: string;
+  taxpayerNumber: string;
+  status: string;
+  paymentStatus: string;
+  paymentAmount: number;
+  created: {
+    by: string;
+    at: string;
+  };
+  items: [items: Item];
+}
 
 const Home = () => {
   // const isUserLoggedIn = false;
@@ -30,6 +60,16 @@ const Home = () => {
   > | null>(null);
 
   const [filter, setFilter] = useState("");
+  const [orderStatusFilter, setOrderStatusFilter] = useState("");
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState("");
+
+  const [orderStatusOptions, setOrderStatusOptions] = useState<Array<string>>(
+    []
+  );
+  const [paymentStatusOptions, setPaymentStatusOptions] = useState<
+    Array<string>
+  >([]);
+
   const [orders, setOrders] = useState<any>([]);
 
   function resetFilter() {
@@ -52,23 +92,42 @@ const Home = () => {
 
   function filterOrders(e?: any) {
     e?.preventDefault();
-    const prev = Object.values(ordersData);
+    setOrders(Object.values(ordersData));
+
+    let prev = Object.values(ordersData);
     if (!prev || prev == undefined) {
       return;
     }
 
-    if (filter === "") {
+    if (
+      filter === "" &&
+      orderStatusFilter === "" &&
+      paymentStatusFilter === ""
+    ) {
       return;
     }
 
-    setOrders(
-      prev.filter((order: any) => {
+    if (filter != "") {
+      prev = prev.filter((order: any) => {
         return (
           order.clientName.toLowerCase().includes(filter.toLowerCase()) ||
           checkItemsFilter(order.items, filter)
         );
-      })
-    );
+      });
+      // console.log("In 1");
+    }
+
+    if (paymentStatusFilter != "") {
+      prev = prev.filter(
+        (order: any) => order.paymentStatus === paymentStatusFilter
+      );
+    }
+
+    if (orderStatusFilter != "") {
+      prev = prev.filter((order: any) => order.status === orderStatusFilter);
+    }
+
+    setOrders(prev);
   }
 
   function updateFilter(e: any) {
@@ -99,6 +158,17 @@ const Home = () => {
       const data = await res.json();
       // console.log(data);
       setOrdersData(data);
+
+      // set available statuses for payments and orders
+      const orderStatus: Set<Object> = new Set(
+        data.map((order: OrderData) => order.status)
+      );
+      const paymentStatus: Set<Object> = new Set(
+        data.map((order: OrderData) => order.paymentStatus)
+      );
+
+      setOrderStatusOptions(Array.from(orderStatus.values()) as string[]);
+      setPaymentStatusOptions(Array.from(paymentStatus.values()) as string[]);
     };
 
     const setUpProviders = async () => {
@@ -121,53 +191,38 @@ const Home = () => {
 
   const newOrderNav = () => router.push("/orders/new");
 
+  // useEffect(() => {
+  //   filterOrders();
+  // }, [filter]);
+
   useEffect(() => {
+    // console.log(filter);
+    // console.log(orderStatusFilter);
+    // console.log(paymentStatusFilter);
+
     filterOrders();
-  }, [filter]);
+  }, [orderStatusFilter, paymentStatusFilter, filter]);
 
   return (
     <>
-      {/* <Link
-        href="/settings"
-        className="absolute right-0 m-4 p-2 rounded-full hover:animate-spin focus:animate-spin"
-      >
-        <FaGear />
-      </Link> */}
       {frontEndDev ||
         (session?.user && (
           <section className="flex flex-col gap-4 mx-auto pt-16 max-w-[556px] bg-white rounded-2xl p-14 shadow-lg">
-            <p className="text-4xl font-thin">
+            {/* <p className="text-4xl font-thin">
               Hello, <span className="font-bold">{session?.user?.name}</span>
-            </p>
+            </p> */}
 
             <div className="inline-flex justify-between items-center">
-              <h3 className="font-bold text-2xl">Orders</h3>
+              <h3 className="font-bold text-2xl">Παραγγελίες</h3>
               <Link
                 href="/items"
                 className="inline-flex items-center gap-1 underline"
               >
-                Storage <GrStorage />
+                Αποθήκη <GrStorage />
               </Link>
             </div>
             <div className="flex justify-between items-center">
               {/* Orders title bar */}
-              <form
-                onSubmit={filterOrders}
-                className="w-full flex items-center justify-start gap-2"
-              >
-                <input
-                  className="px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Search Order..."
-                  value={filter}
-                  onChange={updateFilter}
-                ></input>
-                {/* <button
-                  className="bg-gray-100 border border-blue-500 text-blue-500 font-bold hover:bg-blue-500 focus:bg-blue-500 hover:text-white focus:text-white px-4 py-2 rounded-lg"
-                  type="submit"
-                >
-                  Filter
-                </button> */}
-              </form>
               <div className="flex gap-1">
                 {/* Actions */}
                 <button
@@ -192,9 +247,69 @@ const Home = () => {
                 </button>
               </div>
             </div>
-            <div
-            // className="p-4"
-            >
+            {/* FILTERING BAR */}
+            <div className="flex flex-col gap-4 justify-between bg-gray-200 rounded-2xl p-4">
+              <span className="flex gap-2 items-center">
+                <IoFilter /> Φιλτράρισμα
+              </span>
+              <form
+                onSubmit={filterOrders}
+                className="w-full flex items-center justify-start gap-2"
+              >
+                <input
+                  className="px-4 py-2 border border-gray-300 rounded-lg w-full"
+                  placeholder="Αναζήτηση..."
+                  value={filter}
+                  onChange={updateFilter}
+                ></input>
+                {/* <button
+                  className="bg-gray-100 border border-blue-500 text-blue-500 font-bold hover:bg-blue-500 focus:bg-blue-500 hover:text-white focus:text-white px-4 py-2 rounded-lg"
+                  type="submit"
+                >
+                  Filter
+                </button> */}
+              </form>
+              <>
+                {/* BY ORDER STATUS */}
+
+                <div className="flex flex-col">
+                  <label htmlFor="order-status">Κατάσταση Παραγγελίας</label>
+                  <select
+                    name="order-status"
+                    id="order-status"
+                    value={orderStatusFilter}
+                    onChange={(e) => setOrderStatusFilter(e.target.value)}
+                  >
+                    <option value="">Όλες</option>
+                    {orderStatusOptions &&
+                      orderStatusOptions.map((option, index) => (
+                        <option key={index} value={option}>
+                          {statusMap[option]}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+                {/* BY PAYMENT STATUS */}
+                <div className="flex flex-col">
+                  <label htmlFor="payment-status">Κατάσταση Πληρωμής</label>
+                  <select
+                    name="payment-status"
+                    id="payment-status"
+                    value={paymentStatusFilter}
+                    onChange={(e) => setPaymentStatusFilter(e.target.value)}
+                  >
+                    <option value="">Όλες</option>
+                    {paymentStatusOptions &&
+                      paymentStatusOptions.map((option, index) => (
+                        <option key={index} value={option}>
+                          {paymentStatusMap[option]}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </>
+            </div>
+            <div>
               <section className="overflow-y-visible flex flex-col gap-4">
                 {orders &&
                   Object.values(
@@ -212,23 +327,21 @@ const Home = () => {
                       paymentStatus={order.paymentStatus}
                     />
                   ))}
-                {orders.length === 0 && !filter && <div>LOADING</div>}
-                {orders.length === 0 && filter && <div>No Results</div>}
+                {orders.length === 0 && !filter && <div>Φόρτωση</div>}
+                {orders.length === 0 && filter && <div>Κανένα Αποτέλεσμα</div>}
               </section>
             </div>
           </section>
         ))}
       {!session?.user && !frontEndDev && (
         <section className="w-screen h-screen max-w-[500px] mx-auto flex flex-col gap-8 items-center justify-center">
-          <h1 className="font-bold text-3xl text-white">
-            You are not Authorized!
-          </h1>
+          <h1 className="font-bold text-3xl text-white">Δέν έχετε πρόσβαση!</h1>
 
           <Link
             href="/users/login"
             className="bg-white border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
           >
-            Log In
+            Σύνδεση
           </Link>
 
           {/* {providers &&
