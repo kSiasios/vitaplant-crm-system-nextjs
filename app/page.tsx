@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import OrderItem, { Item } from "@/components/OrderItem";
 import frontEndDev from "@/utils/environment";
+import { OrderData, paymentStatusMap, statusMap } from "@/utils/helper";
 import { BuiltInProviderType } from "next-auth/providers/index";
 import {
   ClientSafeProvider,
@@ -16,36 +17,6 @@ import {
 import Link from "next/link";
 import { GrStorage } from "react-icons/gr";
 import { IoAdd, IoFilter, IoLogOutOutline } from "react-icons/io5";
-
-interface statusDictionary {
-  [index: string]: string;
-}
-
-export const statusMap: statusDictionary = {
-  registered: "Καταχωρημένη",
-  complete: "Ολοκληρωμένη",
-  packed: "Πακεταρισμένη",
-};
-
-export const paymentStatusMap: statusDictionary = {
-  due: "Χρωστούμενη",
-  complete: "Ολοκληρωμένη",
-  "in-advance": "Προκαταβολή",
-};
-
-export interface OrderData {
-  name: string;
-  address: string;
-  taxpayerNumber: string;
-  status: string;
-  paymentStatus: string;
-  paymentAmount: number;
-  created: {
-    by: string;
-    at: string;
-  };
-  items: [items: Item];
-}
 
 const Home = () => {
   // const isUserLoggedIn = false;
