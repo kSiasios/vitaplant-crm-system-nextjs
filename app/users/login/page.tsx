@@ -2,12 +2,12 @@
 
 // pages/auth/signin.tsx
 // import { getProviders } from "next-auth/react";
-import { getCsrfToken, signIn, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
 const SignIn = () => {
-  const [csrf, setCSRF] = useState<string>();
+  // const [csrf, setCSRF] = useState<string>();
   const { data: session } = useSession();
   const [creds, setCreds] = useState({
     username: "",
@@ -61,19 +61,19 @@ const SignIn = () => {
   };
 
   useEffect(() => {
-    const getData = async () => {
-      const res = await getCsrfToken();
-      // return res;
-      // console.log(res);
-      setCSRF(res);
-    };
+    // const getData = async () => {
+    //   const res = await getCsrfToken();
+    //   // return res;
+    //   // console.log(res);
+    //   setCSRF(res);
+    // };
     // setCSRF(await getCsrfToken())
     if (session?.user) {
       // console.log(session.user);
       router.replace("/");
     }
 
-    getData();
+    // getData();
   }, []);
 
   return (
@@ -85,7 +85,7 @@ const SignIn = () => {
         className="flex flex-col gap-1"
         onSubmit={handleSubmit}
       >
-        <input name="csrfToken" type="hidden" defaultValue={csrf} />
+        {/* <input name="csrfToken" type="hidden" defaultValue={csrf} /> */}
         <label className="flex flex-col">
           Όνομα Χρήστη
           <input
