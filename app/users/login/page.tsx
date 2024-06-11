@@ -38,7 +38,7 @@ const SignIn = () => {
         username: creds.username,
         password: creds.password,
         redirect: false,
-        callbackUrl: "/",
+        callbackUrl: process.env.URL,
       });
       if (res?.error) {
         console.error(res.error);
@@ -49,7 +49,7 @@ const SignIn = () => {
       if (res && !res?.ok) {
         alert(await res.status);
       }
-      router.replace("/");
+      // router.replace("/");
       // if (session) {
       //   console.log(session.user);
       // }
