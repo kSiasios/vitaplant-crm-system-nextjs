@@ -49,7 +49,7 @@ const SignIn = () => {
       if (res && !res?.ok) {
         alert(await res.status);
       }
-      // router.replace("/");
+      router.replace("/");
       // if (session) {
       //   console.log(session.user);
       // }
