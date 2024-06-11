@@ -2,12 +2,13 @@
 
 // pages/auth/signin.tsx
 // import { getProviders } from "next-auth/react";
-import { getCsrfToken, signIn } from "next-auth/react";
+import { getCsrfToken, signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
 const SignIn = () => {
   const [csrf, setCSRF] = useState<string>();
+  const { data: session } = useSession();
   const [creds, setCreds] = useState({
     username: "",
     password: "",
@@ -58,6 +59,10 @@ const SignIn = () => {
       setCSRF(res);
     };
     // setCSRF(await getCsrfToken())
+    if (!session?.user) {
+      router.replace("/");
+    }
+
     getData();
   }, []);
 
