@@ -59,7 +59,7 @@ const SignIn = () => {
       setCSRF(res);
     };
     // setCSRF(await getCsrfToken())
-    if (!session?.user) {
+    if (session?.user) {
       router.replace("/");
     }
 
