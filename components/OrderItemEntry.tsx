@@ -91,7 +91,7 @@ const OrderItemEntry = ({
   }, []);
 
   useEffect(() => {
-    console.log(sections);
+    // console.log(sections);
 
     updateChecks();
 
@@ -251,7 +251,7 @@ const OrderItemEntry = ({
     }
     const newSections = [...sections];
 
-    console.log(newSections);
+    // console.log(newSections);
 
     if (!newSections) {
       return;
@@ -299,7 +299,7 @@ const OrderItemEntry = ({
                   handleExpand(index, !itemSectionExpanded[index]);
                 }}
               >
-                <h3 className="font-bold">Item</h3>
+                <h3 className="font-bold">Αντικείμενο</h3>
                 <div className="flex gap-4">
                   {index > 0 && editable && (
                     <button
@@ -326,7 +326,7 @@ const OrderItemEntry = ({
                 <div className="flex flex-col gap-3">
                   <ItemInput
                     editable={editable}
-                    title="Plant"
+                    title="Φυτό"
                     property="plant"
                     isNew={checks[index]?.plantNew}
                     value={section.plant}
@@ -337,7 +337,7 @@ const OrderItemEntry = ({
                   />
                   <ItemInput
                     editable={editable}
-                    title="Subject"
+                    title="Υποκείμενο"
                     property="subject"
                     isNew={checks[index]?.subjectNew}
                     value={section.subject}
@@ -348,7 +348,7 @@ const OrderItemEntry = ({
                   />
                   <ItemInput
                     editable={editable}
-                    title="Variety"
+                    title="Ποικιλία"
                     property="variety"
                     isNew={checks[index]?.varietyNew}
                     value={section.variety}
@@ -359,7 +359,7 @@ const OrderItemEntry = ({
                   />
                   {/* Price */}
                   <div className="flex justify-between items-center">
-                    <label htmlFor={`price_${index}`}>Price</label>
+                    <label htmlFor={`price_${index}`}>Τιμή</label>
                     {editable && (
                       <input
                         type="number"
@@ -386,7 +386,7 @@ const OrderItemEntry = ({
                   </div>
                   {/* Amount */}
                   <div className="flex justify-between items-center">
-                    <label htmlFor={`amount_${index}`}>Amount</label>
+                    <label htmlFor={`amount_${index}`}>Ποσότητα</label>
                     {editable && (
                       <input
                         type="number"
@@ -424,7 +424,7 @@ const OrderItemEntry = ({
                   {section.stock && (
                     <div className="flex items-center gap-1">
                       {editable && (
-                        <div className="flex gap-4">
+                        <div className="flex gap-4 w-full">
                           <input
                             type="checkbox"
                             name="own_stock"
@@ -445,7 +445,8 @@ const OrderItemEntry = ({
                             className="cursor-pointer"
                           />
                           {section.stock.own == "false" && (
-                            <div>
+                            <div className="flex gap-2 items-center justify-between w-full">
+                              Απόθεμα από:
                               <input
                                 type="text"
                                 name="distributor"
@@ -463,22 +464,24 @@ const OrderItemEntry = ({
                                   );
                                 }}
                               />
-                              &apos;s
                             </div>
                           )}
                         </div>
                       )}
                       {/* {!editable && !section.ownStock && <p>NOT</p>} */}
                       {!editable && !section.stock.own && (
-                        <p>{section.stock.distributor}&apos;s</p>
+                        <p>Απόθεμα από: {section.stock.distributor}</p>
                       )}
-                      <label
-                        htmlFor={`own_stock_${index}`}
-                        className={`${editable ? "cursor-pointer" : ""}`}
-                      >
-                        {section.stock?.own && "Own "}
-                        Stock
-                      </label>
+                      {section.stock?.own === "true" && (
+                        <label
+                          htmlFor={`own_stock_${index}`}
+                          className={`${
+                            editable ? "cursor-pointer" : ""
+                          } w-full`}
+                        >
+                          Ίδιο Απόθεμα
+                        </label>
+                      )}
                     </div>
                   )}
                 </div>
@@ -491,7 +494,7 @@ const OrderItemEntry = ({
           onClick={addSection}
           className="border border-green-700 bg-green-100 text-green-700 hover:bg-green-700 focus:bg-green-700 hover:text-white focus:text-white px-4 py-2 rounded-lg m-auto"
         >
-          Add More..
+          Προσθήκη Αντικειμένου
         </button>
       )}
     </div>

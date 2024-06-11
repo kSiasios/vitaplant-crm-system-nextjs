@@ -32,7 +32,7 @@ const ItemInput = ({
                 className="border border-gray-300 rounded-lg"
                 htmlFor={`${property}_existing_${index}`}
               >
-                Existing
+                Υπάρχον
                 <input
                   type="radio"
                   name={`${property}_new_${index}`}
@@ -54,7 +54,7 @@ const ItemInput = ({
                 className="border border-gray-400 rounded-lg"
                 htmlFor={`${property}_new_${index}`}
               >
-                New
+                Νέο
                 <input
                   type="radio"
                   name={`${property}_new_${index}`}

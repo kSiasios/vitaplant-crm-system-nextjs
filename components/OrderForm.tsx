@@ -1,5 +1,6 @@
 "use client";
 
+import { paymentStatusMap, statusMap } from "@/utils/helper";
 import { FormEvent, useEffect, useState } from "react";
 import { Item } from "./OrderItem";
 import OrderItemEntry from "./OrderItemEntry";
@@ -82,20 +83,20 @@ const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
     >
       <input
         required={true}
-        placeholder="Client"
+        placeholder="Όνομα Πελάτη"
         name="clientName"
         value={newFormData.clientName}
         onChange={(e) => handleChange("clientName", e.target.value)}
       />
       <input
         required={true}
-        placeholder="Address"
+        placeholder="Διεύθυνση"
         name="address"
         value={newFormData.address}
         onChange={(e) => handleChange("address", e.target.value)}
       />
       <input
-        placeholder="AFM"
+        placeholder="ΑΦΜ"
         name="taxpayerNumber"
         value={newFormData.taxpayerNumber}
         onChange={(e) => handleChange("taxpayerNumber", e.target.value)}
@@ -108,9 +109,9 @@ const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
           handleChange("status", e.target.value);
         }}
       >
-        <option value="registered">Registered</option>
-        <option value="packed">Packed</option>
-        <option value="complete">Complete</option>
+        <option value="registered">{statusMap["registered"]}</option>
+        <option value="packed">{statusMap["packed"]}</option>
+        <option value="complete">{statusMap["complete"]}</option>
       </select>
       <div className="flex gap-2">
         {/* <label>Order Status</label> */}
@@ -123,9 +124,9 @@ const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
             handleChange("paymentStatus", e.target.value);
           }}
         >
-          <option value="due">Due</option>
-          <option value="in-advance">In Advance</option>
-          <option value="complete">Complete</option>
+          <option value="due">{paymentStatusMap["due"]}</option>
+          <option value="in-advance">{paymentStatusMap["in-advance"]}</option>
+          <option value="complete">{paymentStatusMap["complete"]}</option>
         </select>
         {newFormData.paymentStatus === "in-advance" && (
           <input
@@ -138,7 +139,7 @@ const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
                 parseInt(e.target.value) ? parseInt(e.target.value) : 0
               )
             }
-            placeholder="Payment Amount"
+            placeholder="Ποσό Προκαταβολής"
           />
         )}
       </div>
@@ -162,7 +163,7 @@ const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
         className="bg-white border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
         type="submit"
       >
-        CLICK TO SUBMIT
+        Αποθήκευση
       </button>
     </form>
   );

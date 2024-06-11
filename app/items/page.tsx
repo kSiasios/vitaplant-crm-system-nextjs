@@ -154,7 +154,7 @@ const Items = () => {
         <IoIosArrowRoundBack />
       </button>
       <h1 className="font-bold text-4xl w-full text-center my-4 text-white">
-        Items
+        Αποθήκη
       </h1>
       <div className="bg-white p-4 rounded-xl ">
         <table>
@@ -309,7 +309,7 @@ const Items = () => {
         href="/items/new"
         className="bg-white w-fit mx-auto my-3 px-4 py-2 rounded-lg"
       >
-        New
+        Νέο Αντικείμενο
       </Link>
     </div>
   );

@@ -44,7 +44,15 @@ const SignIn = () => {
         setPending(false);
         return;
       }
+
+      if (res && !res?.ok) {
+        alert(await res.status);
+      }
       router.replace("/");
+      // if (session) {
+      //   console.log(session.user);
+      // }
+
       // router.replace(`${process.env.URL ? process.env.URL : "/"}`);
     } catch (error) {
       console.error(error);
@@ -60,6 +68,7 @@ const SignIn = () => {
     };
     // setCSRF(await getCsrfToken())
     if (session?.user) {
+      // console.log(session.user);
       router.replace("/");
     }
 
@@ -77,7 +86,7 @@ const SignIn = () => {
       >
         <input name="csrfToken" type="hidden" defaultValue={csrf} />
         <label className="flex flex-col">
-          Username
+          Όνομα Χρήστη
           <input
             name="username"
             type="text"
@@ -86,7 +95,7 @@ const SignIn = () => {
           />
         </label>
         <label className="flex flex-col">
-          Password
+          Κωδικός
           <input
             name="password"
             type="password"
@@ -99,7 +108,7 @@ const SignIn = () => {
           className="py-2 rounded-lg font-bold"
           disabled={pending}
         >
-          {pending ? "Singing in..." : "Sign in"}
+          {pending ? "Γίνεται Σύνδεση..." : "Σύνδεση"}
         </button>
       </form>
     </div>
