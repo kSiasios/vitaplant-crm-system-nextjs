@@ -1,14 +1,12 @@
 "use client";
 
-import { normalizeGreekString } from "@/utils/helper";
+import { Item, normalizeGreekString, Stock } from "@/utils/helper";
 import { ChangeEvent, useEffect, useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 import ItemInput from "./ItemInput";
-import { Item, Stock } from "./OrderItem";
-
 interface OrderItemEntryProps {
-  handleChange?: Function;
+  handleChange: Function;
   newItem?: boolean;
   providedSections?: Item[];
   editable?: boolean;
@@ -93,13 +91,19 @@ const OrderItemEntry = ({
   useEffect(() => {
     // console.log(sections);
 
-    updateChecks();
-
     if (handleChange && editable) {
       handleChange(sections);
+      updateChecks();
+
+      console.log(checks);
+      console.log(sections);
     }
 
     function updateChecks() {
+      if (providedSections && Object.keys(providedSections[0]).length === 0) {
+        return;
+      }
+
       if (
         availablePlants.length < 1 &&
         availableSubjects.length < 1 &&
@@ -108,9 +112,9 @@ const OrderItemEntry = ({
         return;
       }
 
-      if (providedSections && providedSections?.length < 1) {
-        return;
-      }
+      // if (providedSections && providedSections?.length < 1) {
+      //   return;
+      // }
       const providedChecks: any = [];
 
       // console.log(providedSections);
@@ -162,7 +166,10 @@ const OrderItemEntry = ({
   }, [sections]);
 
   useEffect(() => {
-    if (providedSections && providedSections?.length < 1) {
+    // console.log("Update providedSections");
+    // console.log(providedSections);
+
+    if (providedSections && Object.keys(providedSections[0]).length === 0) {
       return;
     }
 
@@ -175,7 +182,7 @@ const OrderItemEntry = ({
     setSections(providedSections as Item[]);
   }, [providedSections]);
 
-  const addSection: any = () => {
+  const addSection = () => {
     setSections([
       ...sections,
       {
@@ -193,10 +200,13 @@ const OrderItemEntry = ({
       { plantNew: false, subjectNew: false, varietyNew: false },
     ]);
     setItemSectionExpanded([...itemSectionExpanded, true]);
+    console.log(checks);
+    console.log(sections);
   };
 
   const removeSection = (index: number) => {
     const newSections = [...sections];
+
     newSections.splice(index, 1);
     setSections(newSections);
 
@@ -450,7 +460,7 @@ const OrderItemEntry = ({
                               <input
                                 type="text"
                                 name="distributor"
-                                placeholder="Distributor"
+                                placeholder="Προμηθευτής"
                                 value={
                                   section.stock?.distributor
                                     ? section.stock.distributor
@@ -468,8 +478,7 @@ const OrderItemEntry = ({
                           )}
                         </div>
                       )}
-                      {/* {!editable && !section.ownStock && <p>NOT</p>} */}
-                      {!editable && !section.stock.own && (
+                      {!editable && section.stock.own !== "true" && (
                         <p>Απόθεμα από: {section.stock.distributor}</p>
                       )}
                       {section.stock?.own === "true" && (

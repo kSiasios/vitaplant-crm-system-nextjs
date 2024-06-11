@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import OrderItem, { Item } from "@/components/OrderItem";
+import OrderItem from "@/components/OrderItem";
 import frontEndDev from "@/utils/environment";
-import { OrderData, paymentStatusMap, statusMap } from "@/utils/helper";
+import { Item, OrderData, paymentStatusMap, statusMap } from "@/utils/helper";
 import { BuiltInProviderType } from "next-auth/providers/index";
 import {
   ClientSafeProvider,
@@ -314,38 +314,6 @@ const Home = () => {
           >
             Σύνδεση
           </Link>
-
-          {/* {providers &&
-            Object.values(providers).map((provider) => {
-              // if (provider.name === "Credentials") {
-              //   return (
-              //     <form key={provider.name} className="flex flex-col gap-4">
-              //       <label className="flex flex-col">
-              //         Username
-              //         <input type="text"></input>
-              //       </label>
-              //       <label className="flex flex-col">
-              //         Password
-              //         <input type="password"></input>
-              //       </label>
-              //       <button className="border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white">
-              //         Login
-              //       </button>
-              //     </form>
-              //   );
-              // }
-
-              return (
-                <button
-                  type="button"
-                  key={provider.name}
-                  onClick={() => signIn(provider.id)}
-                  className="border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
-                >
-                  Login with {provider.name}
-                </button>
-              );
-            })} */}
         </section>
       )}
     </>

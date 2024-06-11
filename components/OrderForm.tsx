@@ -1,8 +1,7 @@
 "use client";
 
-import { paymentStatusMap, statusMap } from "@/utils/helper";
+import { Item, paymentStatusMap, statusMap } from "@/utils/helper";
 import { FormEvent, useEffect, useState } from "react";
-import { Item } from "./OrderItem";
 import OrderItemEntry from "./OrderItemEntry";
 
 interface OrderFormProps {

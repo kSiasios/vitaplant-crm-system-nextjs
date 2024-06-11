@@ -21,6 +21,8 @@ const ItemInput = ({
   handleInputChange,
   options,
 }: ItemInputProps) => {
+  // console.log(isNew);
+
   return (
     <div className={`flex gap-2 ${editable ? "flex-col" : "flex-row"}`}>
       <div className="flex gap-1 justify-between">

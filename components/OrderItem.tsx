@@ -1,5 +1,6 @@
 "use client";
 
+import { Item } from "@/utils/helper";
 import Link from "next/link";
 import { useState } from "react";
 import { FaPen } from "react-icons/fa";
@@ -20,20 +21,6 @@ interface OrderProps {
 //   status: String;
 //   amount: number;
 // }
-
-export interface Item {
-  plant: string;
-  subject: string;
-  variety: string;
-  price: string;
-  amount: string;
-  stock: Stock;
-}
-
-export interface Stock {
-  own: string;
-  distributor: string;
-}
 
 const OrderItem = ({
   clientName,

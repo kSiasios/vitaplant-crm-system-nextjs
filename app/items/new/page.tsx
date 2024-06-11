@@ -1,7 +1,7 @@
 "use client";
 
-import { Item } from "@/components/OrderItem";
 import OrderItemEntry from "@/components/OrderItemEntry";
+import { Item } from "@/utils/helper";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";

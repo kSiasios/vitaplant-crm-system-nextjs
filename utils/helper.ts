@@ -1,5 +1,3 @@
-import { Item } from "@/components/OrderItem";
-
 export const normalizeGreekString = (str: string) => {
   // Convert to lowercase
   str = str.toLowerCase();
@@ -41,4 +39,18 @@ export interface OrderData {
     at: string;
   };
   items: [items: Item];
+}
+
+export interface Item {
+  plant: string;
+  subject: string;
+  variety: string;
+  price: string;
+  amount: string;
+  stock: Stock;
+}
+
+export interface Stock {
+  own: string;
+  distributor: string;
 }
