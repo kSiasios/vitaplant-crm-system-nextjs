@@ -1,6 +1,6 @@
 import { model, models, Schema } from "mongoose";
 
-const OrderScema = new Schema({
+const OrderSchema = new Schema({
   clientName: {
     type: String,
     required: [true, "Client's name is required!"],
@@ -29,6 +29,10 @@ const OrderScema = new Schema({
   },
   items: [
     {
+      plant: {
+        type: String,
+        required: [true, "Subject not defined!"],
+      },
       subject: {
         type: String,
         required: [true, "Subject not defined!"],
@@ -59,6 +63,6 @@ const OrderScema = new Schema({
   },
 });
 
-const Order = models.Order || model("Order", OrderScema);
+const Order = models.Order || model("Order", OrderSchema);
 
 export default Order;

@@ -1,7 +1,6 @@
 "use client";
 
 import OrderItemEntry from "@/components/OrderItemEntry";
-import { Item } from "@/utils/helper";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
@@ -9,9 +8,6 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 const NewItem = () => {
   const [orderItems, setOrderItems] = useState<Object>([]);
   const [loading, setLoading] = useState(false);
-  const [availablePlants, setAvailablePlants] = useState([]);
-  const [availableSubjects, setAvailableSubjects] = useState([]);
-  const [availableVarieties, setAvailableVarieties] = useState([]);
 
   const getOrderItems = (data: Array<Object>) => {
     setOrderItems(data);
@@ -27,10 +23,6 @@ const NewItem = () => {
       alert(`Error while fetching items ${resText}`);
       return;
     }
-
-    setAvailablePlants(items.map((item: Item) => item.plant));
-    setAvailableSubjects(items.map((item: Item) => item.subject));
-    setAvailableVarieties(items.map((item: Item) => item.variety));
   };
 
   const formSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -38,7 +30,7 @@ const NewItem = () => {
     console.log(orderItems);
     setLoading(true);
     try {
-      const res = await fetch("/api/items/new", {
+      const res = await fetch("/api/items", {
         method: "POST",
         body: JSON.stringify(orderItems),
       });
@@ -74,20 +66,24 @@ const NewItem = () => {
         <IoIosArrowRoundBack />
       </button>
       <h1 className="font-bold text-4xl w-full text-center my-4 text-white">
-        New Item
+        Νέο Αντικείμενο
       </h1>
       <form
         className="max-w-[500px] mx-auto flex flex-col gap-4"
         onSubmit={formSubmit}
       >
-        <OrderItemEntry handleChange={getOrderItems} newItem={true} />
+        <OrderItemEntry
+          handleChange={getOrderItems}
+          newItem={true}
+          editable="edit"
+        />
         <button
           type="submit"
           disabled={loading}
           className="border border-green-700 bg-green-100 text-green-700 hover:bg-green-700 hover:text-white focus:bg-green-700 focus:text-white rounded-lg px-4 py-2"
         >
-          {loading && "SAVING"}
-          {!loading && "SAVE"}
+          {loading && "Γίνεται Αποθήκευση..."}
+          {!loading && "Αποθήκευση"}
         </button>
       </form>
     </div>

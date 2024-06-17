@@ -1,7 +1,9 @@
 "use client";
 
 import OrderForm from "@/components/OrderForm";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 const EditOrder = ({ params }: { params: { id: string } }) => {
   const id = params.id;
@@ -59,8 +61,16 @@ const EditOrder = ({ params }: { params: { id: string } }) => {
     }
   };
 
+  const router = useRouter();
+
   return (
     <div>
+      <button
+        onClick={() => router.back()}
+        className="absolute aspect-square text-3xl border border-gray-400 p-4 rounded-full mx-4"
+      >
+        <IoIosArrowRoundBack />
+      </button>
       <OrderForm
         orderData={orderData}
         type="edit"

@@ -2,14 +2,14 @@
 
 import { Item, normalizeGreekString, Stock } from "@/utils/helper";
 import { ChangeEvent, useEffect, useState } from "react";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 import ItemInput from "./ItemInput";
 interface OrderItemEntryProps {
   handleChange: Function;
   newItem?: boolean;
   providedSections?: Item[];
-  editable?: boolean;
+  editable?: string;
+  isOrder?: boolean;
 }
 
 export interface Checks {
@@ -22,7 +22,8 @@ const OrderItemEntry = ({
   handleChange,
   newItem,
   providedSections,
-  editable = true,
+  editable = "edit",
+  isOrder,
 }: OrderItemEntryProps) => {
   const [items, setItems] = useState({});
 
@@ -82,25 +83,108 @@ const OrderItemEntry = ({
       setAvailableSubjects(Array.from(subjects.values()) as string[]);
       setAvailableVarieties(Array.from(varieties.values()) as string[]);
 
+      if (providedSections && Object.keys(providedSections[0]).length === 0) {
+        setSections([
+          {
+            plant: availablePlants ? availablePlants[0] : "",
+            subject: availableSubjects ? availableSubjects[0] : "",
+            variety: availableVarieties ? availableVarieties[0] : "",
+            price: "0",
+            amount: "0",
+            stock: { own: "true", distributor: "" },
+          },
+        ]);
+      }
+
       setItems(items);
     };
 
     fetchItems();
+
+    setChecks([
+      {
+        plantNew: false,
+        subjectNew: false,
+        varietyNew: false,
+      },
+    ]);
   }, []);
 
   useEffect(() => {
     // console.log(sections);
 
-    if (handleChange && editable) {
-      handleChange(sections);
+    if (!isOrder) {
       updateChecks();
+    }
 
-      console.log(checks);
-      console.log(sections);
+    if (handleChange && (editable === "edit" || editable === "new")) {
+      handleChange(sections);
     }
 
     function updateChecks() {
-      if (providedSections && Object.keys(providedSections[0]).length === 0) {
+      // console.log(providedSections);
+      const providedChecks: any = [];
+
+      if (
+        !providedSections ||
+        (Object.keys(providedSections[0]).length === 0 && checks.length < 1)
+      ) {
+        // console.log(checks);
+
+        // setChecks([
+        //   {
+        //     plantNew: false,
+        //     subjectNew: false,
+        //     varietyNew: false,
+        //   },
+        // ]);
+
+        sections?.forEach((item, index) => {
+          providedChecks.push({
+            plantNew: false,
+            subjectNew: false,
+            varietyNew: false,
+          });
+
+          if (
+            !availablePlants.find(
+              (plant: string) =>
+                normalizeGreekString(plant ? plant.toLowerCase() : "") ===
+                normalizeGreekString(
+                  item.plant ? item.plant.toLowerCase() : "_"
+                )
+            )
+          ) {
+            providedChecks[index].plantNew = true;
+          }
+
+          if (
+            !availableSubjects.find(
+              (subject: string) =>
+                normalizeGreekString(subject ? subject.toLowerCase() : "") ===
+                normalizeGreekString(
+                  item.subject ? item.subject.toLowerCase() : "_"
+                )
+            )
+          ) {
+            providedChecks[index].subjectNew = true;
+          }
+
+          if (
+            !availableVarieties.find(
+              (variety: string) =>
+                normalizeGreekString(variety ? variety.toLowerCase() : "") ===
+                normalizeGreekString(
+                  item.variety ? item.variety.toLowerCase() : "_"
+                )
+            )
+          ) {
+            providedChecks[index].varietyNew = true;
+          }
+        });
+
+        setChecks(providedChecks);
+
         return;
       }
 
@@ -115,7 +199,6 @@ const OrderItemEntry = ({
       // if (providedSections && providedSections?.length < 1) {
       //   return;
       // }
-      const providedChecks: any = [];
 
       // console.log(providedSections);
 
@@ -161,6 +244,8 @@ const OrderItemEntry = ({
         }
       });
 
+      console.log("called");
+
       setChecks(providedChecks);
     }
   }, [sections]);
@@ -182,7 +267,8 @@ const OrderItemEntry = ({
     setSections(providedSections as Item[]);
   }, [providedSections]);
 
-  const addSection = () => {
+  const addSection = (e: any) => {
+    e.preventDefault();
     setSections([
       ...sections,
       {
@@ -200,8 +286,8 @@ const OrderItemEntry = ({
       { plantNew: false, subjectNew: false, varietyNew: false },
     ]);
     setItemSectionExpanded([...itemSectionExpanded, true]);
-    console.log(checks);
-    console.log(sections);
+    // console.log(checks);
+    // console.log(sections);
   };
 
   const removeSection = (index: number) => {
@@ -275,6 +361,7 @@ const OrderItemEntry = ({
   };
 
   const handleExpand = (index: number, value: boolean) => {
+    return;
     const newExpanded = [...itemSectionExpanded];
     newExpanded[index] = value;
     // console.log(index);
@@ -286,9 +373,12 @@ const OrderItemEntry = ({
     field: keyof Checks,
     value: boolean
   ) => {
-    if (!editable) {
+    if (isOrder) {
       return;
     }
+
+    // console.log(checks);
+
     const newChecks = [...checks];
     newChecks[index][field] = value;
     setChecks(newChecks);
@@ -304,7 +394,7 @@ const OrderItemEntry = ({
               className="border border-gray-400 rounded-lg p-4 flex flex-col gap-4 bg-white"
             >
               <div
-                className="flex justify-between items-center cursor-pointer"
+                className="flex justify-between items-center"
                 onClick={() => {
                   handleExpand(index, !itemSectionExpanded[index]);
                 }}
@@ -320,7 +410,7 @@ const OrderItemEntry = ({
                       <IoTrashOutline />
                     </button>
                   )}
-                  <button
+                  {/* <button
                     className="border border-gray-400 p-4 rounded-lg"
                     onClick={(e) => {
                       e.preventDefault();
@@ -329,13 +419,14 @@ const OrderItemEntry = ({
                   >
                     {!itemSectionExpanded[index] && <IoIosArrowDown />}
                     {itemSectionExpanded[index] && <IoIosArrowUp />}
-                  </button>
+                  </button> */}
                 </div>
               </div>
               {itemSectionExpanded[index] && (
                 <div className="flex flex-col gap-3">
                   <ItemInput
                     editable={editable}
+                    isItem={!isOrder}
                     title="Φυτό"
                     property="plant"
                     isNew={checks[index]?.plantNew}
@@ -347,6 +438,7 @@ const OrderItemEntry = ({
                   />
                   <ItemInput
                     editable={editable}
+                    isItem={!isOrder}
                     title="Υποκείμενο"
                     property="subject"
                     isNew={checks[index]?.subjectNew}
@@ -358,6 +450,7 @@ const OrderItemEntry = ({
                   />
                   <ItemInput
                     editable={editable}
+                    isItem={!isOrder}
                     title="Ποικιλία"
                     property="variety"
                     isNew={checks[index]?.varietyNew}
@@ -424,7 +517,7 @@ const OrderItemEntry = ({
                   </div>
                   {parseInt(section.amount) * parseFloat(section.price) > 0 && (
                     <sup className="text-blue-400 ">
-                      Total Cost:{" "}
+                      Σύνολο:{" "}
                       {parseInt(section.amount) * parseFloat(section.price) > 0
                         ? parseInt(section.amount) * parseFloat(section.price)
                         : 0}

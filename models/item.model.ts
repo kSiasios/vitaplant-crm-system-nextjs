@@ -1,6 +1,6 @@
 import { model, models, Schema } from "mongoose";
 
-const ItemScema = new Schema({
+const ItemSchema = new Schema({
   plant: {
     type: String,
     required: [true, "Plant not defined!"],
@@ -32,6 +32,6 @@ const ItemScema = new Schema({
   },
 });
 
-const Item = models.Item || model("Item", ItemScema);
+const Item = models.Item || model("Item", ItemSchema);
 
 export default Item;

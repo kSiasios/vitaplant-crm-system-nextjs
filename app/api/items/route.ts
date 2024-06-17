@@ -19,27 +19,43 @@ export const GET = async () => {
   }
 };
 
-export const DELETE = async (req: Request) => {
-  try {
-    let data = await req.json();
-    console.log(data);
-    if (!data.id) {
-      return new Response(JSON.stringify({ error: "No id provided" }), {
-        status: 500,
-      });
-    }
-    await connectToDB();
-    const items = await Item.deleteOne({ _id: data.id });
+export const POST = async (req: Request) => {
+  // console.log(req.json())
 
-    return new Response(JSON.stringify(items));
-    // return new Response(JSON.stringify({ message: "Got it!" }));
+  let itemData = await req.json();
+  console.log(itemData);
+
+  for (let index = 0; index < itemData.length; index++) {
+    const item = itemData[index];
+    if (
+      item.subject == "" ||
+      item.variety == "" ||
+      item.amount <= 0 ||
+      item.price <= 0 ||
+      item.stock == undefined
+    ) {
+      return new Response(
+        JSON.stringify({
+          message: "Some Data are not provided!",
+        }),
+        {
+          status: 500,
+        }
+      );
+    }
+  }
+
+  try {
+    await connectToDB();
+    const item = await Item.insertMany(itemData);
+    const res = new Response(
+      JSON.stringify({ message: "Resource created successfully", item }),
+      { status: 201 }
+    );
+
+    return res;
   } catch (error) {
     console.log(error);
-    return new Response(
-      JSON.stringify({
-        message: "An error occured upon deletion!",
-        error,
-      })
-    );
+    return new Response(JSON.stringify({ error }), { status: 500 });
   }
 };

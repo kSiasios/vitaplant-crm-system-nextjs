@@ -6,12 +6,22 @@ import OrderItemEntry from "./OrderItemEntry";
 
 interface OrderFormProps {
   handleSubmit: any;
-  type: String;
+  type: string;
   orderData?: any;
+  loading?: boolean;
+  success?: boolean;
+  error?: boolean;
 }
 
-const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
-  const [formData, setFormData] = useState({
+const OrderForm = ({
+  handleSubmit,
+  type,
+  orderData,
+  loading,
+  success,
+  error,
+}: OrderFormProps) => {
+  const [formData, setFormData] = useState<any>({
     clientName: "",
     address: "",
     taxpayerNumber: "",
@@ -37,12 +47,6 @@ const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
     field: string,
     value: object | string | number | boolean
   ) => {
-    // console.log(value);
-
-    // setFormData({
-    //   ...formData,
-    //   [field]: value,
-    // });
     setNewFormData({
       ...newFormData,
       [field]: value,
@@ -50,20 +54,22 @@ const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
   };
 
   useEffect(() => {
-    // console.log(orderData);
-
     if (orderData) {
       setFormData(orderData);
     }
   }, [orderData]);
 
   useEffect(() => {
-    // console.log(orderData);
-
-    // if (orderData) {
     setNewFormData(formData);
-    // }
   }, [formData]);
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      status: Object.keys(statusMap)[0],
+      paymentStatus: Object.keys(paymentStatusMap)[0],
+    });
+  }, []);
 
   const getOrderItems = (data: Array<Object>) => {
     handleChange("items", data);
@@ -71,7 +77,6 @@ const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
 
   const submitForm = (e: FormEvent) => {
     e.preventDefault();
-
     handleSubmit(newFormData, e);
   };
 
@@ -113,7 +118,6 @@ const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
         <option value="complete">{statusMap["complete"]}</option>
       </select>
       <div className="flex gap-2">
-        {/* <label>Order Status</label> */}
         <select
           className="flex-1"
           required={true}
@@ -156,13 +160,18 @@ const OrderForm = ({ handleSubmit, type, orderData }: OrderFormProps) => {
         <OrderItemEntry
           handleChange={getOrderItems}
           providedSections={formData.items as Item[]}
+          isOrder={true}
+          editable={type}
         />
       </div>
       <button
         className="bg-white border border-black rounded-full px-6 py-3 hover:bg-black hover:text-white focus:bg-black focus:text-white"
         type="submit"
       >
-        Αποθήκευση
+        {!loading && success && !error && "Έγινε Αποθήκευση!"}
+        {!loading && !success && error && "Σφάλμα Αποθήκευσης!"}
+        {loading && "Γίνεται Αποθήκευση..."}
+        {!loading && !success && !error && "Αποθήκευση"}
       </button>
     </form>
   );

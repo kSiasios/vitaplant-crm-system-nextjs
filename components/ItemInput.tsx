@@ -1,8 +1,11 @@
+import { useEffect } from "react";
+
 interface ItemInputProps {
-  editable: boolean;
+  editable: string;
   title: string;
   property: string;
   isNew: boolean;
+  isItem: boolean;
   value: string;
   index: number;
   handleCheckChange: any;
@@ -15,6 +18,7 @@ const ItemInput = ({
   title,
   property,
   isNew,
+  isItem,
   value,
   index,
   handleCheckChange,
@@ -23,11 +27,21 @@ const ItemInput = ({
 }: ItemInputProps) => {
   // console.log(isNew);
 
+  useEffect(() => {
+    handleInputChange(index, property, options[0]);
+  }, [options]);
+
+  // const isNew = !options.includes(value);
+
   return (
-    <div className={`flex gap-2 ${editable ? "flex-col" : "flex-row"}`}>
+    <div
+      className={`flex gap-2 ${
+        editable === "edit" || editable === "new" ? "flex-col" : "flex-row"
+      }`}
+    >
       <div className="flex gap-1 justify-between">
         <h4>{title}</h4>
-        {editable && (
+        {isItem && (
           <div className="flex gap-1">
             <div>
               <label
@@ -75,21 +89,21 @@ const ItemInput = ({
           </div>
         )}
       </div>
-      {!isNew && editable && (
+      {!isNew && (editable === "edit" || editable === "new") && (
         <select
           value={value}
           onChange={(e) => handleInputChange(index, property, e.target.value)}
         >
           {options &&
-            editable &&
+            (editable === "edit" || editable === "new") &&
             options.map((option, idx) => (
-              <option key={idx} value={option}>
+              <option selected={idx === 0} key={idx} value={option}>
                 {option}
               </option>
             ))}
         </select>
       )}
-      {isNew && editable && (
+      {isNew && (editable === "edit" || editable === "new") && (
         <input
           type="text"
           placeholder={title}
@@ -97,11 +111,11 @@ const ItemInput = ({
           onChange={(e) => handleInputChange(index, property, e.target.value)}
         />
       )}
-      {!editable && (
+      {/* {editable !== "edit" && (
         <p>
           {property}_{index}
         </p>
-      )}
+      )} */}
     </div>
   );
 };

@@ -289,14 +289,7 @@ const Home = () => {
                     })
                   ).map((order: any) => (
                     // <div key={index}>{order.name}</div>
-                    <OrderItem
-                      key={order._id}
-                      clientName={order.clientName}
-                      orderID={order._id}
-                      items={order.items}
-                      status={order.status}
-                      paymentStatus={order.paymentStatus}
-                    />
+                    <OrderItem key={order._id} orderData={order} />
                   ))}
                 {orders.length === 0 && !filter && <div>Φόρτωση</div>}
                 {orders.length === 0 && filter && <div>Κανένα Αποτέλεσμα</div>}

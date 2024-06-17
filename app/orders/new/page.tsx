@@ -2,13 +2,21 @@
 import OrderForm from "@/components/OrderForm";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 
 const NewOrder = () => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+
   async function handleNewOrder(data: Object, e?: any) {
     e?.preventDefault();
     // console.log("new order!");
     // console.log(data);
+
+    setLoading(true);
+
     const headers: Headers = new Headers();
     headers.set("Content-Type", "application/json");
     headers.set("Accept", "application/json");
@@ -21,12 +29,24 @@ const NewOrder = () => {
       });
       if (response.ok) {
         console.log("Created ");
+        setSuccess(true);
+
+        setTimeout(() => {
+          setSuccess(false);
+        }, 5000);
       }
 
       if (!response.ok) {
         let jsonRes = await response.json();
         alert(jsonRes.error);
+        setError(true);
+
+        setTimeout(() => {
+          setError(false);
+        }, 5000);
       }
+
+      setLoading(false);
     } catch (error) {
       alert(error);
     }
@@ -68,7 +88,13 @@ const NewOrder = () => {
       >
         <IoIosArrowRoundBack />
       </button>
-      <OrderForm handleSubmit={handleNewOrder} type="new" />
+      <OrderForm
+        handleSubmit={handleNewOrder}
+        type="new"
+        loading={loading}
+        success={success}
+        error={error}
+      />
     </div>
   );
 };

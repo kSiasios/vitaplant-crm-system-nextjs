@@ -1,28 +1,21 @@
-import Order from "@/models/order.model";
+import Item from "@/models/item.model";
 import { connectToDB } from "@/utils/database";
 import { NextResponse } from "next/server";
-import { updateStock } from "../route";
 
 export const GET = async (
   req: Request,
   { params }: { params: { id: string } }
 ) => {
-  // console.log(`GET by ID`);
-
   const { id } = params;
-
-  // console.log(`ID: ${id}`);
 
   try {
     await connectToDB();
-    const order = await Order.findOne({ _id: id });
+    const item = await Item.findOne({ _id: id });
 
-    // console.log(order);
-
-    if (!order) {
+    if (!item) {
       return NextResponse.json(
         {
-          error: `Order with ID(${id}) not found!`,
+          error: `Item with ID(${id}) not found!`,
         },
         {
           status: 404,
@@ -30,7 +23,7 @@ export const GET = async (
       );
     }
 
-    return new Response(JSON.stringify(order));
+    return new Response(JSON.stringify(item));
   } catch (error) {
     console.log(error);
     return new Response(
@@ -48,18 +41,16 @@ export const PUT = async (
 ) => {
   const { id } = params;
 
-  let orderData = await req.json();
+  let itemData = await req.json();
 
-  const updatedData = orderData.data;
+  const updatedData = itemData.data;
 
   delete updatedData._id;
   delete updatedData.__v;
 
-  console.log(updatedData);
-
   try {
     await connectToDB();
-    const order = await Order.updateOne({ _id: id }, updatedData);
+    const order = await Item.updateOne({ _id: id }, updatedData);
 
     return new Response(JSON.stringify(order));
   } catch (error) {
@@ -81,13 +72,7 @@ export const DELETE = async (
 
   try {
     await connectToDB();
-
-    // fetch order data
-    const order = await Order.findById(id);
-
-    updateStock(order, "add");
-
-    const deleteRequest = await Order.deleteOne({ _id: id });
+    const deleteRequest = await Item.deleteOne({ _id: id });
 
     return new Response(JSON.stringify(deleteRequest));
   } catch (error) {
