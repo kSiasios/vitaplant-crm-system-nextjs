@@ -1,3 +1,4 @@
+import Item from "@/models/item.model";
 import mongoose from "mongoose";
 
 let isConnected = false;
@@ -21,5 +22,45 @@ export const connectToDB = async () => {
     console.log("MongoDB connected!");
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const updateStock = async (orderObject: any, operation: string) => {
+  await connectToDB();
+  for (let index = 0; index < orderObject.items.length; index++) {
+    const item = orderObject.items[index];
+
+    const inStorage = await Item.findOne({
+      plant: item.plant,
+      subject: item.subject,
+      variety: item.variety,
+    });
+    if (inStorage) {
+      // update stock
+
+      let newAmount =
+        operation === "add"
+          ? parseInt(inStorage.amount) + parseInt(item.amount)
+          : parseInt(inStorage.amount) - parseInt(item.amount);
+
+      const itemUpdate = await Item.updateOne(
+        {
+          plant: item.plant,
+          subject: item.subject,
+          variety: item.variety,
+        },
+        {
+          amount: newAmount,
+        }
+      );
+
+      if (!itemUpdate) {
+        return new Response(
+          // JSON.stringify({ message: "Resource created successfully" }),
+          JSON.stringify({ error: "Error upon item update!", item }),
+          { status: 500 }
+        );
+      }
+    }
   }
 };

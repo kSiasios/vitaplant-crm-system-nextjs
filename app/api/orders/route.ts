@@ -1,6 +1,6 @@
 import Item from "@/models/item.model";
 import Order from "@/models/order.model";
-import { connectToDB } from "@/utils/database";
+import { connectToDB, updateStock } from "@/utils/database";
 
 export const GET = async () => {
   try {
@@ -79,45 +79,5 @@ export const POST = async (req: Request) => {
     console.log(error);
     const res = new Response(JSON.stringify({ error }), { status: 500 });
     return res;
-  }
-};
-
-export const updateStock = async (orderObject: any, operation: string) => {
-  await connectToDB();
-  for (let index = 0; index < orderObject.items.length; index++) {
-    const item = orderObject.items[index];
-
-    const inStorage = await Item.findOne({
-      plant: item.plant,
-      subject: item.subject,
-      variety: item.variety,
-    });
-    if (inStorage) {
-      // update stock
-
-      let newAmount =
-        operation === "add"
-          ? parseInt(inStorage.amount) + parseInt(item.amount)
-          : parseInt(inStorage.amount) - parseInt(item.amount);
-
-      const itemUpdate = await Item.updateOne(
-        {
-          plant: item.plant,
-          subject: item.subject,
-          variety: item.variety,
-        },
-        {
-          amount: newAmount,
-        }
-      );
-
-      if (!itemUpdate) {
-        return new Response(
-          // JSON.stringify({ message: "Resource created successfully" }),
-          JSON.stringify({ error: "Error upon item update!", item }),
-          { status: 500 }
-        );
-      }
-    }
   }
 };

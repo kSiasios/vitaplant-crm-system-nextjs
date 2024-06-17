@@ -1,7 +1,6 @@
 import Order from "@/models/order.model";
-import { connectToDB } from "@/utils/database";
+import { connectToDB, updateStock } from "@/utils/database";
 import { NextResponse } from "next/server";
-import { updateStock } from "../route";
 
 export const GET = async (
   req: Request,
