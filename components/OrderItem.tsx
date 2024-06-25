@@ -8,7 +8,7 @@ import { GiTreeRoots } from "react-icons/gi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoTrash } from "react-icons/io5";
 import { LuPackage, LuPackageCheck, LuPackageOpen } from "react-icons/lu";
-import { PiPlant } from "react-icons/pi";
+import { PiFlowerTulip, PiPlant } from "react-icons/pi";
 import { TbCurrencyEuro, TbCurrencyEuroOff } from "react-icons/tb";
 
 interface OrderProps {
@@ -69,7 +69,10 @@ const OrderItem = ({ orderData }: OrderProps) => {
             }}
           >
             <div className="flex gap-2">
-              <span>{orderData.clientName}</span>
+              <span className="font-medium">{orderData.clientName}</span>
+              <span className="italic">{`${new Date(
+                orderData.created.at
+              ).toLocaleDateString("el-EL")}`}</span>
             </div>
             <div className="flex gap-1 items-center">
               <div>
@@ -159,14 +162,18 @@ const OrderItem = ({ orderData }: OrderProps) => {
                   <div className="order-items-container">
                     {orderData.items.map((item: any, index: number) => (
                       <div
-                        className="inline-flex gap-3 justify-center p-2 rounded-md"
+                        className="inline-flex gap-3 justify-between items-center p-2 rounded-md"
                         key={index}
                       >
-                        <div className="inline-flex items-center flex-row-reverse gap-1 flex-1 justify-start">
+                        <div className="inline-flex items-center gap-1 ">
+                          <PiFlowerTulip className="text-red-400" />{" "}
+                          {item.plant}
+                        </div>
+                        <div className="inline-flex items-center gap-1">
                           <GiTreeRoots className="text-orange-950" />{" "}
                           {item.subject}
                         </div>
-                        <div className="inline-flex items-center gap-1 flex-1">
+                        <div className="inline-flex items-center gap-1">
                           <PiPlant className="text-teal-800" /> {item.variety}
                         </div>
                       </div>

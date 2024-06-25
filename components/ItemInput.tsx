@@ -28,7 +28,7 @@ const ItemInput = ({
   // console.log(isNew);
 
   useEffect(() => {
-    handleInputChange(index, property, options[0]);
+    if (!value) handleInputChange(index, property, options[0]);
   }, [options]);
 
   // const isNew = !options.includes(value);
@@ -97,7 +97,7 @@ const ItemInput = ({
           {options &&
             (editable === "edit" || editable === "new") &&
             options.map((option, idx) => (
-              <option selected={idx === 0} key={idx} value={option}>
+              <option key={idx} value={option}>
                 {option}
               </option>
             ))}

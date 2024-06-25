@@ -168,9 +168,11 @@ const Home = () => {
 
   const newOrderNav = () => router.push("/orders/new");
 
-  // useEffect(() => {
-  //   filterOrders();
-  // }, [filter]);
+  useEffect(() => {
+    // console.log(orders[0].created.at);
+    let dateOfCreation = new Date(orders[0]?.created?.at);
+    console.log(dateOfCreation.getDate());
+  }, [orders]);
 
   useEffect(() => {
     // console.log(filter);

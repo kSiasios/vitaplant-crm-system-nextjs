@@ -96,6 +96,8 @@ const OrderItemEntry = ({
         ]);
       }
 
+      setItemSectionExpanded(providedSections?.map((section) => true) || []);
+
       setItems(items);
     };
 
@@ -129,16 +131,6 @@ const OrderItemEntry = ({
         !providedSections ||
         (Object.keys(providedSections[0]).length === 0 && checks.length < 1)
       ) {
-        // console.log(checks);
-
-        // setChecks([
-        //   {
-        //     plantNew: false,
-        //     subjectNew: false,
-        //     varietyNew: false,
-        //   },
-        // ]);
-
         sections?.forEach((item, index) => {
           providedChecks.push({
             plantNew: false,
@@ -195,12 +187,6 @@ const OrderItemEntry = ({
       ) {
         return;
       }
-
-      // if (providedSections && providedSections?.length < 1) {
-      //   return;
-      // }
-
-      // console.log(providedSections);
 
       providedSections?.forEach((item, index) => {
         providedChecks.push({
@@ -360,12 +346,15 @@ const OrderItemEntry = ({
     }
   };
 
-  const handleExpand = (index: number, value: boolean) => {
-    return;
+  const handleExpand = (index: number) => {
+    // return;
     const newExpanded = [...itemSectionExpanded];
-    newExpanded[index] = value;
+    newExpanded[index] = !itemSectionExpanded[index];
     // console.log(index);
     setItemSectionExpanded(newExpanded);
+
+    // // reset item data
+    // setSections(sections);
   };
 
   const handleCheckChange = (
@@ -394,9 +383,9 @@ const OrderItemEntry = ({
               className="border border-gray-400 rounded-lg p-4 flex flex-col gap-4 bg-white"
             >
               <div
-                className="flex justify-between items-center"
+                className="flex justify-between items-center cursor-pointer"
                 onClick={() => {
-                  handleExpand(index, !itemSectionExpanded[index]);
+                  handleExpand(index);
                 }}
               >
                 <h3 className="font-bold">Αντικείμενο</h3>
