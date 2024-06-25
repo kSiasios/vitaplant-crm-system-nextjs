@@ -11,6 +11,7 @@ const EditOrder = ({ params }: { params: { id: string } }) => {
     clientName: "",
     address: "",
     taxpayerNumber: "",
+    phone: "",
     status: "",
     paymentAmount: "",
     paymentStatus: "",
@@ -23,6 +24,8 @@ const EditOrder = ({ params }: { params: { id: string } }) => {
     const fetchOrderData = async () => {
       const res = await fetch(`/api/orders/${id}`);
       const data = await res.json();
+
+      // console.log(data);
 
       setOrderData(data);
     };

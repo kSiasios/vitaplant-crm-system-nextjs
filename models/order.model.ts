@@ -11,6 +11,9 @@ const OrderSchema = new Schema({
   taxpayerNumber: {
     type: String,
   },
+  phone: {
+    type: String,
+  },
   status: {
     type: String,
     required: [true, "Order Status not defined!"],

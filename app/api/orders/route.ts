@@ -27,6 +27,7 @@ export const POST = async (req: Request) => {
     clientName: orderData.clientName,
     address: orderData.address,
     taxpayerNumber: orderData.taxpayerNumber,
+    phone: orderData.phone,
     status: orderData.status,
     paymentStatus: orderData.paymentStatus,
     paymentAmount:

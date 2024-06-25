@@ -2,6 +2,11 @@
 
 import { Item, paymentStatusMap, statusMap } from "@/utils/helper";
 import { FormEvent, useEffect, useState } from "react";
+import { BsFillTelephoneFill } from "react-icons/bs";
+import { IoIosPin, IoMdPerson } from "react-icons/io";
+import { LuPackageOpen } from "react-icons/lu";
+import { PiIdentificationCardFill } from "react-icons/pi";
+import { TbCurrencyEuro } from "react-icons/tb";
 import OrderItemEntry from "./OrderItemEntry";
 
 interface OrderFormProps {
@@ -25,6 +30,7 @@ const OrderForm = ({
     clientName: "",
     address: "",
     taxpayerNumber: "",
+    phone: "",
     status: "",
     paymentAmount: "",
     paymentStatus: "",
@@ -36,6 +42,7 @@ const OrderForm = ({
     clientName: "",
     address: "",
     taxpayerNumber: "",
+    phone: "",
     status: "",
     paymentAmount: "",
     paymentStatus: "",
@@ -85,41 +92,69 @@ const OrderForm = ({
       onSubmit={submitForm}
       className="flex flex-col max-w-[500px] mx-auto border border-gray-400 rounded-lg p-8 gap-4 bg-white"
     >
-      <input
-        required={true}
-        placeholder="Όνομα Πελάτη"
-        name="clientName"
-        value={newFormData.clientName}
-        onChange={(e) => handleChange("clientName", e.target.value)}
-      />
-      <input
-        required={true}
-        placeholder="Διεύθυνση"
-        name="address"
-        value={newFormData.address}
-        onChange={(e) => handleChange("address", e.target.value)}
-      />
-      <input
-        placeholder="ΑΦΜ"
-        name="taxpayerNumber"
-        value={newFormData.taxpayerNumber}
-        onChange={(e) => handleChange("taxpayerNumber", e.target.value)}
-      />
-      <select
-        required={true}
-        value={newFormData.status}
-        name="status"
-        onChange={(e) => {
-          handleChange("status", e.target.value);
-        }}
-      >
-        <option value="registered">{statusMap["registered"]}</option>
-        <option value="packed">{statusMap["packed"]}</option>
-        <option value="complete">{statusMap["complete"]}</option>
-      </select>
-      <div className="flex gap-2">
+      <label className="inline-flex justify-center items-center gap-2 w-full">
+        <IoMdPerson />
+        <input
+          className="w-full"
+          required={true}
+          placeholder="Όνομα Πελάτη"
+          name="clientName"
+          value={newFormData.clientName}
+          onChange={(e) => handleChange("clientName", e.target.value)}
+        />
+      </label>
+      <label className="inline-flex justify-center items-center gap-2 w-full">
+        <IoIosPin />
+        <input
+          className="w-full"
+          required={true}
+          placeholder="Διεύθυνση"
+          name="address"
+          value={newFormData.address}
+          onChange={(e) => handleChange("address", e.target.value)}
+        />
+      </label>
+      <label className="inline-flex justify-center items-center gap-2 w-full">
+        <PiIdentificationCardFill />
+        <input
+          className="w-full"
+          placeholder="ΑΦΜ"
+          name="taxpayerNumber"
+          value={newFormData.taxpayerNumber}
+          onChange={(e) => handleChange("taxpayerNumber", e.target.value)}
+        />
+      </label>
+      <label className="inline-flex justify-center items-center gap-2 w-full">
+        <BsFillTelephoneFill />
+        <input
+          className="w-full"
+          placeholder="Τηλέφωνο"
+          name="phone"
+          type="tel"
+          value={newFormData.phone}
+          onChange={(e) => handleChange("phone", e.target.value)}
+        />
+      </label>
+      <label className="inline-flex justify-center items-center gap-2 w-full">
+        <LuPackageOpen />
         <select
-          className="flex-1"
+          className="w-full"
+          required={true}
+          value={newFormData.status}
+          name="status"
+          onChange={(e) => {
+            handleChange("status", e.target.value);
+          }}
+        >
+          <option value="registered">{statusMap["registered"]}</option>
+          <option value="packed">{statusMap["packed"]}</option>
+          <option value="complete">{statusMap["complete"]}</option>
+        </select>
+      </label>
+      <label className="inline-flex justify-center items-center gap-2 w-full">
+        <TbCurrencyEuro />
+        <select
+          className="w-full"
           required={true}
           value={newFormData.paymentStatus}
           name="paymentStatus"
@@ -145,7 +180,7 @@ const OrderForm = ({
             placeholder="Ποσό Προκαταβολής"
           />
         )}
-      </div>
+      </label>
       <div className="flex flex-col gap-2">
         <label htmlFor="comments">Σχόλια</label>
         <textarea

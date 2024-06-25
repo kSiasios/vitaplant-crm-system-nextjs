@@ -165,15 +165,15 @@ const OrderItem = ({ orderData }: OrderProps) => {
                         className="inline-flex gap-3 justify-between items-center p-2 rounded-md"
                         key={index}
                       >
-                        <div className="inline-flex items-center gap-1 ">
+                        <div className="inline-flex items-center gap-1 flex-1">
                           <PiFlowerTulip className="text-red-400" />{" "}
                           {item.plant}
                         </div>
-                        <div className="inline-flex items-center gap-1">
+                        <div className="inline-flex items-center gap-1 flex-1">
                           <GiTreeRoots className="text-orange-950" />{" "}
                           {item.subject}
                         </div>
-                        <div className="inline-flex items-center gap-1">
+                        <div className="inline-flex items-center gap-1 flex-1">
                           <PiPlant className="text-teal-800" /> {item.variety}
                         </div>
                       </div>

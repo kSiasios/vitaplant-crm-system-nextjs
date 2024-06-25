@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { GiTreeRoots } from "react-icons/gi";
+import { PiFlowerTulip, PiPlant } from "react-icons/pi";
 
 interface ItemInputProps {
   editable: string;
@@ -40,7 +42,12 @@ const ItemInput = ({
       }`}
     >
       <div className="flex gap-1 justify-between">
-        <h4>{title}</h4>
+        <h4 className="inline-flex gap-2 items-center">
+          {property === "plant" && <PiFlowerTulip />}
+          {property === "subject" && <GiTreeRoots />}
+          {property === "variety" && <PiPlant />}
+          {title}
+        </h4>
         {isItem && (
           <div className="flex gap-1">
             <div>
