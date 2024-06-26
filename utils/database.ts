@@ -50,7 +50,7 @@ export const updateStock = async (orderObject: any, operation: string) => {
           variety: item.variety,
         },
         {
-          amount: newAmount,
+          currentAmount: newAmount,
         }
       );
 
