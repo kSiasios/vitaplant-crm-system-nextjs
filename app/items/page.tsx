@@ -49,18 +49,13 @@ const Items = () => {
 
   async function handleDelete(id: string) {
     if (confirm("Are you sure you want to delete this item?")) {
-      const data = {
-        id,
-      };
-
       const headers: Headers = new Headers();
       headers.set("Content-Type", "application/json");
       headers.set("Accept", "application/json");
 
-      const response = await fetch("/api/items", {
+      const response = await fetch(`/api/items/${id}`, {
         method: "DELETE",
         headers,
-        body: JSON.stringify(data),
       });
 
       const text = await response.text();
