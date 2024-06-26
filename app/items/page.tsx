@@ -166,6 +166,7 @@ const Items = () => {
               <th scope="col">Υποκείμενο</th>
               <th scope="col">Ποικιλία</th>
               <th scope="col">Τιμή</th>
+              <th scope="col">Αποθήκη</th>
               <th scope="col">Ποσότητα</th>
               <th scope="col">Ίδιο Απόθεμα</th>
               <th scope="col">Προμηθευτής</th>
@@ -215,6 +216,17 @@ const Items = () => {
                   value={filter.price}
                   onChange={(e) => {
                     setFilter({ ...filter, price: e.target.value });
+                  }}
+                /> */}
+              </td>
+              <td className="text-center">
+                {/* <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={filter.amount}
+                  onChange={(e) => {
+                    setFilter({ ...filter, amount: e.target.value });
                   }}
                 /> */}
               </td>
@@ -279,6 +291,7 @@ const Items = () => {
                 <td className="text-center">{item.subject}</td>
                 <td className="text-center">{item.variety}</td>
                 <td className="text-center">{item.price}</td>
+                <td className="text-center">{item.currentAmount}</td>
                 <td className="text-center">{item.amount}</td>
                 <td>
                   {item.stock.own ? (

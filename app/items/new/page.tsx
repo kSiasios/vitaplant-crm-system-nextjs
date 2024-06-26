@@ -6,11 +6,11 @@ import { FormEvent, useEffect, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 
 const NewItem = () => {
-  const [orderItems, setOrderItems] = useState<Object>([]);
+  const [itemData, setItemData] = useState<any>([]);
   const [loading, setLoading] = useState(false);
 
   const getOrderItems = (data: Array<Object>) => {
-    setOrderItems(data);
+    setItemData(data);
   };
 
   const fetchItems = async () => {
@@ -27,12 +27,20 @@ const NewItem = () => {
 
   const formSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(orderItems);
+    let data = {
+      ...itemData[0],
+      currentAmount: itemData[0].amount,
+    };
+    // setItemData(...itemData);
     setLoading(true);
+
+    console.log(data);
+    // return;
+
     try {
       const res = await fetch("/api/items", {
         method: "POST",
-        body: JSON.stringify(orderItems),
+        body: JSON.stringify(data),
       });
 
       if (!res.ok) {

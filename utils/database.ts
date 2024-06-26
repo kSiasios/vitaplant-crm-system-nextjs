@@ -40,8 +40,8 @@ export const updateStock = async (orderObject: any, operation: string) => {
 
       let newAmount =
         operation === "add"
-          ? parseInt(inStorage.amount) + parseInt(item.amount)
-          : parseInt(inStorage.amount) - parseInt(item.amount);
+          ? parseInt(inStorage.currentAmount) + parseInt(item.amount)
+          : parseInt(inStorage.currentAmount) - parseInt(item.amount);
 
       const itemUpdate = await Item.updateOne(
         {

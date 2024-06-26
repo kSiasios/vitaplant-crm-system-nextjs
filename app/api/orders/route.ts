@@ -57,7 +57,7 @@ export const POST = async (req: Request) => {
         );
       }
 
-      if (item.stock.own && inStorage.amount < item.amount) {
+      if (item.stock.own && inStorage.currentAmount < item.amount) {
         return new Response(
           JSON.stringify({ error: "Item amount is too much!", item }),
           { status: 500 }

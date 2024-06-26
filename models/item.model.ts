@@ -16,6 +16,10 @@ const ItemSchema = new Schema({
   price: {
     type: Number,
   },
+  currentAmount: {
+    type: Number,
+    required: [true, "Current Amount not defined!"],
+  },
   amount: {
     type: Number,
     required: [true, "Amount not defined!"],
