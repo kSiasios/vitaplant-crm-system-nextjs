@@ -58,6 +58,15 @@ const OrderItem = ({ orderData }: OrderProps) => {
     return;
   };
 
+  const getCost = (data: any) => {
+    let cost = 0;
+    data.items.forEach((item: any) => {
+      cost += item.amount * item.price;
+    });
+
+    return cost;
+  };
+
   return (
     orderData && (
       <div className={isDeleted ? "hidden" : "block"}>
@@ -68,11 +77,16 @@ const OrderItem = ({ orderData }: OrderProps) => {
               setIsExpanded(!isExpanded);
             }}
           >
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2">
               <span className="font-medium">{orderData.clientName}</span>
-              <span className="italic">{`${new Date(
-                orderData.created.at
-              ).toLocaleDateString("el-EL")}`}</span>
+              <div className="inline-flex gap-2">
+                <span className="italic">{`${new Date(
+                  orderData.created.at
+                ).toLocaleDateString("el-EL")}`}</span>
+                <span className="font-semibold inline-flex items-center">
+                  {getCost(orderData)} <TbCurrencyEuro />
+                </span>
+              </div>
             </div>
             <div className="flex gap-1 items-center">
               <div>
@@ -165,6 +179,7 @@ const OrderItem = ({ orderData }: OrderProps) => {
                         className="inline-flex gap-3 justify-between items-center p-2 rounded-md"
                         key={index}
                       >
+                        {item.amount} x {parseFloat(item.price)}
                         <div className="inline-flex items-center gap-1 flex-1">
                           <PiFlowerTulip className="text-red-400" />{" "}
                           {item.plant}
@@ -179,7 +194,6 @@ const OrderItem = ({ orderData }: OrderProps) => {
                       </div>
                     ))}
                   </div>
-                  {/* <span>{items.toString()}</span> */}
                 </div>
               </div>
             )}
