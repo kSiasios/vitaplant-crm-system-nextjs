@@ -67,6 +67,11 @@ const OrderForm = ({
   }, [orderData]);
 
   useEffect(() => {
+    if (orderData && orderData != formData) {
+      setFormData(orderData);
+      return;
+    }
+
     setNewFormData(formData);
   }, [formData]);
 
