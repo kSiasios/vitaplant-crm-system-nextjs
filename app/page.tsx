@@ -171,7 +171,7 @@ const Home = () => {
   useEffect(() => {
     // console.log(orders[0].created.at);
     let dateOfCreation = new Date(orders[0]?.created?.at);
-    console.log(dateOfCreation.getDate());
+    // console.log(dateOfCreation.getDate());
   }, [orders]);
 
   useEffect(() => {

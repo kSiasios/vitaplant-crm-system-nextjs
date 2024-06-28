@@ -45,19 +45,29 @@ export const POST = async (req: Request) => {
 
     for (let index = 0; index < orderObject.items.length; index++) {
       const item = orderObject.items[index];
-      const inStorage = await Item.findOne({
+      let inStorage = await Item.findOne({
         plant: item.plant,
         subject: item.subject,
         variety: item.variety,
       });
-      if (!inStorage && item.stock.own) {
+
+      if (item.stock.own !== "true") {
+        inStorage = await Item.findOne({
+          plant: item.plant,
+          subject: item.subject,
+          variety: item.variety,
+          "stock.distributor": item.stock.distributor,
+        });
+      }
+
+      if (!inStorage && item.stock.own === "true") {
         return new Response(
           JSON.stringify({ error: "Item not found in storage!", item }),
           { status: 500 }
         );
       }
 
-      if (item.stock.own && inStorage.currentAmount < item.amount) {
+      if (item.stock.own === "true" && inStorage.currentAmount < item.amount) {
         return new Response(
           JSON.stringify({ error: "Item amount is too much!", item }),
           { status: 500 }
@@ -67,7 +77,7 @@ export const POST = async (req: Request) => {
 
     const order = await Order.create(orderObject);
 
-    await updateStock(orderObject, "subtract");
+    await updateStock(orderObject.items, "subtract");
 
     const res = new Response(
       // JSON.stringify({ message: "Resource created successfully" }),

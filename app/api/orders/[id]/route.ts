@@ -1,3 +1,4 @@
+import Item from "@/models/item.model";
 import Order from "@/models/order.model";
 import { connectToDB, updateStock } from "@/utils/database";
 import { NextResponse } from "next/server";
@@ -49,18 +50,47 @@ export const PUT = async (
 
   let orderData = await req.json();
 
-  const updatedData = orderData.data;
-
-  delete updatedData._id;
-  delete updatedData.__v;
-
-  console.log(updatedData);
+  const updatedData = { ...orderData.data };
 
   try {
     await connectToDB();
-    const order = await Order.updateOne({ _id: id }, updatedData);
 
-    return new Response(JSON.stringify(order));
+    const oldOrder = await Order.findById(id);
+
+    oldOrder.items.forEach(async (item: any) => {
+      const newItem = updatedData.items.find(
+        (i: any) =>
+          i.plant === item.plant &&
+          i.subject === item.subject &&
+          i.variety === item.variety &&
+          i.stock.distributor === item.stock.distributor
+      );
+
+      const difference = newItem.amount - item.amount;
+      console.log(difference);
+
+      const itemUpdate = await Item.updateOne(
+        {
+          plant: newItem.plant,
+          subject: newItem.subject,
+          variety: newItem.variety,
+          "stock.distributor": newItem.stock.distributor,
+        },
+        {
+          $inc: { currentAmount: -difference },
+        }
+      );
+      if (!itemUpdate) {
+        return new Response(JSON.stringify({ itemUpdate }), {
+          status: 500,
+        });
+      }
+    });
+
+    // update order
+    const orderUpdate = await Order.updateOne({ _id: id }, updatedData);
+
+    return new Response(JSON.stringify(orderUpdate));
   } catch (error) {
     console.log(error);
     return new Response(
@@ -84,7 +114,7 @@ export const DELETE = async (
     // fetch order data
     const order = await Order.findById(id);
 
-    updateStock(order, "add");
+    updateStock(order.items, "add");
 
     const deleteRequest = await Order.deleteOne({ _id: id });
 

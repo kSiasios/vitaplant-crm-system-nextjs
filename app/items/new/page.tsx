@@ -68,7 +68,7 @@ const NewItem = () => {
   return (
     <div>
       <button
-        onClick={() => router.back()}
+        onClick={() => router.push("/")}
         className="absolute aspect-square text-3xl border border-gray-400 p-4 rounded-full mx-4"
       >
         <IoIosArrowRoundBack />

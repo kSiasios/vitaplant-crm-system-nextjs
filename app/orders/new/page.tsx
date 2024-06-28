@@ -70,7 +70,7 @@ const NewOrder = () => {
             You are not allowed here!
           </h1>
           <button
-            onClick={() => router.back()}
+            onClick={() => router.push("/")}
             className="flex justify-center items-center font-bold text-xl bg-transparent underline w-fit"
           >
             Go Back!
@@ -83,7 +83,7 @@ const NewOrder = () => {
   return (
     <div className="pt-8">
       <button
-        onClick={() => router.back()}
+        onClick={() => router.push("/")}
         className="absolute aspect-square text-3xl border border-gray-400 p-4 rounded-full mx-4"
       >
         <IoIosArrowRoundBack />

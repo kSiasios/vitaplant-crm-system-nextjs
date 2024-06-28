@@ -143,7 +143,7 @@ const Items = () => {
   return (
     <div className="flex flex-col w-fit mx-auto">
       <button
-        onClick={() => router.back()}
+        onClick={() => router.push("/")}
         className="absolute aspect-square text-3xl border border-gray-400 p-4 rounded-full mx-4"
       >
         <IoIosArrowRoundBack />
@@ -161,8 +161,8 @@ const Items = () => {
               <th scope="col">Υποκείμενο</th>
               <th scope="col">Ποικιλία</th>
               <th scope="col">Τιμή</th>
-              <th scope="col">Αποθήκη</th>
               <th scope="col">Ποσότητα</th>
+              <th scope="col">Αποθήκη</th>
               <th scope="col">Ίδιο Απόθεμα</th>
               <th scope="col">Προμηθευτής</th>
             </tr>
@@ -286,8 +286,8 @@ const Items = () => {
                 <td className="text-center">{item.subject}</td>
                 <td className="text-center">{item.variety}</td>
                 <td className="text-center">{item.price}</td>
-                <td className="text-center">{item.currentAmount}</td>
                 <td className="text-center">{item.amount}</td>
+                <td className="text-center">{item.currentAmount}</td>
                 <td>
                   {item.stock.own ? (
                     <FaCheck className="mx-auto" />
