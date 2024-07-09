@@ -114,7 +114,7 @@ export const DELETE = async (
     // fetch order data
     const order = await Order.findById(id);
 
-    updateStock(order.items, "add");
+    updateStock(order.items, "delete");
 
     const deleteRequest = await Order.deleteOne({ _id: id });
 

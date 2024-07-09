@@ -48,11 +48,18 @@ export const updateStock = async (items: any, operation: string) => {
     if (inStorage) {
       // update stock
 
-      const difference =
-        parseInt(item.amount) - parseInt(inStorage.currentAmount);
-      // if (operation === "add") {
-      //   newAmount = parseInt(inStorage.currentAmount) + parseInt(item.amount);
-      // } else if (operation === "subtract") {
+      // const difference =
+      //   parseInt(item.amount) - parseInt(inStorage.currentAmount);
+
+      let difference =
+        parseInt(inStorage.currentAmount) - parseInt(item.amount);
+
+      // console.log(difference);
+
+      if (operation === "delete") {
+        difference = parseInt(inStorage.currentAmount) + parseInt(item.amount);
+        // console.log(difference);
+      } // } else if (operation === "subtract") {
       //   newAmount = parseInt(inStorage.currentAmount) - parseInt(item.amount);
       // } else if (operation === "edit") {
       //   newAmount = parseInt(inStorage.currentAmount) - parseInt(item.amount);
@@ -84,7 +91,7 @@ export const updateStock = async (items: any, operation: string) => {
             variety: item.variety,
           },
           {
-            $inc: { currentAmount: -difference },
+            currentAmount: difference,
           }
         );
       } else {
@@ -96,7 +103,7 @@ export const updateStock = async (items: any, operation: string) => {
             "stock.distributor": item.stock.distributor,
           },
           {
-            $inc: { currentAmount: -difference },
+            currentAmount: difference,
           }
         );
       }

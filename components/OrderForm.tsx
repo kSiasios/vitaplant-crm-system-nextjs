@@ -1,6 +1,6 @@
 "use client";
 
-import { Item, paymentStatusMap, statusMap } from "@/utils/helper";
+import { deepCompare, Item, paymentStatusMap, statusMap } from "@/utils/helper";
 import { FormEvent, useEffect, useState } from "react";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { IoIosPin, IoMdPerson } from "react-icons/io";
@@ -18,6 +18,18 @@ interface OrderFormProps {
   error?: boolean;
 }
 
+const defaultFormData = {
+  clientName: "",
+  address: "",
+  taxpayerNumber: "",
+  phone: "",
+  status: "",
+  paymentAmount: "",
+  paymentStatus: "",
+  comments: "",
+  items: [{}],
+};
+
 const OrderForm = ({
   handleSubmit,
   type,
@@ -26,17 +38,7 @@ const OrderForm = ({
   success,
   error,
 }: OrderFormProps) => {
-  const [formData, setFormData] = useState<any>({
-    clientName: "",
-    address: "",
-    taxpayerNumber: "",
-    phone: "",
-    status: "",
-    paymentAmount: "",
-    paymentStatus: "",
-    comments: "",
-    items: [{}],
-  });
+  const [formData, setFormData] = useState<any>(defaultFormData);
 
   const [newFormData, setNewFormData] = useState({
     clientName: "",
@@ -61,9 +63,11 @@ const OrderForm = ({
   };
 
   useEffect(() => {
-    // if (orderData) {
-    setFormData(orderData);
-    // }
+    console.log(orderData);
+
+    if (!deepCompare(orderData, defaultFormData)) {
+      setFormData(orderData);
+    }
   }, [orderData]);
 
   useEffect(() => {
