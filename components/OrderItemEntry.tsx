@@ -1,6 +1,6 @@
 "use client";
 
-import { Item, normalizeGreekString, Stock } from "@/utils/helper";
+import { deepCompare, Item, normalizeGreekString, Stock } from "@/utils/helper";
 import { ChangeEvent, useEffect, useState } from "react";
 import { IoTrashOutline } from "react-icons/io5";
 import ItemInput from "./ItemInput";
@@ -26,6 +26,7 @@ const OrderItemEntry = ({
   isOrder,
 }: OrderItemEntryProps) => {
   const [items, setItems] = useState({});
+  const [fetching, setFetching] = useState({});
 
   const [availablePlants, setAvailablePlants] = useState<Array<string>>([]);
   const [availableSubjects, setAvailableSubjects] = useState<Array<string>>([]);
@@ -33,7 +34,28 @@ const OrderItemEntry = ({
     []
   );
 
+  const defaultItems: Item[] = [
+    {
+      plant: "",
+      subject: "",
+      variety: "",
+      price: "0",
+      amount: "0",
+      stock: { own: "true", distributor: "" },
+    },
+  ];
+
   const [sections, setSections] = useState<Item[]>([
+    {
+      plant: "",
+      subject: "",
+      variety: "",
+      price: "0",
+      amount: "0",
+      stock: { own: "true", distributor: "" },
+    },
+  ]);
+  const [defaultSections, setDefaultSections] = useState<Item[]>([
     {
       plant: "",
       subject: "",
@@ -84,7 +106,7 @@ const OrderItemEntry = ({
       setAvailableVarieties(Array.from(varieties.values()) as string[]);
 
       if (providedSections && Object.keys(providedSections[0]).length === 0) {
-        setSections([
+        setDefaultSections([
           {
             plant: availablePlants ? availablePlants[0] : "",
             subject: availableSubjects ? availableSubjects[0] : "",
@@ -94,6 +116,16 @@ const OrderItemEntry = ({
             stock: { own: "true", distributor: "" },
           },
         ]);
+        // setSections([
+        //   {
+        //     plant: availablePlants ? availablePlants[0] : "",
+        //     subject: availableSubjects ? availableSubjects[0] : "",
+        //     variety: availableVarieties ? availableVarieties[0] : "",
+        //     price: "0",
+        //     amount: "0",
+        //     stock: { own: "true", distributor: "" },
+        //   },
+        // ]);
       }
 
       setItemSectionExpanded(providedSections?.map((section) => true) || []);
@@ -113,13 +145,27 @@ const OrderItemEntry = ({
   }, []);
 
   useEffect(() => {
+    if (!deepCompare(sections, providedSections)) {
+      setSections(defaultSections);
+    }
+  }, [defaultSections]);
+
+  useEffect(() => {
     // console.log(sections);
 
     if (!isOrder) {
       updateChecks();
     }
 
-    if (handleChange && (editable === "edit" || editable === "new")) {
+    if (
+      handleChange &&
+      (editable === "edit" || editable === "new") &&
+      !deepCompare(sections, providedSections)
+    ) {
+      console.log(sections, providedSections);
+      console.log(deepCompare(sections, providedSections));
+      console.log("sections");
+
       handleChange(sections);
     }
 
@@ -248,9 +294,11 @@ const OrderItemEntry = ({
       return;
     }
 
-    // console.log(providedSections);
+    console.log(providedSections as Item[]);
 
+    // do {
     setSections(providedSections as Item[]);
+    // } while (fetching);
   }, [providedSections]);
 
   const addSection = (e: any) => {
