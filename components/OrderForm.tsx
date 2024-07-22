@@ -56,6 +56,8 @@ const OrderForm = ({
     field: string,
     value: object | string | number | boolean
   ) => {
+    // console.log(newFormData);
+
     setNewFormData({
       ...newFormData,
       [field]: value,
@@ -63,7 +65,8 @@ const OrderForm = ({
   };
 
   useEffect(() => {
-    console.log(orderData);
+    // console.log(orderData);
+    // console.log(deepCompare(orderData, defaultFormData));
 
     if (!deepCompare(orderData, defaultFormData)) {
       setFormData(orderData);
@@ -71,13 +74,23 @@ const OrderForm = ({
   }, [orderData]);
 
   useEffect(() => {
-    if (orderData && orderData != formData) {
+    // console.log(orderData);
+    // console.log(deepCompare(orderData, formData));
+    // console.log(orderData && !deepCompare(orderData, formData));
+
+    if (orderData && !deepCompare(orderData, formData)) {
+      // console.log("New DT");
+
       setFormData(orderData);
       return;
     }
 
     setNewFormData(formData);
   }, [formData]);
+
+  // useEffect(() => {
+  //   console.log(newFormData);
+  // }, [newFormData]);
 
   useEffect(() => {
     setFormData({
@@ -88,6 +101,9 @@ const OrderForm = ({
   }, []);
 
   const getOrderItems = (data: Array<Object>) => {
+    // console.log("Holaed");
+    // console.log(data);
+
     handleChange("items", data);
   };
 
