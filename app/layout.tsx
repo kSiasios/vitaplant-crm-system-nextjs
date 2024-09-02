@@ -17,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="relative">
-        <Provider>
+        <div className="flex justify-center gap-2 items-center h-[100vh] text-white text-4xl font-black">
+          This page is <span className="underline">not</span> available!
+        </div>
+        {/* <Provider>
           <Link href="/" className="absolute -z-10">
             <Image
               alt="Vitaplant Logo"
@@ -29,7 +32,7 @@ export default function RootLayout({
           <main className="min-h-screen p-8 pb-24">{children}</main>
           <div className="absolute w-full h-full top-0 left-0 background-image-container pointer-events-none"></div>
           <Footer />
-        </Provider>
+        </Provider> */}
       </body>
     </html>
   );
